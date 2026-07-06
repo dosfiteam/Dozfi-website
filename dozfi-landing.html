@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Dozfi — Stop Losing Money to No-Shows</title>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600;700;800&family=Instrument+Sans:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet"/>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --purple: #5b4ef5;
+    --purple-light: #eeecff;
+    --purple-mid: #a49cf9;
+    --green: #22c07a;
+    --green-light: #edfbf3;
+    --dark: #1a1830;
+    --mid: #6b6894;
+    --light: #f5f4ff;
+    --white: #ffffff;
+    --border: #e4e2f8;
+    --shadow: 0 2px 16px rgba(91,78,245,0.08);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Instrument Sans', sans-serif;
+    background: var(--white);
+    color: var(--dark);
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50%       { transform: scale(1.04); }
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50%       { transform: translateY(-8px); }
+  }
+  @keyframes ping {
+    0%   { transform: scale(1); opacity: 0.7; }
+    100% { transform: scale(2.2); opacity: 0; }
+  }
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateX(-16px); }
+    to   { opacity: 1; transform: translateX(0); }
+  }
+
+  .fade-up { animation: fadeUp 0.7s ease both; }
+  .fade-up-2 { animation: fadeUp 0.7s 0.15s ease both; }
+  .fade-up-3 { animation: fadeUp 0.7s 0.3s ease both; }
+  .fade-up-4 { animation: fadeUp 0.7s 0.45s ease both; }
+
+  /* ── NAV ── */
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 5%;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 64px;
+  }
+  .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+  .nav-logo-text {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: 1.3rem; font-weight: 700;
+    color: var(--dark); letter-spacing: -0.02em;
+  }
+  .nav-logo-text span { color: var(--purple); }
+  .nav-cta {
+    background: var(--purple); color: var(--white);
+    border: none; border-radius: 10px;
+    padding: 10px 22px;
+    font-family: 'Instrument Sans', sans-serif;
+    font-size: 0.9rem; font-weight: 500;
+    cursor: pointer; text-decoration: none;
+    transition: all 0.2s;
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+  .nav-cta:hover { background: #4a3ee0; transform: translateY(-1px); box-shadow: 0 4px 16px rgba(91,78,245,0.3); }
+
+  /* ── HERO ── */
+  .hero {
+    padding: 80px 5% 70px;
+    max-width: 1100px; margin: 0 auto;
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 60px; align-items: center;
+  }
+  @media (max-width: 768px) {
+    .hero { grid-template-columns: 1fr; padding: 48px 6% 48px; gap: 40px; }
+    .hero-visual { order: -1; }
+  }
+
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--purple-light); color: var(--purple);
+    font-size: 0.78rem; font-weight: 600;
+    padding: 6px 14px; border-radius: 20px;
+    margin-bottom: 20px; letter-spacing: 0.03em;
+  }
+  .badge-dot {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--purple);
+    position: relative;
+  }
+  .badge-dot::after {
+    content: ''; position: absolute;
+    inset: 0; border-radius: 50%;
+    background: var(--purple);
+    animation: ping 1.5s ease-out infinite;
+  }
+
+  .hero h1 {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: clamp(2.2rem, 4.5vw, 3.4rem);
+    font-weight: 800; line-height: 1.1;
+    letter-spacing: -0.03em;
+    color: var(--dark);
+    margin-bottom: 20px;
+  }
+  .hero h1 .accent { color: var(--purple); }
+  .hero h1 .green  { color: var(--green);  }
+
+  .hero-sub {
+    font-size: 1.1rem; color: var(--mid);
+    line-height: 1.7; margin-bottom: 32px;
+    max-width: 480px;
+  }
+
+  .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+
+  .btn-primary {
+    background: var(--purple); color: var(--white);
+    border: none; border-radius: 12px;
+    padding: 15px 28px;
+    font-family: 'Instrument Sans', sans-serif;
+    font-size: 1rem; font-weight: 600;
+    cursor: pointer; text-decoration: none;
+    transition: all 0.2s;
+    display: inline-flex; align-items: center; gap: 8px;
+    box-shadow: 0 4px 20px rgba(91,78,245,0.25);
+  }
+  .btn-primary:hover { background: #4a3ee0; transform: translateY(-2px); box-shadow: 0 8px 28px rgba(91,78,245,0.35); }
+
+  .btn-secondary {
+    background: transparent; color: var(--dark);
+    border: 1.5px solid var(--border);
+    border-radius: 12px; padding: 14px 24px;
+    font-family: 'Instrument Sans', sans-serif;
+    font-size: 1rem; cursor: pointer;
+    text-decoration: none; transition: all 0.2s;
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+  .btn-secondary:hover { border-color: var(--purple); color: var(--purple); background: var(--purple-light); }
+
+  .hero-note {
+    margin-top: 14px; font-size: 0.82rem;
+    color: var(--mid); display: flex; align-items: center; gap: 6px;
+  }
+  .hero-note svg { color: var(--green); flex-shrink: 0; }
+
+  /* ── HERO VISUAL ── */
+  .hero-visual { position: relative; }
+
+  .phone-card {
+    background: var(--white);
+    border: 1.5px solid var(--border);
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: 0 8px 40px rgba(91,78,245,0.1);
+    animation: float 4s ease-in-out infinite;
+  }
+
+  .phone-header {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 16px; padding-bottom: 14px;
+    border-bottom: 1px solid var(--border);
+  }
+  .phone-avatar {
+    width: 38px; height: 38px; border-radius: 50%;
+    background: var(--purple); display: flex;
+    align-items: center; justify-content: center;
+    color: white; font-weight: 700; font-size: 0.85rem;
+    flex-shrink: 0;
+  }
+  .phone-info strong { display: block; font-size: 0.88rem; color: var(--dark); }
+  .phone-info span { font-size: 0.75rem; color: var(--mid); }
+  .phone-live {
+    margin-left: auto; background: var(--green-light);
+    color: var(--green); font-size: 0.68rem; font-weight: 600;
+    padding: 3px 9px; border-radius: 20px; letter-spacing: 0.04em;
+  }
+
+  .sms-bubble {
+    background: var(--purple-light);
+    border-radius: 4px 16px 16px 16px;
+    padding: 12px 14px;
+    font-size: 0.84rem; color: var(--dark);
+    line-height: 1.55; margin-bottom: 10px;
+  }
+  .sms-bubble strong { color: var(--purple); }
+
+  .sms-reply {
+    background: var(--purple);
+    border-radius: 16px 4px 16px 16px;
+    padding: 10px 14px;
+    font-size: 0.84rem; color: white;
+    margin-left: auto; max-width: 80%;
+    text-align: right;
+    animation: slideIn 0.5s 1.2s ease both;
+    opacity: 0;
+    animation-fill-mode: both;
+  }
+
+  .sms-time { font-size: 0.7rem; color: var(--mid); text-align: center; margin: 8px 0 4px; }
+
+  .stat-bubble {
+    position: absolute;
+    background: var(--white);
+    border: 1.5px solid var(--border);
+    border-radius: 14px;
+    padding: 12px 16px;
+    box-shadow: var(--shadow);
+    display: flex; align-items: center; gap: 10px;
+  }
+  .stat-bubble-1 {
+    top: -18px; right: -18px;
+    animation: fadeUp 0.6s 0.6s ease both;
+  }
+  .stat-bubble-2 {
+    bottom: -18px; left: -18px;
+    animation: fadeUp 0.6s 0.9s ease both;
+  }
+  .stat-icon { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .stat-val { font-family: 'Bricolage Grotesque', sans-serif; font-size: 1.1rem; font-weight: 700; color: var(--dark); }
+  .stat-lbl { font-size: 0.7rem; color: var(--mid); }
+
+  /* ── SOCIAL PROOF STRIP ── */
+  .proof-strip {
+    background: var(--light);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 18px 5%;
+    display: flex; align-items: center; justify-content: center;
+    gap: 40px; flex-wrap: wrap;
+  }
+  .proof-item {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 0.85rem; color: var(--mid); font-weight: 500;
+  }
+  .proof-item svg { color: var(--green); }
+
+  /* ── HOW IT WORKS ── */
+  .section {
+    padding: 80px 5%;
+    max-width: 1100px; margin: 0 auto;
+  }
+  .section-tag {
+    display: inline-block;
+    background: var(--purple-light); color: var(--purple);
+    font-size: 0.75rem; font-weight: 600;
+    padding: 5px 14px; border-radius: 20px;
+    letter-spacing: 0.06em; text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+  .section-title {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: clamp(1.7rem, 3vw, 2.4rem);
+    font-weight: 800; letter-spacing: -0.02em;
+    color: var(--dark); margin-bottom: 12px; line-height: 1.2;
+  }
+  .section-sub { font-size: 1rem; color: var(--mid); max-width: 520px; line-height: 1.7; margin-bottom: 48px; }
+
+  .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+  @media (max-width: 700px) { .steps { grid-template-columns: 1fr; } }
+
+  .step-card {
+    background: var(--white);
+    border: 1.5px solid var(--border);
+    border-radius: 18px; padding: 28px;
+    transition: all 0.25s; position: relative;
+    overflow: hidden;
+  }
+  .step-card::before {
+    content: ''; position: absolute;
+    top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, var(--purple), var(--purple-mid));
+    opacity: 0; transition: opacity 0.25s;
+  }
+  .step-card:hover { transform: translateY(-4px); box-shadow: 0 12px 36px rgba(91,78,245,0.1); border-color: var(--purple-mid); }
+  .step-card:hover::before { opacity: 1; }
+
+  .step-num {
+    width: 40px; height: 40px; border-radius: 12px;
+    background: var(--purple-light); color: var(--purple);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: 1rem; font-weight: 800;
+    margin-bottom: 16px;
+  }
+  .step-card h3 {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: 1.05rem; font-weight: 700;
+    color: var(--dark); margin-bottom: 8px;
+  }
+  .step-card p { font-size: 0.88rem; color: var(--mid); line-height: 1.65; }
+
+  /* ── FEATURES ── */
+  .features-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+  @media (max-width: 700px) { .features-grid { grid-template-columns: 1fr; } }
+
+  .feature-card {
+    background: var(--light);
+    border: 1.5px solid var(--border);
+    border-radius: 18px; padding: 28px;
+    transition: all 0.25s;
+  }
+  .feature-card:hover { background: var(--white); box-shadow: 0 8px 28px rgba(91,78,245,0.08); transform: translateY(-3px); }
+  .feature-icon {
+    width: 48px; height: 48px; border-radius: 14px;
+    background: var(--purple); display: flex;
+    align-items: center; justify-content: center;
+    margin-bottom: 16px;
+  }
+  .feature-card h3 {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: 1.05rem; font-weight: 700;
+    color: var(--dark); margin-bottom: 8px;
+  }
+  .feature-card p { font-size: 0.88rem; color: var(--mid); line-height: 1.65; }
+
+  /* ── SAVINGS SHOWCASE ── */
+  .savings-section {
+    background: var(--light);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 80px 5%;
+  }
+  .savings-inner { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
+  @media (max-width: 768px) { .savings-inner { grid-template-columns: 1fr; gap: 40px; } }
+
+  .savings-stats { display: flex; flex-direction: column; gap: 16px; }
+  .savings-stat {
+    background: var(--white);
+    border: 1.5px solid var(--border);
+    border-radius: 16px; padding: 20px 24px;
+    display: flex; align-items: center; gap: 16px;
+  }
+  .savings-stat-icon {
+    width: 48px; height: 48px; border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .savings-stat-val {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: 1.6rem; font-weight: 800; color: var(--dark);
+  }
+  .savings-stat-lbl { font-size: 0.82rem; color: var(--mid); margin-top: 2px; }
+
+  /* ── PRICING ── */
+  .pricing-card {
+    background: var(--white);
+    border: 2px solid var(--purple);
+    border-radius: 24px; padding: 40px;
+    max-width: 460px; margin: 0 auto;
+    box-shadow: 0 8px 40px rgba(91,78,245,0.12);
+    text-align: center;
+  }
+  .pricing-badge {
+    display: inline-block;
+    background: var(--purple); color: white;
+    font-size: 0.75rem; font-weight: 600;
+    padding: 5px 16px; border-radius: 20px;
+    letter-spacing: 0.06em; margin-bottom: 20px;
+  }
+  .pricing-price {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: 3.5rem; font-weight: 800;
+    color: var(--dark); letter-spacing: -0.04em;
+    line-height: 1;
+  }
+  .pricing-price sup { font-size: 1.5rem; vertical-align: top; margin-top: 12px; }
+  .pricing-price span { font-size: 1rem; color: var(--mid); font-weight: 400; letter-spacing: 0; }
+  .pricing-trial { font-size: 0.9rem; color: var(--green); font-weight: 600; margin: 8px 0 24px; }
+  .pricing-divider { height: 1px; background: var(--border); margin: 24px 0; }
+  .pricing-features { text-align: left; display: flex; flex-direction: column; gap: 12px; margin-bottom: 28px; }
+  .pricing-feature { display: flex; align-items: center; gap: 10px; font-size: 0.9rem; color: var(--dark); }
+  .check { width: 20px; height: 20px; border-radius: 50%; background: var(--green-light); color: var(--green); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+
+  /* ── TESTIMONIALS ── */
+  .testimonials { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  @media (max-width: 700px) { .testimonials { grid-template-columns: 1fr; } }
+
+  .testimonial {
+    background: var(--white);
+    border: 1.5px solid var(--border);
+    border-radius: 18px; padding: 24px;
+  }
+  .stars { color: #f59e0b; font-size: 0.9rem; margin-bottom: 12px; letter-spacing: 2px; }
+  .testimonial p { font-size: 0.9rem; color: var(--dark); line-height: 1.65; font-style: italic; margin-bottom: 16px; }
+  .testimonial-author { display: flex; align-items: center; gap: 10px; }
+  .author-avatar {
+    width: 36px; height: 36px; border-radius: 50%;
+    background: var(--purple); color: white;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 0.8rem; flex-shrink: 0;
+  }
+  .author-name { font-size: 0.85rem; font-weight: 600; color: var(--dark); }
+  .author-biz { font-size: 0.75rem; color: var(--mid); }
+
+  /* ── CTA SECTION ── */
+  .cta-section {
+    background: var(--purple);
+    padding: 80px 5%; text-align: center;
+  }
+  .cta-section h2 {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+    font-weight: 800; color: white;
+    letter-spacing: -0.02em; line-height: 1.2;
+    margin-bottom: 16px;
+  }
+  .cta-section p { font-size: 1rem; color: rgba(255,255,255,0.75); margin-bottom: 32px; }
+  .btn-white {
+    background: white; color: var(--purple);
+    border: none; border-radius: 12px;
+    padding: 16px 36px;
+    font-family: 'Instrument Sans', sans-serif;
+    font-size: 1rem; font-weight: 600;
+    cursor: pointer; text-decoration: none;
+    transition: all 0.2s; display: inline-block;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+  }
+  .btn-white:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(0,0,0,0.2); }
+  .cta-note { margin-top: 14px; font-size: 0.82rem; color: rgba(255,255,255,0.6); }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--dark); padding: 40px 5%;
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 16px;
+  }
+  .footer-logo {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: 1.1rem; font-weight: 700; color: white;
+  }
+  .footer-logo span { color: var(--purple-mid); }
+  footer p { font-size: 0.8rem; color: #6b6894; }
+  .footer-email { font-size: 0.82rem; color: var(--purple-mid); text-decoration: none; }
+  .footer-email:hover { color: white; }
+
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">
+    <svg width="32" height="32" viewBox="0 0 44 44" fill="none">
+      <rect width="44" height="44" rx="11" fill="#5b4ef5"/>
+      <rect x="7" y="9" width="30" height="22" rx="5" fill="white"/>
+      <path d="M10 31 L8 38 L17 31 Z" fill="white"/>
+      <circle cx="22" cy="22" r="2.5" fill="#5b4ef5"/>
+      <path d="M17 22 Q17 17 22 17 Q27 17 27 22" fill="none" stroke="#5b4ef5" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
+      <path d="M13 22 Q13 13 22 13 Q31 13 31 22" fill="none" stroke="#5b4ef5" stroke-width="2" stroke-linecap="round"/>
+    </svg>
+    <span class="nav-logo-text"><span>D</span>ozfi</span>
+  </a>
+  <a href="mailto:team@dozfi.com" class="nav-cta">
+    Start Free Trial
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+  </a>
+</nav>
+
+<!-- HERO -->
+<section style="background: white;">
+  <div class="hero">
+    <div>
+      <div class="hero-badge fade-up">
+        <span class="badge-dot"></span>
+        Simple. Automated. Affordable.
+      </div>
+      <h1 class="fade-up-2">
+        Stop losing money<br>to <span class="accent">no-shows</span> &amp;<br><span class="green">bad pricing.</span>
+      </h1>
+      <p class="hero-sub fade-up-3">
+        Dozfi automatically texts your clients so they show up — and tells you exactly when to raise prices or run a sale. Set it up once. Watch your revenue grow.
+      </p>
+      <div class="hero-actions fade-up-4">
+        <a href="mailto:team@dozfi.com" class="btn-primary">
+          Try Free for 30 Days
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+        <a href="#how-it-works" class="btn-secondary">See how it works</a>
+      </div>
+      <div class="hero-note fade-up-4">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+        No credit card needed. Cancel anytime. Takes 10 minutes to set up.
+      </div>
+    </div>
+
+    <!-- PHONE MOCKUP -->
+    <div class="hero-visual fade-up-3">
+      <div style="position: relative; padding: 20px;">
+        <div class="phone-card">
+          <div class="phone-header">
+            <div class="phone-avatar">D</div>
+            <div class="phone-info">
+              <strong>Dozfi — Auto Reminder</strong>
+              <span>Sent automatically · 9:00 AM</span>
+            </div>
+            <span class="phone-live">● LIVE</span>
+          </div>
+          <div class="sms-bubble">
+            Hi <strong>Maria!</strong> 👋 Reminder: your appointment at <strong>Luxe Hair Studio</strong> is tomorrow at 2:00 PM. Reply <strong>YES</strong> to confirm or <strong>NO</strong> to cancel.
+          </div>
+          <div class="sms-time">Just now</div>
+          <div class="sms-reply">YES ✓</div>
+        </div>
+
+        <div class="stat-bubble stat-bubble-1">
+          <div class="stat-icon" style="background:#edfbf3;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#22c07a" stroke-width="2.5"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          </div>
+          <div>
+            <div class="stat-val" style="color:#22c07a;">$1,240</div>
+            <div class="stat-lbl">Saved this month</div>
+          </div>
+        </div>
+
+        <div class="stat-bubble stat-bubble-2">
+          <div class="stat-icon" style="background:#eeecff;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#5b4ef5" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+          </div>
+          <div>
+            <div class="stat-val" style="color:#5b4ef5;">84%</div>
+            <div class="stat-lbl">Show-up rate</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROOF STRIP -->
+<div class="proof-strip">
+  <div class="proof-item">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+    Works for salons, gyms, spas & more
+  </div>
+  <div class="proof-item">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+    Set up in under 10 minutes
+  </div>
+  <div class="proof-item">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+    No tech skills needed
+  </div>
+  <div class="proof-item">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+    Saves the average business $1,200/month
+  </div>
+</div>
+
+<!-- HOW IT WORKS -->
+<section class="section" id="how-it-works">
+  <div class="section-tag">How it works</div>
+  <h2 class="section-title">Three steps. That's it.</h2>
+  <p class="section-sub">We built Dozfi to be the simplest tool you've ever used. If you can send a text, you can use Dozfi.</p>
+
+  <div class="steps">
+    <div class="step-card">
+      <div class="step-num">1</div>
+      <h3>Tell us about your business</h3>
+      <p>Enter your business name, appointment times, and your clients' phone numbers. Takes less than 10 minutes. We walk you through every step.</p>
+    </div>
+    <div class="step-card">
+      <div class="step-num">2</div>
+      <h3>We text your clients automatically</h3>
+      <p>Dozfi sends reminder texts to your clients before every appointment. They confirm with a simple reply. No-shows drop immediately.</p>
+    </div>
+    <div class="step-card">
+      <div class="step-num">3</div>
+      <h3>Watch your savings grow</h3>
+      <p>Your dashboard tracks every dollar recovered in real time. See exactly how much Dozfi is making you — updated every single day.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<div style="background: var(--light); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
+  <section class="section">
+    <div class="section-tag">Features</div>
+    <h2 class="section-title">Everything you need.<br>Nothing you don't.</h2>
+    <p class="section-sub">No complicated menus. No 47-step setup. Just the tools that make you money.</p>
+
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        </div>
+        <h3>Automatic Appointment Reminders</h3>
+        <p>Dozfi texts every client before their appointment automatically. They confirm or cancel with one reply. Your calendar fills itself.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon" style="background: var(--green);">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        </div>
+        <h3>Smart Pricing Advice</h3>
+        <p>Dozfi tells you when your schedule is slow and suggests the perfect discount to fill it fast — so you never sit around losing money on a quiet Tuesday.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon" style="background: #f59e0b;">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        </div>
+        <h3>Live Savings Tracker</h3>
+        <p>See exactly how much money Dozfi has saved and recovered for your business — updated every day. Most businesses recover their subscription cost in the first week.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon" style="background: #ef4444;">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        </div>
+        <h3>Win-Back Campaigns</h3>
+        <p>Dozfi automatically texts clients who haven't visited in a while with a special offer — bringing them back before they forget about you.</p>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- SAVINGS SHOWCASE -->
+<div class="savings-section">
+  <div class="savings-inner">
+    <div>
+      <div class="section-tag">Real results</div>
+      <h2 class="section-title">The average Dozfi customer recovers $1,200 a month.</h2>
+      <p style="color: var(--mid); font-size: 1rem; line-height: 1.7; margin-top: 12px;">That's $14,400 a year — from a $75/month subscription. Every dollar your clients don't show up is a dollar Dozfi works to get back for you.</p>
+    </div>
+    <div class="savings-stats">
+      <div class="savings-stat">
+        <div class="savings-stat-icon" style="background: var(--green-light);">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#22c07a" stroke-width="2.5"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        </div>
+        <div>
+          <div class="savings-stat-val">$1,200+</div>
+          <div class="savings-stat-lbl">Average recovered per month</div>
+        </div>
+      </div>
+      <div class="savings-stat">
+        <div class="savings-stat-icon" style="background: var(--purple-light);">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#5b4ef5" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+        </div>
+        <div>
+          <div class="savings-stat-val">Up to 90%</div>
+          <div class="savings-stat-lbl">Client show-up rate with reminders</div>
+        </div>
+      </div>
+      <div class="savings-stat">
+        <div class="savings-stat-icon" style="background: #fff7ed;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+        </div>
+        <div>
+          <div class="savings-stat-val">10 minutes</div>
+          <div class="savings-stat-lbl">Average time to get fully set up</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TESTIMONIALS -->
+<section class="section">
+  <div class="section-tag">What people say</div>
+  <h2 class="section-title">Small businesses love Dozfi.</h2>
+  <p class="section-sub" style="margin-bottom: 36px;">Real results from real business owners just like you.</p>
+
+  <div class="testimonials">
+    <div class="testimonial">
+      <div class="stars">★★★★★</div>
+      <p>"I was losing around $800 a month to no-shows. Dozfi cut that almost completely. The texts go out automatically — I don't do anything."</p>
+      <div class="testimonial-author">
+        <div class="author-avatar">M</div>
+        <div>
+          <div class="author-name">Maria T.</div>
+          <div class="author-biz">Luxe Hair Studio</div>
+        </div>
+      </div>
+    </div>
+    <div class="testimonial">
+      <div class="stars">★★★★★</div>
+      <p>"I'm not a tech person at all. My daughter set it up for me in 15 minutes and now it just runs. My slow Tuesdays are completely gone."</p>
+      <div class="testimonial-author">
+        <div class="author-avatar">D</div>
+        <div>
+          <div class="author-name">Denise R.</div>
+          <div class="author-biz">Serenity Nail Spa</div>
+        </div>
+      </div>
+    </div>
+    <div class="testimonial">
+      <div class="stars">★★★★★</div>
+      <p>"Worth every penny and then some. My clients actually love the reminders — they say it helps them not forget. I recovered my first month's fee in 3 days."</p>
+      <div class="testimonial-author">
+        <div class="author-avatar">J</div>
+        <div>
+          <div class="author-name">James K.</div>
+          <div class="author-biz">FitLife Personal Training</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<div style="background: var(--light); border-top: 1px solid var(--border); padding: 80px 5%;">
+  <div style="max-width: 1100px; margin: 0 auto; text-align: center;">
+    <div class="section-tag" style="margin-bottom: 14px;">Pricing</div>
+    <h2 class="section-title" style="margin-bottom: 10px;">One simple price. No surprises.</h2>
+    <p style="color: var(--mid); font-size: 1rem; margin-bottom: 40px;">Most businesses make back their subscription cost in the first week.</p>
+
+    <div class="pricing-card">
+      <div class="pricing-badge">MOST POPULAR</div>
+      <div class="pricing-price"><sup>$</sup>75<span>/month</span></div>
+      <div class="pricing-trial">✓ First month completely free — no credit card needed</div>
+      <div class="pricing-divider"></div>
+      <div class="pricing-features">
+        <div class="pricing-feature">
+          <div class="check"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg></div>
+          Unlimited automatic appointment reminders
+        </div>
+        <div class="pricing-feature">
+          <div class="check"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg></div>
+          AI-powered pricing & sale recommendations
+        </div>
+        <div class="pricing-feature">
+          <div class="check"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg></div>
+          Live savings tracker — see your money in real time
+        </div>
+        <div class="pricing-feature">
+          <div class="check"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg></div>
+          Win-back campaigns for lost clients
+        </div>
+        <div class="pricing-feature">
+          <div class="check"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg></div>
+          Slow-day promo texts sent automatically
+        </div>
+        <div class="pricing-feature">
+          <div class="check"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg></div>
+          Free setup help — we walk you through everything
+        </div>
+      </div>
+      <a href="mailto:team@dozfi.com" class="btn-primary" style="width: 100%; justify-content: center; font-size: 1.05rem; padding: 16px;">
+        Start My Free Month
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+      <p style="font-size: 0.78rem; color: var(--mid); margin-top: 12px;">Cancel anytime. No contracts. No hidden fees.</p>
+    </div>
+  </div>
+</div>
+
+<!-- CTA -->
+<div class="cta-section">
+  <h2>Ready to stop losing money?</h2>
+  <p>Join small businesses already using Dozfi to recover thousands every month.</p>
+  <a href="mailto:team@dozfi.com" class="btn-white">Get Started Free Today</a>
+  <p class="cta-note">Email us at team@dozfi.com — we'll get you set up personally.</p>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo"><span>D</span>ozfi</div>
+  <p>© 2026 Dozfi. Built for small businesses.</p>
+  <a href="mailto:team@dozfi.com" class="footer-email">team@dozfi.com</a>
+</footer>
+
+</body>
+</html>
