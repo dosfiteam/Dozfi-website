@@ -478,6 +478,11 @@ footer p { font-size: 0.75rem; color: var(--muted); }
         <label class="timing-opt"><input type="radio" name="timing" value="48" onchange="selTiming(this)"/><div class="timing-val">48h</div><div class="timing-lbl">Before</div></label>
         <label class="timing-opt"><input type="radio" name="timing" value="2" onchange="selTiming(this)"/><div class="timing-val">2h</div><div class="timing-lbl">Before</div></label>
       </div>
+      <div class="mfield">
+        <label>Average appointment value ($)</label>
+        <input type="number" id="apptValue" placeholder="e.g. 150" min="0" step="1"/>
+        <div style="font-size:0.75rem; color:#9998AB; margin-top:5px;">This lets Dozfi show you how much revenue it's protecting each month.</div>
+      </div>
       <div class="mfield"><label>Anything else? (optional)</label><textarea id="notes" placeholder="E.g. I use Vagaro for scheduling..."></textarea></div>
       <div class="btn-row">
         <button class="mbtn-back" onclick="goToStep(2)">← Back</button>
@@ -626,8 +631,10 @@ function selTiming(input) {
 async function submitSignup() {
   const timing = document.querySelector('input[name="timing"]:checked')?.value || '24';
   const notes = document.getElementById('notes').value.trim();
+  const apptValue = parseFloat(document.getElementById('apptValue').value) || 0;
   formData.timing = timing;
   formData.notes = notes;
+  formData.appointmentValue = apptValue;
   const btn = document.getElementById('submitBtn');
   btn.textContent = 'Setting up...';
   btn.disabled = true;
