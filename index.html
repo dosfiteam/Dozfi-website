@@ -6,6 +6,7 @@
 <title>Dozfi — Appointment Reminders That Actually Work</title>
 <meta name="brand-owner" content="Elektra Bannatyne DBA Dozfi"/>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<script src="https://js.stripe.com/v3/"></script>
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -424,7 +425,7 @@ footer p { font-size: 0.75rem; color: var(--muted); }
 
     <!-- STEP 1 -->
     <div id="mstep1">
-      <div class="step-tag">Step 1 of 3</div>
+      <div class="step-tag">Step 1 of 4</div>
       <div class="step-title">Tell us about your business</div>
       <div class="step-sub">Takes about 2 minutes. You'll be sending reminders by the end.</div>
       <div class="mfield"><label>Your name</label><input type="text" id="ownerName" placeholder="Maria Rodriguez"/></div>
@@ -449,7 +450,7 @@ footer p { font-size: 0.75rem; color: var(--muted); }
 
     <!-- STEP 2 -->
     <div id="mstep2" style="display:none">
-      <div class="step-tag">Step 2 of 3</div>
+      <div class="step-tag">Step 2 of 4</div>
       <div class="step-title">Add your clients</div>
       <div class="step-sub">Paste from a spreadsheet or add manually. You can always add more later.</div>
       <div class="import-box">
@@ -470,7 +471,7 @@ footer p { font-size: 0.75rem; color: var(--muted); }
 
     <!-- STEP 3 -->
     <div id="mstep3" style="display:none">
-      <div class="step-tag">Step 3 of 3</div>
+      <div class="step-tag">Step 3 of 4</div>
       <div class="step-title">When should reminders go out?</div>
       <div class="step-sub">We'll text your clients this long before their appointment.</div>
       <div class="timing-grid">
@@ -491,6 +492,31 @@ footer p { font-size: 0.75rem; color: var(--muted); }
       <div class="merror" id="err3"></div>
     </div>
 
+    <!-- STEP 4: Payment -->
+    <div id="mstep4" style="display:none">
+      <div class="step-tag">Step 4 of 4</div>
+      <div class="step-title">Start your free month</div>
+      <div class="step-sub">No charge today. Your card is saved and you'll be billed $75 after your 30-day free trial ends. Cancel anytime before then.</div>
+      <div style="background:#F9F9FB; border:1px solid #EBEBF0; border-radius:12px; padding:20px; margin-bottom:16px;">
+        <div style="font-size:0.82rem; font-weight:600; color:#0F0E1A; margin-bottom:12px;">Card details</div>
+        <div id="card-element" style="padding:12px 14px; border:1.5px solid #EBEBF0; border-radius:10px; background:white;"></div>
+        <div id="card-errors" style="color:#DC2626; font-size:0.78rem; margin-top:8px;"></div>
+      </div>
+      <div style="display:flex; align-items:center; gap:8px; margin-bottom:16px;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        <span style="font-size:0.75rem; color:#9998AB;">Secured by Stripe. Dozfi never sees your card number.</span>
+      </div>
+      <div style="background:#F0FDF4; border:1px solid #BBF7D0; border-radius:10px; padding:12px 14px; margin-bottom:20px;">
+        <div style="font-size:0.82rem; font-weight:700; color:#16A34A;">✓ First 30 days completely free</div>
+        <div style="font-size:0.75rem; color:#555466; margin-top:3px;">Then $75/month. Cancel anytime before your trial ends and you won't be charged.</div>
+      </div>
+      <div class="btn-row">
+        <button class="mbtn-back" onclick="goToStep(3)">← Back</button>
+        <button class="mbtn-next" id="payBtn" onclick="submitPayment()">Start free trial →</button>
+      </div>
+      <div class="merror" id="err4"></div>
+    </div>
+
     <!-- SUCCESS -->
     <div id="mstepSuccess" style="display:none">
       <div class="success-screen">
@@ -504,8 +530,31 @@ footer p { font-size: 0.75rem; color: var(--muted); }
 
 <script>
 const BACKEND = 'https://dozfi-backend.vercel.app';
+const STRIPE_KEY = 'pk_live_51TstHLC5qfJXtZk3Mxi8ci9htVmv8bevY1XPwffHmAsAIhcpUJi9i85HiZw3m9gZJDzuTwmGji7iwtXikdIsF4vM002JYuUnn6';
 let clientCount = 0;
 let formData = {};
+let stripe, cardElement;
+
+function initStripe() {
+  if (stripe) return;
+  stripe = Stripe(STRIPE_KEY);
+  const elements = stripe.elements();
+  cardElement = elements.create('card', {
+    style: {
+      base: {
+        fontFamily: "'Plus Jakarta Sans', sans-serif",
+        fontSize: '15px',
+        color: '#0F0E1A',
+        '::placeholder': { color: '#9998AB' }
+      }
+    }
+  });
+  cardElement.mount('#card-element');
+  cardElement.on('change', e => {
+    const el = document.getElementById('card-errors');
+    el.textContent = e.error ? e.error.message : '';
+  });
+}
 
 function openModal() {
   document.getElementById('modalOverlay').classList.add('open');
@@ -523,15 +572,16 @@ function handleOverlayClick(e) {
 }
 
 function goToStep(n) {
-  ['mstep1','mstep2','mstep3','mstepSuccess'].forEach(id => {
+  ['mstep1','mstep2','mstep3','mstep4','mstepSuccess'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.style.display = 'none';
   });
   const target = n === 'success' ? 'mstepSuccess' : 'mstep' + n;
   document.getElementById(target).style.display = 'block';
-  const pct = n === 1 ? 33 : n === 2 ? 66 : n === 3 ? 90 : 100;
+  const pct = n === 1 ? 25 : n === 2 ? 50 : n === 3 ? 75 : n === 4 ? 90 : 100;
   document.getElementById('progressFill').style.width = pct + '%';
   document.getElementById('modal').scrollTop = 0;
+  if (n === 4) initStripe();
 }
 
 function goToStep2() {
@@ -635,18 +685,55 @@ async function submitSignup() {
   formData.timing = timing;
   formData.notes = notes;
   formData.appointmentValue = apptValue;
-  const btn = document.getElementById('submitBtn');
-  btn.textContent = 'Setting up...';
+  goToStep(4);
+}
+
+async function submitPayment() {
+  const btn = document.getElementById('payBtn');
+  btn.textContent = 'Processing...';
   btn.disabled = true;
+
   try {
+    // Create setup intent on backend
+    const res = await fetch(BACKEND + '/create-setup-intent', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: formData.ownerEmail, name: formData.ownerName })
+    });
+    const { clientSecret, error: backendError } = await res.json();
+    if (backendError) throw new Error(backendError);
+
+    // Confirm card setup with Stripe
+    const { setupIntent, error: stripeError } = await stripe.confirmCardSetup(clientSecret, {
+      payment_method: {
+        card: cardElement,
+        billing_details: { name: formData.ownerName, email: formData.ownerEmail }
+      }
+    });
+
+    if (stripeError) {
+      document.getElementById('card-errors').textContent = stripeError.message;
+      btn.textContent = 'Start free trial →';
+      btn.disabled = false;
+      return;
+    }
+
+    // Save business with payment method
+    formData.paymentMethodId = setupIntent.payment_method;
     await fetch(BACKEND + '/signup', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(formData)
     });
-  } catch (e) { /* show success regardless */ }
-  document.getElementById('progressFill').style.width = '100%';
-  goToStep('success');
+
+    document.getElementById('progressFill').style.width = '100%';
+    goToStep('success');
+
+  } catch (err) {
+    showErr('err4', 'Something went wrong. Please try again.');
+    btn.textContent = 'Start free trial →';
+    btn.disabled = false;
+  }
 }
 
 function showErr(id, msg) {
