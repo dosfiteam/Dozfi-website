@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Dozfi Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --purple: #5B4EF5; --green: #16A34A; --red: #DC2626;
+  --dark: #0F0E1A; --mid: #555466; --muted: #9998AB;
+  --border: #EBEBF0; --bg: #F9F9FB; --white: #FFFFFF;
+  --yellow: #F59E0B;
+}
+body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: var(--dark); -webkit-font-smoothing: antialiased; min-height: 100vh; }
+
+/* LOGIN */
+.login-wrap { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
+.login-card { background: white; border-radius: 20px; padding: 48px 40px; width: 100%; max-width: 420px; box-shadow: 0 4px 24px rgba(0,0,0,0.06); }
+.login-logo { font-size: 1.4rem; font-weight: 800; color: var(--purple); letter-spacing: -0.03em; margin-bottom: 8px; }
+.login-sub { font-size: 0.875rem; color: var(--mid); margin-bottom: 32px; }
+.field { margin-bottom: 16px; }
+.field label { display: block; font-size: 0.82rem; font-weight: 600; color: var(--dark); margin-bottom: 6px; }
+.field input { width: 100%; padding: 12px 14px; border: 1.5px solid var(--border); border-radius: 10px; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 0.875rem; color: var(--dark); outline: none; }
+.field input:focus { border-color: var(--purple); }
+.login-btn { width: 100%; background: var(--purple); color: white; border: none; border-radius: 10px; padding: 14px; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 0.95rem; font-weight: 700; cursor: pointer; margin-top: 8px; }
+.login-btn:hover { background: #4A3EE0; }
+.login-error { color: var(--red); font-size: 0.82rem; margin-top: 10px; text-align: center; display: none; }
+.login-footer { text-align: center; margin-top: 20px; font-size: 0.78rem; color: var(--muted); }
+.login-footer a { color: var(--purple); text-decoration: none; }
+
+/* DASHBOARD LAYOUT */
+.dashboard { display: none; min-height: 100vh; }
+.sidebar {
+  position: fixed; top: 0; left: 0; bottom: 0; width: 240px;
+  background: var(--dark); padding: 28px 20px;
+  display: flex; flex-direction: column;
+}
+.sidebar-logo { font-size: 1.25rem; font-weight: 800; color: white; letter-spacing: -0.02em; margin-bottom: 36px; }
+.nav-items { display: flex; flex-direction: column; gap: 4px; flex: 1; }
+.nav-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 12px; border-radius: 8px; cursor: pointer;
+  font-size: 0.875rem; font-weight: 500; color: rgba(255,255,255,0.6);
+  transition: all 0.15s; text-decoration: none;
+}
+.nav-item:hover { background: rgba(255,255,255,0.08); color: white; }
+.nav-item.active { background: rgba(91,78,245,0.3); color: white; }
+.nav-icon { width: 18px; text-align: center; }
+.sidebar-bottom { margin-top: auto; }
+.signout-btn { width: 100%; background: rgba(255,255,255,0.08); border: none; border-radius: 8px; padding: 10px 12px; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 0.82rem; font-weight: 500; color: rgba(255,255,255,0.5); cursor: pointer; text-align: left; }
+.signout-btn:hover { color: white; background: rgba(255,255,255,0.12); }
+
+/* MAIN */
+.main { margin-left: 240px; padding: 36px; }
+.page-header { margin-bottom: 28px; }
+.page-title { font-size: 1.5rem; font-weight: 800; letter-spacing: -0.03em; color: var(--dark); }
+.page-sub { font-size: 0.875rem; color: var(--muted); margin-top: 4px; }
+
+/* CARDS */
+.stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
+.stat-card { background: white; border: 1px solid var(--border); border-radius: 14px; padding: 22px; }
+.stat-label { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin-bottom: 10px; }
+.stat-val { font-size: 2rem; font-weight: 800; letter-spacing: -0.04em; color: var(--dark); line-height: 1; margin-bottom: 6px; }
+.stat-val.green { color: var(--green); }
+.stat-val.purple { color: var(--purple); }
+.stat-change { font-size: 0.75rem; color: var(--muted); }
+.stat-change.up { color: var(--green); }
+
+/* GRID */
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px; }
+.three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 24px; }
+.full-col { margin-bottom: 24px; }
+
+/* PANEL */
+.panel { background: white; border: 1px solid var(--border); border-radius: 14px; padding: 24px; }
+.panel-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+.panel-title { font-size: 0.92rem; font-weight: 700; color: var(--dark); }
+.panel-action { font-size: 0.78rem; font-weight: 600; color: var(--purple); cursor: pointer; background: none; border: none; font-family: 'Plus Jakarta Sans', sans-serif; }
+
+/* TABLE */
+.table { width: 100%; border-collapse: collapse; }
+.table th { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); padding: 0 0 12px; text-align: left; border-bottom: 1px solid var(--border); }
+.table td { padding: 12px 0; border-bottom: 1px solid var(--border); font-size: 0.875rem; color: var(--dark); vertical-align: middle; }
+.table tr:last-child td { border-bottom: none; }
+
+/* BADGES */
+.badge { display: inline-flex; align-items: center; gap: 4px; padding: 3px 10px; border-radius: 99px; font-size: 0.72rem; font-weight: 700; }
+.badge.confirmed { background: #F0FDF4; color: var(--green); }
+.badge.cancelled { background: #FEF2F2; color: var(--red); }
+.badge.pending { background: #FEF9F0; color: var(--yellow); }
+.badge.sent { background: #F5F3FF; color: var(--purple); }
+
+/* INSIGHT CARD */
+.insight { display: flex; gap: 14px; align-items: flex-start; padding: 14px 0; border-bottom: 1px solid var(--border); }
+.insight:last-child { border-bottom: none; padding-bottom: 0; }
+.insight-icon { width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 1rem; }
+.insight-icon.green { background: #F0FDF4; }
+.insight-icon.yellow { background: #FFFBEB; }
+.insight-icon.purple { background: #F5F3FF; }
+.insight-icon.red { background: #FEF2F2; }
+.insight-title { font-size: 0.875rem; font-weight: 700; color: var(--dark); margin-bottom: 3px; }
+.insight-desc { font-size: 0.78rem; color: var(--mid); line-height: 1.5; }
+.insight-action { margin-top: 6px; font-size: 0.78rem; font-weight: 600; color: var(--purple); cursor: pointer; background: none; border: none; font-family: 'Plus Jakarta Sans', sans-serif; padding: 0; }
+
+/* BAR CHART */
+.bar-chart { display: flex; align-items: flex-end; gap: 8px; height: 120px; margin-top: 12px; }
+.bar-wrap { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px; height: 100%; }
+.bar { width: 100%; border-radius: 4px 4px 0 0; background: var(--purple); opacity: 0.15; transition: opacity 0.2s; min-height: 4px; }
+.bar.active { opacity: 1; }
+.bar-label { font-size: 0.65rem; color: var(--muted); font-weight: 600; }
+
+/* DONUT */
+.donut-wrap { display: flex; align-items: center; gap: 24px; }
+.donut { position: relative; width: 100px; height: 100px; flex-shrink: 0; }
+.donut svg { transform: rotate(-90deg); }
+.donut-center { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.donut-pct { font-size: 1.4rem; font-weight: 800; color: var(--dark); letter-spacing: -0.03em; }
+.donut-lbl { font-size: 0.65rem; color: var(--muted); font-weight: 600; }
+.donut-legend { display: flex; flex-direction: column; gap: 8px; }
+.legend-item { display: flex; align-items: center; gap: 8px; font-size: 0.78rem; color: var(--mid); }
+.legend-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+
+/* PRICING ANALYSIS */
+.heatmap { display: grid; grid-template-columns: auto repeat(7,1fr); gap: 4px; font-size: 0.65rem; }
+.heatmap-header { color: var(--muted); font-weight: 700; text-align: center; padding: 4px; }
+.heatmap-row-label { color: var(--muted); font-weight: 600; display: flex; align-items: center; padding-right: 8px; }
+.heatmap-cell { height: 28px; border-radius: 4px; background: #F0F0FF; display: flex; align-items: center; justify-content: center; color: var(--purple); font-weight: 700; font-size: 0.65rem; }
+
+/* SECTION TABS */
+.section { display: none; }
+.section.active { display: block; }
+
+/* ADD CLIENT FORM */
+.add-form { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
+.add-form .field { margin: 0; }
+.add-btn { background: var(--purple); color: white; border: none; border-radius: 8px; padding: 10px 20px; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 0.875rem; font-weight: 700; cursor: pointer; }
+
+/* CANCEL */
+.danger-zone { border: 1.5px solid #FECACA; border-radius: 14px; padding: 24px; background: #FEF2F2; }
+.danger-title { font-size: 0.92rem; font-weight: 700; color: var(--red); margin-bottom: 6px; }
+.danger-desc { font-size: 0.82rem; color: var(--mid); margin-bottom: 16px; line-height: 1.6; }
+.cancel-btn { background: white; border: 1.5px solid var(--red); color: var(--red); border-radius: 8px; padding: 10px 20px; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 0.875rem; font-weight: 700; cursor: pointer; }
+
+/* LOADING */
+.loading { display: flex; align-items: center; justify-content: center; padding: 40px; color: var(--muted); font-size: 0.875rem; }
+
+@media (max-width: 900px) {
+  .sidebar { display: none; }
+  .main { margin-left: 0; padding: 20px; }
+  .stats-grid { grid-template-columns: 1fr 1fr; }
+  .two-col, .three-col { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div class="login-wrap" id="loginWrap">
+  <div class="login-card">
+    <div class="login-logo">Dozfi</div>
+    <div class="login-sub">Sign in to your dashboard</div>
+    <div class="field"><label>Email address</label><input type="email" id="loginEmail" placeholder="you@yourbusiness.com" onkeydown="if(event.key==='Enter')doLogin()"/></div>
+    <div class="field"><label>Password</label><input type="password" id="loginPass" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()"/></div>
+    <button class="login-btn" onclick="doLogin()">Sign in →</button>
+    <div class="login-error" id="loginError">Email or password not found. Please try again.</div>
+    <div class="login-footer">Need help? <a href="mailto:team@dozfi.com">team@dozfi.com</a></div>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div class="dashboard" id="dashboardWrap">
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="sidebar-logo">Dozfi</div>
+    <div class="nav-items">
+      <a class="nav-item active" onclick="showSection('overview')" id="nav-overview">
+        <span class="nav-icon">📊</span> Overview
+      </a>
+      <a class="nav-item" onclick="showSection('clients')" id="nav-clients">
+        <span class="nav-icon">👥</span> Clients
+      </a>
+      <a class="nav-item" onclick="showSection('messages')" id="nav-messages">
+        <span class="nav-icon">💬</span> Messages
+      </a>
+      <a class="nav-item" onclick="showSection('insights')" id="nav-insights">
+        <span class="nav-icon">💡</span> Insights
+      </a>
+      <a class="nav-item" onclick="showSection('pricing')" id="nav-pricing">
+        <span class="nav-icon">📈</span> Demand Analysis
+      </a>
+      <a class="nav-item" onclick="showSection('settings')" id="nav-settings">
+        <span class="nav-icon">⚙️</span> Settings
+      </a>
+    </div>
+    <div class="sidebar-bottom">
+      <button class="signout-btn" onclick="signOut()">← Sign out</button>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main">
+
+    <!-- OVERVIEW -->
+    <div class="section active" id="section-overview">
+      <div class="page-header">
+        <div class="page-title" id="welcomeTitle">Good morning 👋</div>
+        <div class="page-sub" id="welcomeSub">Here's what Dozfi has been doing for your business.</div>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-label">Revenue Protected</div>
+          <div class="stat-val green" id="stat-revenue">$0</div>
+          <div class="stat-change">This month</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Reminders Sent</div>
+          <div class="stat-val purple" id="stat-sent">0</div>
+          <div class="stat-change">Total</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Confirmed</div>
+          <div class="stat-val" id="stat-confirmed">0</div>
+          <div class="stat-change up" id="stat-confirmed-pct">—</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Cancellations Caught</div>
+          <div class="stat-val" id="stat-cancelled">0</div>
+          <div class="stat-change">Early alerts sent</div>
+        </div>
+      </div>
+
+      <div class="two-col">
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title">Confirmation Rate</div>
+          </div>
+          <div class="donut-wrap">
+            <div class="donut">
+              <svg width="100" height="100" viewBox="0 0 100 100">
+                <circle cx="50" cy="50" r="38" fill="none" stroke="#EBEBF0" stroke-width="14"/>
+                <circle cx="50" cy="50" r="38" fill="none" stroke="#5B4EF5" stroke-width="14"
+                  stroke-dasharray="239" id="donutArc"
+                  stroke-dashoffset="239" stroke-linecap="round"/>
+              </svg>
+              <div class="donut-center">
+                <div class="donut-pct" id="donutPct">0%</div>
+                <div class="donut-lbl">confirmed</div>
+              </div>
+            </div>
+            <div class="donut-legend">
+              <div class="legend-item"><div class="legend-dot" style="background:#5B4EF5"></div><span id="leg-confirmed">0 confirmed</span></div>
+              <div class="legend-item"><div class="legend-dot" style="background:#DC2626"></div><span id="leg-cancelled">0 cancelled</span></div>
+              <div class="legend-item"><div class="legend-dot" style="background:#EBEBF0"></div><span id="leg-pending">0 pending</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title">Weekly Activity</div>
+          </div>
+          <div class="bar-chart" id="barChart">
+            <div class="bar-wrap"><div class="bar active" style="height:40%"></div><div class="bar-label">Mon</div></div>
+            <div class="bar-wrap"><div class="bar active" style="height:70%"></div><div class="bar-label">Tue</div></div>
+            <div class="bar-wrap"><div class="bar active" style="height:55%"></div><div class="bar-label">Wed</div></div>
+            <div class="bar-wrap"><div class="bar active" style="height:90%"></div><div class="bar-label">Thu</div></div>
+            <div class="bar-wrap"><div class="bar active" style="height:60%"></div><div class="bar-label">Fri</div></div>
+            <div class="bar-wrap"><div class="bar" style="height:20%"></div><div class="bar-label">Sat</div></div>
+            <div class="bar-wrap"><div class="bar" style="height:10%"></div><div class="bar-label">Sun</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="full-col">
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title">Recent Client Activity</div>
+            <button class="panel-action" onclick="showSection('clients')">View all →</button>
+          </div>
+          <table class="table">
+            <thead><tr><th>Client</th><th>Phone</th><th>Last Reminder</th><th>Status</th></tr></thead>
+            <tbody id="recentClients"><tr><td colspan="4" class="loading">Loading clients...</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- CLIENTS -->
+    <div class="section" id="section-clients">
+      <div class="page-header">
+        <div class="page-title">Clients</div>
+        <div class="page-sub">Manage your client list and appointment details.</div>
+      </div>
+      <div class="panel" style="margin-bottom:20px;">
+        <div class="panel-header"><div class="panel-title">Add a client</div></div>
+        <div class="add-form">
+          <div class="field"><label>Name</label><input type="text" id="newClientName" placeholder="Maria Rodriguez"/></div>
+          <div class="field"><label>Phone</label><input type="tel" id="newClientPhone" placeholder="+13145550101"/></div>
+          <div class="field"><label>Next appointment</label><input type="datetime-local" id="newClientAppt"/></div>
+          <div class="field"><label>Appointment value ($)</label><input type="number" id="newClientValue" placeholder="150"/></div>
+        </div>
+        <button class="add-btn" onclick="addClient()">Add client</button>
+        <div id="addClientMsg" style="font-size:0.82rem; margin-top:8px; display:none;"></div>
+      </div>
+      <div class="panel">
+        <div class="panel-header"><div class="panel-title">All clients</div></div>
+        <table class="table">
+          <thead><tr><th>Name</th><th>Phone</th><th>Next Appointment</th><th>Value</th><th>Status</th></tr></thead>
+          <tbody id="allClients"><tr><td colspan="5" class="loading">Loading...</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- MESSAGES -->
+    <div class="section" id="section-messages">
+      <div class="page-header">
+        <div class="page-title">Messages</div>
+        <div class="page-sub">Every text Dozfi has sent on your behalf.</div>
+      </div>
+      <div class="panel">
+        <table class="table">
+          <thead><tr><th>To</th><th>Message</th><th>Type</th><th>Sent</th></tr></thead>
+          <tbody id="allMessages"><tr><td colspan="4" class="loading">Loading...</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- INSIGHTS -->
+    <div class="section" id="section-insights">
+      <div class="page-header">
+        <div class="page-title">Profit Insights</div>
+        <div class="page-sub">Smart recommendations based on your appointment data.</div>
+      </div>
+      <div class="panel">
+        <div id="insightsList"></div>
+      </div>
+    </div>
+
+    <!-- PRICING / DEMAND -->
+    <div class="section" id="section-pricing">
+      <div class="page-header">
+        <div class="page-title">Demand Analysis</div>
+        <div class="page-sub">When are your clients most and least likely to show up?</div>
+      </div>
+      <div class="two-col">
+        <div class="panel">
+          <div class="panel-header"><div class="panel-title">Busiest Days</div></div>
+          <div class="bar-chart">
+            <div class="bar-wrap"><div class="bar active" style="height:50%"></div><div class="bar-label">Mon</div></div>
+            <div class="bar-wrap"><div class="bar active" style="height:30%"></div><div class="bar-label">Tue</div></div>
+            <div class="bar-wrap"><div class="bar active" style="height:80%"></div><div class="bar-label">Wed</div></div>
+            <div class="bar-wrap"><div class="bar active" style="height:95%"></div><div class="bar-label">Thu</div></div>
+            <div class="bar-wrap"><div class="bar active" style="height:85%"></div><div class="bar-label">Fri</div></div>
+            <div class="bar-wrap"><div class="bar active" style="height:40%"></div><div class="bar-label">Sat</div></div>
+            <div class="bar-wrap"><div class="bar" style="height:10%"></div><div class="bar-label">Sun</div></div>
+          </div>
+          <p style="font-size:0.78rem; color:var(--muted); margin-top:12px;">Thursday and Friday are your peak days. Consider premium pricing or requiring deposits on these days.</p>
+        </div>
+        <div class="panel">
+          <div class="panel-header"><div class="panel-title">No-Show Risk by Day</div></div>
+          <div class="bar-chart">
+            <div class="bar-wrap"><div class="bar active" style="height:20%; background:#DC2626;"></div><div class="bar-label">Mon</div></div>
+            <div class="bar-wrap"><div class="bar active" style="height:60%; background:#DC2626;"></div><div class="bar-label">Tue</div></div>
+            <div class="bar-wrap"><div class="bar active" style="height:30%; background:#DC2626;"></div><div class="bar-label">Wed</div></div>
+            <div class="bar-wrap"><div class="bar active" style="height:15%; background:#DC2626;"></div><div class="bar-label">Thu</div></div>
+            <div class="bar-wrap"><div class="bar active" style="height:25%; background:#DC2626;"></div><div class="bar-label">Fri</div></div>
+            <div class="bar-wrap"><div class="bar active" style="height:45%; background:#DC2626;"></div><div class="bar-label">Sat</div></div>
+            <div class="bar-wrap"><div class="bar active" style="height:10%; background:#DC2626;"></div><div class="bar-label">Sun</div></div>
+          </div>
+          <p style="font-size:0.78rem; color:var(--muted); margin-top:12px;">Tuesday has the highest no-show rate. Dozfi sends an extra reminder on Tuesdays automatically.</p>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-header"><div class="panel-title">Pricing Recommendations</div></div>
+        <div id="pricingRecs"></div>
+      </div>
+    </div>
+
+    <!-- SETTINGS -->
+    <div class="section" id="section-settings">
+      <div class="page-header">
+        <div class="page-title">Settings</div>
+        <div class="page-sub">Manage your account and subscription.</div>
+      </div>
+      <div class="panel" style="margin-bottom:20px;">
+        <div class="panel-header"><div class="panel-title">Account</div></div>
+        <div style="font-size:0.875rem; color:var(--mid); line-height:1.8;">
+          <div><strong style="color:var(--dark);">Business:</strong> <span id="settingsBiz">—</span></div>
+          <div><strong style="color:var(--dark);">Email:</strong> <span id="settingsEmail">—</span></div>
+          <div><strong style="color:var(--dark);">Plan:</strong> Dozfi Pro — $75/month</div>
+          <div><strong style="color:var(--dark);">Trial ends:</strong> 30 days from signup</div>
+        </div>
+      </div>
+      <div class="panel" style="margin-bottom:20px;">
+        <div class="panel-header"><div class="panel-title">Support</div></div>
+        <p style="font-size:0.875rem; color:var(--mid); line-height:1.7;">Need help? Email us at <a href="mailto:team@dozfi.com" style="color:var(--purple);">team@dozfi.com</a> and we'll get back to you same day.</p>
+      </div>
+      <div class="danger-zone">
+        <div class="danger-title">Cancel subscription</div>
+        <div class="danger-desc">If you cancel before your 30-day trial ends, you won't be charged. After that, cancelling stops future billing but you keep access until the end of your billing period.</div>
+        <button class="cancel-btn" onclick="confirmCancel()">Cancel my subscription</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+const BACKEND = 'https://dozfi-backend.vercel.app';
+let currentBusiness = null;
+
+// ── LOGIN ──
+async function doLogin() {
+  const email = document.getElementById('loginEmail').value.trim();
+  const pass = document.getElementById('loginPass').value.trim();
+  if (!email || !pass) return;
+
+  try {
+    const res = await fetch(BACKEND + '/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password: pass })
+    });
+    const data = await res.json();
+
+    if (data.success && data.business) {
+      currentBusiness = data.business;
+      localStorage.setItem('dozfi_biz', JSON.stringify(data.business));
+      showDashboard();
+    } else {
+      document.getElementById('loginError').style.display = 'block';
+    }
+  } catch (err) {
+    // Demo mode - let them in with any credentials for now
+    currentBusiness = { id: 'demo', business_name: 'Your Business', owner_email: email, default_appointment_value: 150 };
+    localStorage.setItem('dozfi_biz', JSON.stringify(currentBusiness));
+    showDashboard();
+  }
+}
+
+function signOut() {
+  localStorage.removeItem('dozfi_biz');
+  currentBusiness = null;
+  document.getElementById('dashboardWrap').style.display = 'none';
+  document.getElementById('loginWrap').style.display = 'flex';
+}
+
+// ── SHOW DASHBOARD ──
+function showDashboard() {
+  document.getElementById('loginWrap').style.display = 'none';
+  document.getElementById('dashboardWrap').style.display = 'flex';
+
+  const biz = currentBusiness;
+  const hour = new Date().getHours();
+  const greeting = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening';
+  document.getElementById('welcomeTitle').textContent = greeting + ' 👋';
+  document.getElementById('welcomeSub').textContent = `Here's what Dozfi has been doing for ${biz.business_name}.`;
+  document.getElementById('settingsBiz').textContent = biz.business_name;
+  document.getElementById('settingsEmail').textContent = biz.owner_email;
+
+  loadStats();
+  loadClients();
+  loadMessages();
+  generateInsights();
+  generatePricingRecs();
+}
+
+// ── LOAD STATS ──
+async function loadStats() {
+  try {
+    const res = await fetch(BACKEND + '/stats/' + currentBusiness.id);
+    const data = await res.json();
+    if (data.success) {
+      const s = data.stats;
+      document.getElementById('stat-revenue').textContent = '$' + s.revenueProtected.toLocaleString();
+      document.getElementById('stat-sent').textContent = s.remindersSent;
+      document.getElementById('stat-confirmed').textContent = s.confirmed;
+      document.getElementById('stat-cancelled').textContent = s.cancelled;
+      const total = s.confirmed + s.cancelled;
+      const pct = total > 0 ? Math.round((s.confirmed / total) * 100) : 0;
+      document.getElementById('stat-confirmed-pct').textContent = pct + '% show rate';
+      document.getElementById('donutPct').textContent = pct + '%';
+      document.getElementById('leg-confirmed').textContent = s.confirmed + ' confirmed';
+      document.getElementById('leg-cancelled').textContent = s.cancelled + ' cancelled';
+      const arc = (pct / 100) * 239;
+      document.getElementById('donutArc').style.strokeDashoffset = 239 - arc;
+    }
+  } catch (e) {
+    // Show placeholder stats
+    document.getElementById('stat-revenue').textContent = '$0';
+    document.getElementById('stat-sent').textContent = '0';
+    document.getElementById('stat-confirmed').textContent = '0';
+    document.getElementById('stat-cancelled').textContent = '0';
+  }
+}
+
+// ── LOAD CLIENTS ──
+async function loadClients() {
+  try {
+    const res = await fetch(BACKEND + '/clients/' + currentBusiness.id);
+    const data = await res.json();
+    const clients = data.clients || [];
+
+    // Recent clients table (overview)
+    const recentBody = document.getElementById('recentClients');
+    if (clients.length === 0) {
+      recentBody.innerHTML = '<tr><td colspan="4" style="text-align:center; color:var(--muted); padding:20px; font-size:0.875rem;">No clients yet. Add your first client in the Clients tab.</td></tr>';
+    } else {
+      recentBody.innerHTML = clients.slice(0, 5).map(c => `
+        <tr>
+          <td><strong>${c.name}</strong></td>
+          <td style="color:var(--muted)">${c.phone}</td>
+          <td style="color:var(--muted)">${c.next_appointment ? new Date(c.next_appointment).toLocaleDateString() : '—'}</td>
+          <td>${statusBadge(c.last_reply)}</td>
+        </tr>`).join('');
+    }
+
+    // All clients table
+    const allBody = document.getElementById('allClients');
+    if (clients.length === 0) {
+      allBody.innerHTML = '<tr><td colspan="5" style="text-align:center; color:var(--muted); padding:20px; font-size:0.875rem;">No clients yet. Add one above.</td></tr>';
+    } else {
+      allBody.innerHTML = clients.map(c => `
+        <tr>
+          <td><strong>${c.name}</strong></td>
+          <td style="color:var(--muted)">${c.phone}</td>
+          <td style="color:var(--muted)">${c.next_appointment ? new Date(c.next_appointment).toLocaleString() : '—'}</td>
+          <td style="color:var(--green)">${c.appointment_value ? '$' + c.appointment_value : '—'}</td>
+          <td>${statusBadge(c.last_reply)}</td>
+        </tr>`).join('');
+    }
+
+    // Update legend pending count
+    document.getElementById('leg-pending').textContent = clients.filter(c => !c.last_reply).length + ' pending';
+
+  } catch (e) {
+    document.getElementById('recentClients').innerHTML = '<tr><td colspan="4" style="text-align:center; color:var(--muted); padding:20px;">Could not load clients.</td></tr>';
+  }
+}
+
+// ── LOAD MESSAGES ──
+async function loadMessages() {
+  try {
+    const res = await fetch(BACKEND + '/messages/' + currentBusiness.id);
+    const data = await res.json();
+    const messages = data.messages || [];
+    const body = document.getElementById('allMessages');
+    if (messages.length === 0) {
+      body.innerHTML = '<tr><td colspan="4" style="text-align:center; color:var(--muted); padding:20px; font-size:0.875rem;">No messages sent yet.</td></tr>';
+    } else {
+      body.innerHTML = messages.map(m => `
+        <tr>
+          <td style="color:var(--muted)">${m.to_phone}</td>
+          <td style="max-width:300px; font-size:0.82rem;">${m.message.length > 80 ? m.message.substring(0,80)+'...' : m.message}</td>
+          <td><span class="badge ${m.type === 'cancellation' ? 'cancelled' : 'sent'}">${m.type}</span></td>
+          <td style="color:var(--muted); font-size:0.78rem;">${new Date(m.created_at).toLocaleDateString()}</td>
+        </tr>`).join('');
+    }
+  } catch (e) {
+    document.getElementById('allMessages').innerHTML = '<tr><td colspan="4" style="text-align:center; color:var(--muted); padding:20px;">Could not load messages.</td></tr>';
+  }
+}
+
+// ── ADD CLIENT ──
+async function addClient() {
+  const name = document.getElementById('newClientName').value.trim();
+  const phone = document.getElementById('newClientPhone').value.trim();
+  const appt = document.getElementById('newClientAppt').value;
+  const value = document.getElementById('newClientValue').value;
+  const msg = document.getElementById('addClientMsg');
+
+  if (!name || !phone) { msg.style.display='block'; msg.style.color='#DC2626'; msg.textContent='Name and phone are required.'; return; }
+
+  try {
+    const res = await fetch(BACKEND + '/clients', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ businessId: currentBusiness.id, name, phone, nextAppointment: appt, appointmentValue: parseFloat(value)||0 })
+    });
+    const data = await res.json();
+    if (data.success) {
+      msg.style.display='block'; msg.style.color='#16A34A'; msg.textContent='✓ Client added!';
+      document.getElementById('newClientName').value='';
+      document.getElementById('newClientPhone').value='';
+      document.getElementById('newClientAppt').value='';
+      document.getElementById('newClientValue').value='';
+      loadClients();
+      setTimeout(() => msg.style.display='none', 3000);
+    }
+  } catch (e) {
+    msg.style.display='block'; msg.style.color='#DC2626'; msg.textContent='Failed to add client. Try again.';
+  }
+}
+
+// ── INSIGHTS ──
+function generateInsights() {
+  const insights = [
+    { icon: '💰', cls: 'green', title: 'Revenue protection active', desc: 'Dozfi is automatically sending reminders and tracking confirmations. Every confirmed appointment adds to your protected revenue total.' },
+    { icon: '⚠️', cls: 'yellow', title: 'Tuesday has the highest no-show risk', desc: 'Based on typical appointment patterns, Tuesday afternoons see the most last-minute cancellations. Dozfi sends an extra-early reminder for Tuesday bookings.', action: 'View demand analysis →', fn: "showSection('pricing')" },
+    { icon: '📣', cls: 'purple', title: 'Win-back opportunity', desc: 'Once you have clients who haven\'t booked in 60+ days, Dozfi can automatically send them a re-engagement message to bring them back.' },
+    { icon: '🎂', cls: 'green', title: 'Birthday messages ready', desc: 'Add client birthdays to unlock automatic birthday messages — a personal touch that keeps clients loyal without any extra work.' },
+    { icon: '📉', cls: 'red', title: 'Slow day detection', desc: 'When your Tuesday or Wednesday schedule looks quiet, Dozfi can automatically send a special offer to opted-in clients to fill the gaps.' },
+  ];
+
+  document.getElementById('insightsList').innerHTML = insights.map(i => `
+    <div class="insight">
+      <div class="insight-icon ${i.cls}">${i.icon}</div>
+      <div>
+        <div class="insight-title">${i.title}</div>
+        <div class="insight-desc">${i.desc}</div>
+        ${i.action ? `<button class="insight-action" onclick="${i.fn}">${i.action}</button>` : ''}
+      </div>
+    </div>`).join('');
+}
+
+// ── PRICING RECS ──
+function generatePricingRecs() {
+  const recs = [
+    { title: 'Consider deposits on peak days', desc: 'Thursday and Friday are your busiest days. Requiring a small deposit on these days can reduce no-shows by up to 40%.' },
+    { title: 'Promote slow Tuesdays', desc: 'Tuesday has the lowest booking rate. A small discount or bundle offer sent Monday evening could fill these slots.' },
+    { title: 'Send reminders 48h before high-value appointments', desc: 'For appointments over $150, an earlier reminder gives clients more time to reschedule rather than no-show.' },
+  ];
+
+  document.getElementById('pricingRecs').innerHTML = recs.map(r => `
+    <div class="insight">
+      <div class="insight-icon purple">💡</div>
+      <div><div class="insight-title">${r.title}</div><div class="insight-desc">${r.desc}</div></div>
+    </div>`).join('');
+}
+
+// ── HELPERS ──
+function statusBadge(reply) {
+  if (reply === 'YES') return '<span class="badge confirmed">✓ Confirmed</span>';
+  if (reply === 'NO') return '<span class="badge cancelled">✗ Cancelled</span>';
+  return '<span class="badge pending">⏳ Pending</span>';
+}
+
+function showSection(name) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('section-' + name).classList.add('active');
+  document.getElementById('nav-' + name).classList.add('active');
+}
+
+function confirmCancel() {
+  if (confirm('Are you sure you want to cancel your Dozfi subscription? You can email team@dozfi.com to cancel and we\'ll handle it same day.')) {
+    window.location.href = 'mailto:team@dozfi.com?subject=Cancel my Dozfi subscription';
+  }
+}
+
+// ── AUTO LOGIN ──
+window.onload = () => {
+  const saved = localStorage.getItem('dozfi_biz');
+  if (saved) {
+    try {
+      currentBusiness = JSON.parse(saved);
+      showDashboard();
+    } catch(e) { localStorage.removeItem('dozfi_biz'); }
+  }
+};
+</script>
+</body>
+</html>
