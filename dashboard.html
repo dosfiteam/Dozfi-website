@@ -165,6 +165,16 @@ a{color:var(--purple)}
 .banner{background:var(--purple-soft);border:1px solid #D9D4FC;border-radius:12px;padding:14px 16px;margin-bottom:18px;display:flex;gap:12px;align-items:flex-start}
 .banner-t{font-size:.87rem;font-weight:700;margin-bottom:2px}
 .banner-p{font-size:.81rem;color:var(--body);line-height:1.5}
+.bub{max-width:78%;padding:9px 13px;border-radius:13px;font-size:.86rem;line-height:1.5}
+.bub-in{background:var(--shell);border:1px solid var(--line);align-self:flex-start;border-bottom-left-radius:4px}
+.bub-out{background:var(--purple);color:#fff;align-self:flex-end;border-bottom-right-radius:4px}
+.bub-time{font-size:.68rem;color:var(--faint);margin-top:3px}
+.bub-out .bub-time{color:rgba(255,255,255,.7);text-align:right}
+.seg-row{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:12px}
+.seg{border:1.5px solid var(--line);border-radius:99px;padding:6px 13px;font-size:.8rem;font-weight:600;cursor:pointer;background:#fff}
+.seg[aria-pressed="true"]{border-color:var(--purple);background:var(--purple-soft);color:var(--purple)}
+.seg .cnt{color:var(--faint);font-weight:500;margin-left:4px}
+.seg[aria-pressed="true"] .cnt{color:var(--purple)}
 
 @media(max-width:960px){
   .side{position:static;width:100%;flex-direction:row;align-items:center;padding:12px;overflow-x:auto}
@@ -372,6 +382,16 @@ a{color:var(--purple)}
       <div class="card">
         <div class="card-h"><div><div class="card-t">Send a message</div><div class="card-d">Write once, send to as many clients as you pick. Use <code>{name}</code> to personalize each text.</div></div></div>
         <div class="f"><label for="composeText">Message</label><textarea id="composeText" placeholder="Hi {name}, we have an opening tomorrow if you'd like to come in..." style="min-height:80px"></textarea></div>
+        <div style="font-size:.82rem;font-weight:600;margin-bottom:8px">Send to a group</div>
+        <div class="seg-row" id="segRow">
+          <button class="seg" data-seg="all">Everyone <span class="cnt" id="seg-all">–</span></button>
+          <button class="seg" data-seg="upcoming">Upcoming appts <span class="cnt" id="seg-upcoming">–</span></button>
+          <button class="seg" data-seg="new">New (30 days) <span class="cnt" id="seg-new">–</span></button>
+          <button class="seg" data-seg="dormant">Haven't booked (60+ days) <span class="cnt" id="seg-dormant">–</span></button>
+          <button class="seg" data-seg="confirmed">Confirmed <span class="cnt" id="seg-confirmed">–</span></button>
+          <button class="seg" data-seg="cancelled">Cancelled <span class="cnt" id="seg-cancelled">–</span></button>
+        </div>
+        <div style="font-size:.82rem;font-weight:600;margin:14px 0 8px">Or pick individual clients</div>
         <div style="position:relative;max-width:100%;margin-bottom:10px">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--faint)" stroke-width="2" style="position:absolute;left:11px;top:50%;transform:translateY(-50%)"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
           <input id="composeSearch" placeholder="Search clients to add" style="width:100%;padding:9px 12px 9px 33px;border:1.5px solid var(--line);border-radius:9px;font-size:.85rem;outline:none;font-family:inherit"/>
@@ -559,6 +579,24 @@ a{color:var(--purple)}
   </div>
 </div>
 
+<div class="sheet" id="convoSheet" onclick="if(event.target===this)closeConvo()">
+  <div class="sheet-box" style="max-width:480px;display:flex;flex-direction:column;max-height:88vh">
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:4px">
+      <div class="sheet-h" id="convoName" style="margin:0">Conversation</div>
+      <button class="row-x" onclick="closeConvo()">Close</button>
+    </div>
+    <div class="card-d" id="convoPhone" style="margin-bottom:14px"></div>
+    <div id="convoBody" style="flex:1;overflow-y:auto;padding:4px 2px;display:flex;flex-direction:column;gap:8px;min-height:120px"></div>
+    <div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--line)">
+      <textarea id="convoReply" placeholder="Type a message to this client…" style="width:100%;padding:10px 12px;border:1.5px solid var(--line);border-radius:9px;font-size:.87rem;outline:none;font-family:inherit;min-height:54px;resize:vertical"></textarea>
+      <div style="display:flex;justify-content:flex-end;margin-top:8px">
+        <button class="btn btn-sm" id="convoSendBtn">Send</button>
+      </div>
+      <div class="notice" id="convoMsg"></div>
+    </div>
+  </div>
+</div>
+
 <div class="sheet" id="confirmSheet" onclick="if(event.target===this)closeConfirm()">
   <div class="sheet-box">
     <div class="sheet-h" id="cfTitle">Are you sure?</div>
@@ -674,7 +712,7 @@ function boot() {
       '<div class="banner-p">Dozfi is analyzing your business now. Anything below marked as needing more data will fill in as you add appointments and prices.</div></div></div>';
   }
 
-  loadInsights(); loadClients().then(loadStats); loadMessages(); loadSettings(); loadBilling(); loadAutomations();
+  loadInsights(); loadClients().then(loadStats); loadMessages(); loadSettings(); loadBilling(); loadAutomations(); loadSegments();
 }
 
 /* ---------- nav ---------- */
@@ -867,6 +905,7 @@ async function loadClients() {
     $('clientCount').textContent = allClients.length ? `${allClients.length} on file` : '';
     renderClientRows(allClients);
     renderComposePickList(allClients);
+    if (typeof loadSegments === 'function') loadSegments();
   } catch (e) {
     $('clientsBox').innerHTML = `<div class="empty"><div class="empty-h">Couldn't load your clients</div><div class="empty-p">${esc(e.message)}</div><button class="btn btn-ghost btn-sm" onclick="loadClients()">Try again</button></div>`;
   }
@@ -883,12 +922,12 @@ function renderClientRows(cs) {
   $('clientsBox').innerHTML = `<table class="tbl">
     <thead><tr><th>Name</th><th>Phone</th><th>Next appointment</th><th>Value</th><th>Status</th><th></th></tr></thead>
     <tbody>${cs.map(c => `<tr>
-      <td><strong>${esc(c.name)}</strong></td>
+      <td><button class="link-btn" style="font-weight:700;font-size:.87rem" onclick="openConversation('${c.id}')">${esc(c.name)}</button></td>
       <td class="muted">${esc(c.phone)}</td>
       <td class="muted">${c.next_appointment ? new Date(c.next_appointment).toLocaleString([], {month:'short',day:'numeric',hour:'numeric',minute:'2-digit'}) : 'Not scheduled'}</td>
       <td>${c.appointment_value ? money(c.appointment_value) : '<span class="muted">—</span>'}</td>
       <td>${c.status === 'opted_out' ? '<span class="tag no">Opted out</span>' : c.last_reply === 'YES' ? '<span class="tag ok">Confirmed</span>' : c.last_reply === 'NO' ? '<span class="tag no">Cancelled</span>' : '<span class="tag wait">Waiting</span>'}</td>
-      <td style="text-align:right"><button class="row-x" onclick="removeClient('${c.id}','${esc(c.name).replace(/'/g,"\\'")}')">Remove</button></td>
+      <td style="text-align:right"><button class="row-x" style="margin-right:12px" onclick="openConversation('${c.id}')">View chat</button><button class="row-x" onclick="removeClient('${c.id}','${esc(c.name).replace(/'/g,"\\'")}')">Remove</button></td>
     </tr>`).join('')}</tbody></table>`;
 }
 
@@ -1240,6 +1279,8 @@ function renderComposePickList(list) {
     </label>`).join('');
   box.querySelectorAll('input[type=checkbox]').forEach(cb => {
     cb.onchange = () => {
+      selectedSegment = null;
+      document.querySelectorAll('#segRow .seg').forEach(s => s.setAttribute('aria-pressed', 'false'));
       if (cb.checked) composeSelected.add(cb.dataset.id); else composeSelected.delete(cb.dataset.id);
       $('composeCount').textContent = `${composeSelected.size} client${composeSelected.size === 1 ? '' : 's'} selected`;
     };
@@ -1255,33 +1296,71 @@ document.getElementById('composeSearch')?.addEventListener('input', e => {
 });
 
 $('selectAllBtn')?.addEventListener('click', () => {
+  selectedSegment = null;
+  document.querySelectorAll('#segRow .seg').forEach(s => s.setAttribute('aria-pressed', 'false'));
   allClients.forEach(c => composeSelected.add(c.id));
   renderComposePickList(allClients);
   $('composeCount').textContent = `${composeSelected.size} client${composeSelected.size === 1 ? '' : 's'} selected`;
 });
 
 $('selectNoneBtn')?.addEventListener('click', () => {
+  selectedSegment = null;
+  document.querySelectorAll('#segRow .seg').forEach(s => s.setAttribute('aria-pressed', 'false'));
   composeSelected.clear();
   renderComposePickList(allClients);
   $('composeCount').textContent = '0 clients selected';
+});
+
+/* ---------- segments ---------- */
+let selectedSegment = null;
+
+async function loadSegments() {
+  try {
+    const d = await api('/segments/' + biz.id);
+    const s = d.segments || {};
+    Object.keys(s).forEach(k => { const el = $('seg-' + k); if (el) el.textContent = s[k]; });
+  } catch (e) { /* silent */ }
+}
+
+document.querySelectorAll('#segRow .seg').forEach(seg => {
+  seg.onclick = () => {
+    const already = seg.getAttribute('aria-pressed') === 'true';
+    document.querySelectorAll('#segRow .seg').forEach(s => s.setAttribute('aria-pressed', 'false'));
+    if (already) {
+      selectedSegment = null;
+      $('composeCount').textContent = `${composeSelected.size} client${composeSelected.size === 1 ? '' : 's'} selected`;
+    } else {
+      seg.setAttribute('aria-pressed', 'true');
+      selectedSegment = seg.dataset.seg;
+      composeSelected.clear();
+      renderComposePickList(allClients);
+      const cnt = $('seg-' + selectedSegment)?.textContent || '';
+      $('composeCount').textContent = `Sending to "${seg.textContent.replace(/\s*\d+\s*$/, '').trim()}" (${cnt})`;
+    }
+  };
 });
 
 $('composeSendBtn')?.addEventListener('click', async () => {
   clearNote('composeMsg');
   const text = $('composeText').value.trim();
   if (!text) return note('composeMsg', 'Write a message before sending.');
-  if (composeSelected.size === 0) return note('composeMsg', 'Select at least one client to send to.');
+  if (!selectedSegment && composeSelected.size === 0) return note('composeMsg', 'Pick a group or select clients to send to.');
 
   const btn = $('composeSendBtn');
   btn.disabled = true; btn.innerHTML = '<span class="spin"></span> Sending…';
   try {
+    const payload = selectedSegment
+      ? { businessId: biz.id, segment: selectedSegment, message: text }
+      : { businessId: biz.id, clientIds: [...composeSelected], message: text };
     const d = await api('/messages/bulk', {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ businessId: biz.id, clientIds: [...composeSelected], message: text })
+      body: JSON.stringify(payload)
     });
     note('composeMsg', `Sent to ${d.sent} client${d.sent === 1 ? '' : 's'}${d.failed ? `, ${d.failed} failed` : ''}.`, true);
     $('composeText').value = '';
     composeSelected.clear();
+    selectedSegment = null;
+    document.querySelectorAll('#segRow .seg').forEach(s => s.setAttribute('aria-pressed', 'false'));
     $('composeCount').textContent = '0 clients selected';
     renderComposePickList(allClients);
     loadMessages(); loadStats();
@@ -1413,6 +1492,61 @@ async function reactivate() {
 }
 
 /* ---------- sheets ---------- */
+/* ---------- client conversation ---------- */
+let convoClient = null;
+
+async function openConversation(clientId) {
+  $('convoSheet').classList.add('on');
+  $('convoName').textContent = 'Conversation';
+  $('convoPhone').textContent = '';
+  $('convoBody').innerHTML = '<div class="loading"><span class="spin"></span> Loading…</div>';
+  $('convoReply').value = '';
+  clearNote('convoMsg');
+  try {
+    const d = await api('/conversation/' + clientId);
+    convoClient = d.client;
+    $('convoName').textContent = d.client.name;
+    $('convoPhone').textContent = d.client.phone;
+    renderConvo(d.messages || []);
+  } catch (e) {
+    $('convoBody').innerHTML = `<div class="empty"><div class="empty-p">${esc(e.message)}</div></div>`;
+  }
+}
+
+function renderConvo(msgs) {
+  if (!msgs.length) {
+    $('convoBody').innerHTML = `<div class="empty"><div class="empty-p">No messages with this client yet. Send the first one below.</div></div>`;
+    return;
+  }
+  $('convoBody').innerHTML = msgs.map(m => {
+    const incoming = m.type === 'incoming';
+    const when = new Date(m.created_at).toLocaleString([], { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' });
+    return `<div class="bub ${incoming ? 'bub-in' : 'bub-out'}">${esc(m.message)}<div class="bub-time">${when}</div></div>`;
+  }).join('');
+  const body = $('convoBody');
+  body.scrollTop = body.scrollHeight;
+}
+
+$('convoSendBtn')?.addEventListener('click', async () => {
+  clearNote('convoMsg');
+  const text = $('convoReply').value.trim();
+  if (!text) return;
+  if (!convoClient) return;
+  const btn = $('convoSendBtn'); btn.disabled = true; btn.innerHTML = '<span class="spin"></span> Sending…';
+  try {
+    await api('/messages/send', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ businessId: biz.id, clientId: convoClient.id, to: convoClient.phone, message: text })
+    });
+    $('convoReply').value = '';
+    openConversation(convoClient.id);
+    loadMessages();
+  } catch (e) { note('convoMsg', e.message); }
+  btn.disabled = false; btn.textContent = 'Send';
+});
+
+function closeConvo() { $('convoSheet').classList.remove('on'); convoClient = null; }
+
 function openHelp() { $('helpSheet').classList.add('on'); }
 function closeHelp() { $('helpSheet').classList.remove('on'); }
 function askConfirm(title, body, fn) {
@@ -1421,7 +1555,7 @@ function askConfirm(title, body, fn) {
   $('confirmSheet').classList.add('on');
 }
 function closeConfirm() { $('confirmSheet').classList.remove('on'); }
-document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeHelp(); closeConfirm(); } });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeHelp(); closeConfirm(); closeConvo(); } });
 
 let resizeTimer;
 window.addEventListener('resize', () => {
