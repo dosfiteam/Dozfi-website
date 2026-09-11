@@ -83,7 +83,8 @@ a{color:var(--purple)}
 
 /* ===== OPPORTUNITIES ===== */
 .opp{border:1px solid var(--line);border-radius:14px;padding:20px;background:var(--card);margin-bottom:12px;display:flex;gap:16px}
-.opp-ic{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.opp-ic{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--purple)}
+.opp-ic svg{display:block}
 .opp-body{flex:1;min-width:0}
 .opp-cat{font-size:.75rem;font-weight:700;color:var(--faint);margin-bottom:7px}
 .opp-row{display:flex;gap:9px;margin-bottom:9px;font-size:.87rem;line-height:1.55}
@@ -276,6 +277,10 @@ a{color:var(--purple)}
           <div class="metric-n">Texts Dozfi sent on your behalf.</div>
         </div>
       </div>
+      <div class="card">
+        <div class="card-h"><div><div class="card-t">Confirmed appointment value over time</div><div class="card-d">Running total, based on when each client confirmed.</div></div></div>
+        <div style="position:relative;height:220px;margin-top:8px"><canvas id="impactChart"></canvas></div>
+      </div>
       <div class="two">
         <div class="card">
           <div class="card-h"><div><div class="card-t">Reply breakdown</div><div class="card-d">Of the clients who replied to a reminder.</div></div></div>
@@ -306,7 +311,13 @@ a{color:var(--purple)}
         <div class="notice" id="ncMsg"></div>
       </div>
       <div class="card">
-        <div class="card-h"><div class="card-t">Your clients</div><div class="card-d" id="clientCount"></div></div>
+        <div class="card-h">
+          <div><div class="card-t">Your clients</div><div class="card-d" id="clientCount"></div></div>
+          <div style="position:relative;max-width:260px;width:100%">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--faint)" stroke-width="2" style="position:absolute;left:11px;top:50%;transform:translateY(-50%)"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+            <input id="clientSearchBox" placeholder="Search by name or phone" style="width:100%;padding:9px 12px 9px 33px;border:1.5px solid var(--line);border-radius:9px;font-size:.85rem;outline:none;font-family:inherit"/>
+          </div>
+        </div>
         <div id="clientsBox"><div class="loading">Loading…</div></div>
       </div>
     </section>
@@ -347,7 +358,32 @@ a{color:var(--purple)}
         <h1 class="h1">Messages</h1>
         <p class="sub">Every text Dozfi has sent for you, and every cancellation it caught.</p>
       </div>
-      <div class="card"><div id="msgBox"><div class="loading">Loading…</div></div></div>
+
+      <div class="card">
+        <div class="card-h"><div><div class="card-t">Send a message</div><div class="card-d">Write once, send to as many clients as you pick. Use <code>{name}</code> to personalize each text.</div></div></div>
+        <div class="f"><label for="composeText">Message</label><textarea id="composeText" placeholder="Hi {name}, we have an opening tomorrow if you'd like to come in..." style="min-height:80px"></textarea></div>
+        <div style="position:relative;max-width:100%;margin-bottom:10px">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--faint)" stroke-width="2" style="position:absolute;left:11px;top:50%;transform:translateY(-50%)"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+          <input id="composeSearch" placeholder="Search clients to add" style="width:100%;padding:9px 12px 9px 33px;border:1.5px solid var(--line);border-radius:9px;font-size:.85rem;outline:none;font-family:inherit"/>
+        </div>
+        <div id="composePickList" style="max-height:180px;overflow-y:auto;border:1px solid var(--line);border-radius:10px;margin-bottom:12px"></div>
+        <div style="display:flex;align-items:center;gap:12px">
+          <button class="btn" id="composeSendBtn">Send message</button>
+          <span class="card-d" id="composeCount" style="margin:0">0 clients selected</span>
+        </div>
+        <div class="notice" id="composeMsg"></div>
+      </div>
+
+      <div class="card">
+        <div class="card-h">
+          <div class="card-t">History</div>
+          <div style="position:relative;max-width:260px;width:100%">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--faint)" stroke-width="2" style="position:absolute;left:11px;top:50%;transform:translateY(-50%)"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+            <input id="msgSearchBox" placeholder="Search messages" style="width:100%;padding:9px 12px 9px 33px;border:1.5px solid var(--line);border-radius:9px;font-size:.85rem;outline:none;font-family:inherit"/>
+          </div>
+        </div>
+        <div id="msgBox"><div class="loading">Loading…</div></div>
+      </div>
     </section>
 
     <!-- ===== SETTINGS ===== -->
@@ -555,7 +591,7 @@ function boot() {
       '<div class="banner-p">Dozfi is analyzing your business now. Anything below marked as needing more data will fill in as you add appointments and prices.</div></div></div>';
   }
 
-  loadInsights(); loadStats(); loadClients(); loadMessages(); loadSettings(); loadBilling();
+  loadInsights(); loadClients().then(loadStats); loadMessages(); loadSettings(); loadBilling();
 }
 
 /* ---------- nav ---------- */
@@ -571,11 +607,18 @@ document.querySelectorAll('.nav-i[data-page]').forEach(btn => {
 
 /* ---------- insights ---------- */
 const ICONS = {
-  calendar: '📅', alert: '⚠️', dollar: '💵', users: '👥'
+  calendar: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>',
+  alert: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><path d="M12 9v4M12 17h.01"/></svg>',
+  dollar: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>',
+  users: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>'
 };
 const TONES = {
   purple: 'var(--purple-soft)', green: 'var(--green-soft)',
   red: 'var(--red-soft)', yellow: 'var(--amber-soft)', neutral: 'var(--shell)'
+};
+const TONE_TEXT = {
+  purple: 'var(--purple)', green: 'var(--green)',
+  red: 'var(--red)', yellow: '#B4740A', neutral: 'var(--faint)'
 };
 
 async function loadInsights() {
@@ -598,7 +641,7 @@ async function loadInsights() {
 
     $('oppList').innerHTML = list.map(i => `
       <div class="opp ${i.needsData ? 'waiting' : ''}">
-        <div class="opp-ic" style="background:${TONES[i.tone] || TONES.neutral}">${ICONS[i.icon] || '•'}</div>
+        <div class="opp-ic" style="background:${TONES[i.tone] || TONES.neutral};color:${TONE_TEXT[i.tone] || TONE_TEXT.neutral}">${ICONS[i.icon] || ''}</div>
         <div class="opp-body">
           <div class="opp-cat">${esc(i.category)}</div>
           <div class="opp-row"><div class="opp-key">Noticed</div><div class="opp-val">${esc(i.noticed)}</div></div>
@@ -653,36 +696,126 @@ async function loadStats() {
     $('replyBreak').innerHTML = `<div class="empty"><div class="empty-p">${esc(e.message)}</div><button class="btn btn-ghost btn-sm" onclick="loadStats()">Try again</button></div>`;
     $('respRate').innerHTML = '';
   }
+  drawImpactChart();
+}
+
+function drawImpactChart() {
+  const canvas = $('impactChart');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const dpr = window.devicePixelRatio || 1;
+  const rect = canvas.parentElement.getBoundingClientRect();
+  const W = rect.width, H = 220;
+  canvas.width = W * dpr; canvas.height = H * dpr;
+  canvas.style.width = W + 'px'; canvas.style.height = H + 'px';
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  ctx.clearRect(0, 0, W, H);
+
+  const confirmed = (allClients || [])
+    .filter(c => c.last_reply === 'YES' && c.last_reply_at)
+    .map(c => ({ date: new Date(c.last_reply_at), value: c.appointment_value || biz.default_appointment_value || 0 }))
+    .sort((a, b) => a.date - b.date);
+
+  const pad = { l: 46, r: 14, t: 14, b: 26 };
+  const plotW = W - pad.l - pad.r, plotH = H - pad.t - pad.b;
+
+  if (confirmed.length < 2) {
+    ctx.fillStyle = '#8E8DA0';
+    ctx.font = '13px Plus Jakarta Sans, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('Not enough confirmed appointments yet to chart a trend.', W / 2, H / 2);
+    return;
+  }
+
+  const byDay = {};
+  let running = 0;
+  confirmed.forEach(c => {
+    const key = c.date.toISOString().split('T')[0];
+    running += c.value;
+    byDay[key] = running;
+  });
+  const days = Object.keys(byDay).sort();
+  const points = days.map(d => byDay[d]);
+  const max = Math.max(...points, 1);
+
+  ctx.strokeStyle = '#E6E5EE'; ctx.lineWidth = 1;
+  for (let i = 0; i <= 3; i++) {
+    const y = pad.t + (plotH / 3) * i;
+    ctx.beginPath(); ctx.moveTo(pad.l, y); ctx.lineTo(W - pad.r, y); ctx.stroke();
+    ctx.fillStyle = '#8E8DA0'; ctx.font = '10px Plus Jakarta Sans, sans-serif'; ctx.textAlign = 'right';
+    ctx.fillText('$' + Math.round(max - (max / 3) * i).toLocaleString(), pad.l - 8, y + 3);
+  }
+
+  const xFor = i => pad.l + (points.length > 1 ? (plotW / (points.length - 1)) * i : plotW / 2);
+  const yFor = v => pad.t + plotH - (v / max) * plotH;
+
+  ctx.beginPath();
+  points.forEach((p, i) => { const x = xFor(i), y = yFor(p); i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y); });
+  ctx.lineTo(xFor(points.length - 1), pad.t + plotH);
+  ctx.lineTo(xFor(0), pad.t + plotH);
+  ctx.closePath();
+  ctx.fillStyle = 'rgba(91,78,245,0.08)';
+  ctx.fill();
+
+  ctx.beginPath();
+  points.forEach((p, i) => { const x = xFor(i), y = yFor(p); i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y); });
+  ctx.strokeStyle = '#5B4EF5'; ctx.lineWidth = 2.2; ctx.lineJoin = 'round'; ctx.stroke();
+
+  points.forEach((p, i) => {
+    ctx.beginPath(); ctx.arc(xFor(i), yFor(p), 2.8, 0, Math.PI * 2);
+    ctx.fillStyle = '#5B4EF5'; ctx.fill();
+  });
+
+  ctx.fillStyle = '#8E8DA0'; ctx.font = '10px Plus Jakarta Sans, sans-serif'; ctx.textAlign = 'center';
+  const step = Math.max(1, Math.ceil(days.length / 6));
+  days.forEach((d, i) => {
+    if (i % step !== 0 && i !== days.length - 1) return;
+    ctx.fillText(new Date(d).toLocaleDateString([], { month: 'short', day: 'numeric' }), xFor(i), H - 6);
+  });
 }
 
 /* ---------- clients ---------- */
+let allClients = [];
+
 async function loadClients() {
   try {
     const d = await api('/clients/' + biz.id);
-    const cs = d.clients || [];
-    $('clientCount').textContent = cs.length ? `${cs.length} on file` : '';
-
-    if (!cs.length) {
-      $('clientsBox').innerHTML = `<div class="empty">
-        <div class="empty-h">No clients yet</div>
-        <div class="empty-p">Add one above, or bring in the list you already keep in a spreadsheet.</div>
-        <button class="btn btn-sm" onclick="document.querySelector('[data-page=import]').click()">Import a spreadsheet</button></div>`;
-      return;
-    }
-    $('clientsBox').innerHTML = `<table class="tbl">
-      <thead><tr><th>Name</th><th>Phone</th><th>Next appointment</th><th>Value</th><th>Status</th><th></th></tr></thead>
-      <tbody>${cs.map(c => `<tr>
-        <td><strong>${esc(c.name)}</strong></td>
-        <td class="muted">${esc(c.phone)}</td>
-        <td class="muted">${c.next_appointment ? new Date(c.next_appointment).toLocaleString([], {month:'short',day:'numeric',hour:'numeric',minute:'2-digit'}) : 'Not scheduled'}</td>
-        <td>${c.appointment_value ? money(c.appointment_value) : '<span class="muted">—</span>'}</td>
-        <td>${c.status === 'opted_out' ? '<span class="tag no">Opted out</span>' : c.last_reply === 'YES' ? '<span class="tag ok">Confirmed</span>' : c.last_reply === 'NO' ? '<span class="tag no">Cancelled</span>' : '<span class="tag wait">Waiting</span>'}</td>
-        <td style="text-align:right"><button class="row-x" onclick="removeClient('${c.id}','${esc(c.name).replace(/'/g,"\\'")}')">Remove</button></td>
-      </tr>`).join('')}</tbody></table>`;
+    allClients = d.clients || [];
+    $('clientCount').textContent = allClients.length ? `${allClients.length} on file` : '';
+    renderClientRows(allClients);
+    renderComposePickList(allClients);
   } catch (e) {
     $('clientsBox').innerHTML = `<div class="empty"><div class="empty-h">Couldn't load your clients</div><div class="empty-p">${esc(e.message)}</div><button class="btn btn-ghost btn-sm" onclick="loadClients()">Try again</button></div>`;
   }
 }
+
+function renderClientRows(cs) {
+  if (!cs.length) {
+    $('clientsBox').innerHTML = `<div class="empty">
+      <div class="empty-h">No clients yet</div>
+      <div class="empty-p">Add one above, or bring in the list you already keep in a spreadsheet.</div>
+      <button class="btn btn-sm" onclick="document.querySelector('[data-page=import]').click()">Import a spreadsheet</button></div>`;
+    return;
+  }
+  $('clientsBox').innerHTML = `<table class="tbl">
+    <thead><tr><th>Name</th><th>Phone</th><th>Next appointment</th><th>Value</th><th>Status</th><th></th></tr></thead>
+    <tbody>${cs.map(c => `<tr>
+      <td><strong>${esc(c.name)}</strong></td>
+      <td class="muted">${esc(c.phone)}</td>
+      <td class="muted">${c.next_appointment ? new Date(c.next_appointment).toLocaleString([], {month:'short',day:'numeric',hour:'numeric',minute:'2-digit'}) : 'Not scheduled'}</td>
+      <td>${c.appointment_value ? money(c.appointment_value) : '<span class="muted">—</span>'}</td>
+      <td>${c.status === 'opted_out' ? '<span class="tag no">Opted out</span>' : c.last_reply === 'YES' ? '<span class="tag ok">Confirmed</span>' : c.last_reply === 'NO' ? '<span class="tag no">Cancelled</span>' : '<span class="tag wait">Waiting</span>'}</td>
+      <td style="text-align:right"><button class="row-x" onclick="removeClient('${c.id}','${esc(c.name).replace(/'/g,"\\'")}')">Remove</button></td>
+    </tr>`).join('')}</tbody></table>`;
+}
+
+document.getElementById('clientSearchBox')?.addEventListener('input', e => {
+  const q = e.target.value.trim().toLowerCase();
+  const filtered = q ? allClients.filter(c =>
+    (c.name || '').toLowerCase().includes(q) || (c.phone || '').includes(q)
+  ) : allClients;
+  renderClientRows(filtered);
+});
 
 $('ncBtn').onclick = async () => {
   const name = $('ncName').value.trim(), phone = $('ncPhone').value.trim();
@@ -808,25 +941,94 @@ $('importBtn').onclick = async () => {
 };
 
 /* ---------- messages ---------- */
+let allMessages = [];
+
 async function loadMessages() {
   try {
     const d = await api('/messages/' + biz.id);
-    const ms = d.messages || [];
-    if (!ms.length) {
-      $('msgBox').innerHTML = `<div class="empty"><div class="empty-h">Nothing sent yet</div>
-        <div class="empty-p">Dozfi sends a reminder once a client has a future appointment date on file. Add one and it takes care of the rest.</div></div>`;
-      return;
-    }
-    $('msgBox').innerHTML = `<table class="tbl"><thead><tr><th>To</th><th>Message</th><th>Type</th><th>When</th></tr></thead>
-      <tbody>${ms.map(m => `<tr>
-        <td class="muted">${esc(m.to_phone)}</td>
-        <td style="max-width:380px">${esc(m.message.length > 100 ? m.message.slice(0,100) + '…' : m.message)}</td>
-        <td><span class="tag ${m.type === 'cancellation' ? 'no' : 'sent'}">${esc(m.type)}</span></td>
-        <td class="muted">${new Date(m.created_at).toLocaleDateString([], {month:'short',day:'numeric'})}</td></tr>`).join('')}</tbody></table>`;
+    allMessages = d.messages || [];
+    renderMessageRows(allMessages);
   } catch (e) {
     $('msgBox').innerHTML = `<div class="empty"><div class="empty-h">Couldn't load your messages</div><div class="empty-p">${esc(e.message)}</div><button class="btn btn-ghost btn-sm" onclick="loadMessages()">Try again</button></div>`;
   }
 }
+
+function renderMessageRows(ms) {
+  if (!ms.length) {
+    $('msgBox').innerHTML = `<div class="empty"><div class="empty-h">Nothing sent yet</div>
+      <div class="empty-p">Dozfi sends a reminder once a client has a future appointment date on file. Add one and it takes care of the rest.</div></div>`;
+    return;
+  }
+  $('msgBox').innerHTML = `<table class="tbl"><thead><tr><th>To</th><th>Message</th><th>Type</th><th>When</th></tr></thead>
+    <tbody>${ms.map(m => `<tr>
+      <td class="muted">${esc(m.to_phone)}</td>
+      <td style="max-width:380px">${esc(m.message.length > 100 ? m.message.slice(0,100) + '…' : m.message)}</td>
+      <td><span class="tag ${m.type === 'cancellation' ? 'no' : 'sent'}">${esc(m.type)}</span></td>
+      <td class="muted">${new Date(m.created_at).toLocaleDateString([], {month:'short',day:'numeric'})}</td></tr>`).join('')}</tbody></table>`;
+}
+
+document.getElementById('msgSearchBox')?.addEventListener('input', e => {
+  const q = e.target.value.trim().toLowerCase();
+  const filtered = q ? allMessages.filter(m =>
+    (m.message || '').toLowerCase().includes(q) || (m.to_phone || '').includes(q)
+  ) : allMessages;
+  renderMessageRows(filtered);
+});
+
+/* ---------- compose / custom send ---------- */
+let composeSelected = new Set();
+
+function renderComposePickList(list) {
+  const box = $('composePickList');
+  if (!list.length) {
+    box.innerHTML = `<div style="padding:16px;text-align:center;color:var(--faint);font-size:.85rem">No clients yet. Add some in the Clients tab first.</div>`;
+    return;
+  }
+  box.innerHTML = list.map(c => `
+    <label style="display:flex;align-items:center;gap:10px;padding:9px 12px;border-bottom:1px solid var(--line);cursor:pointer;font-size:.85rem">
+      <input type="checkbox" data-id="${c.id}" ${composeSelected.has(c.id) ? 'checked' : ''} style="accent-color:var(--purple)"/>
+      <span>${esc(c.name)}</span><span class="muted" style="margin-left:auto">${esc(c.phone)}</span>
+    </label>`).join('');
+  box.querySelectorAll('input[type=checkbox]').forEach(cb => {
+    cb.onchange = () => {
+      if (cb.checked) composeSelected.add(cb.dataset.id); else composeSelected.delete(cb.dataset.id);
+      $('composeCount').textContent = `${composeSelected.size} client${composeSelected.size === 1 ? '' : 's'} selected`;
+    };
+  });
+}
+
+document.getElementById('composeSearch')?.addEventListener('input', e => {
+  const q = e.target.value.trim().toLowerCase();
+  const filtered = q ? allClients.filter(c =>
+    (c.name || '').toLowerCase().includes(q) || (c.phone || '').includes(q)
+  ) : allClients;
+  renderComposePickList(filtered);
+});
+
+$('composeSendBtn')?.addEventListener('click', async () => {
+  clearNote('composeMsg');
+  const text = $('composeText').value.trim();
+  if (!text) return note('composeMsg', 'Write a message before sending.');
+  if (composeSelected.size === 0) return note('composeMsg', 'Select at least one client to send to.');
+
+  const btn = $('composeSendBtn');
+  btn.disabled = true; btn.innerHTML = '<span class="spin"></span> Sending…';
+  try {
+    const d = await api('/messages/bulk', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ businessId: biz.id, clientIds: [...composeSelected], message: text })
+    });
+    note('composeMsg', `Sent to ${d.sent} client${d.sent === 1 ? '' : 's'}${d.failed ? `, ${d.failed} failed` : ''}.`, true);
+    $('composeText').value = '';
+    composeSelected.clear();
+    $('composeCount').textContent = '0 clients selected';
+    renderComposePickList(allClients);
+    loadMessages(); loadStats();
+  } catch (e) {
+    note('composeMsg', e.message);
+  }
+  btn.disabled = false; btn.textContent = 'Send message';
+});
 
 /* ---------- settings ---------- */
 function loadSettings() {
@@ -945,6 +1147,12 @@ function askConfirm(title, body, fn) {
 }
 function closeConfirm() { $('confirmSheet').classList.remove('on'); }
 document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeHelp(); closeConfirm(); } });
+
+let resizeTimer;
+window.addEventListener('resize', () => {
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(() => { if (biz) drawImpactChart(); }, 150);
+});
 
 /* ---------- start ---------- */
 (function start() {
