@@ -3,746 +3,714 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Dozfi — Appointment Reminders That Actually Work</title>
+<title>Dozfi — Find the profit your business is leaking</title>
+<meta name="description" content="Dozfi is an AI profit optimizer for small businesses. It reads the appointment and customer data you already have, finds where revenue is leaking, tells you what to do about it in plain English, and handles the follow-up automatically. $75 a month."/>
 <meta name="brand-owner" content="Elektra Bannatyne DBA Dozfi"/>
+<link rel="canonical" href="https://dozfi.com/"/>
+<meta name="robots" content="index,follow"/>
+<meta property="og:type" content="website"/>
+<meta property="og:site_name" content="Dozfi"/>
+<meta property="og:title" content="Dozfi — Find the profit your business is leaking"/>
+<meta property="og:description" content="An AI profit optimizer for small businesses. Dozfi finds where your revenue is leaking, tells you what to do, and handles the follow-up."/>
+<meta property="og:url" content="https://dozfi.com/"/>
+<meta property="og:image" content="https://dozfi.com/og.png"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:title" content="Dozfi — Find the profit your business is leaking"/>
+<meta name="twitter:description" content="An AI profit optimizer for small businesses."/>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg"/>
+<link rel="apple-touch-icon" href="/favicon.svg"/>
+<meta name="theme-color" content="#5B4EF5"/>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
 <script src="https://js.stripe.com/v3/"></script>
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"SoftwareApplication",
+  "name":"Dozfi",
+  "applicationCategory":"BusinessApplication",
+  "operatingSystem":"Web",
+  "description":"An AI profit optimizer for small businesses. Dozfi analyzes the appointment and customer data you already have, finds where revenue is leaking, and automates the follow-up.",
+  "url":"https://dozfi.com/",
+  "offers":{"@type":"Offer","price":"75","priceCurrency":"USD","description":"Dozfi Pro, billed monthly. First 30 days free."}
+}
+</script>
 <style>
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-:root {
-  --purple: #5B4EF5;
-  --green: #16A34A;
-  --dark: #0F0E1A;
-  --mid: #555466;
-  --muted: #9998AB;
-  --border: #EBEBF0;
-  --bg: #FFFFFF;
-  --off: #F9F9FB;
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --purple:#5B4EF5; --purple-dark:#4A3EE0; --purple-soft:#F2F0FE;
+  --green:#0F8A4C; --green-soft:#ECFAF1;
+  --red:#C7342B; --red-soft:#FDF1F0;
+  --ink:#12111C; --body:#4E4D5E; --faint:#8E8DA0;
+  --line:#E6E5EE; --shell:#F6F6F9;
 }
-
-html { scroll-behavior: smooth; }
-body {
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  background: var(--bg);
-  color: var(--dark);
-  -webkit-font-smoothing: antialiased;
-}
+html{scroll-behavior:smooth}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:#fff;color:var(--ink);-webkit-font-smoothing:antialiased;line-height:1.55}
+button,input,select,textarea{font-family:inherit}
+a{color:var(--purple)}
+.wrap{max-width:1080px;margin:0 auto;padding:0 24px}
 
 /* NAV */
-nav {
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  z-index: 50;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 6%;
-  height: 70px;
-}
-.nav-wordmark {
-  font-size: 1.25rem; font-weight: 800; color: white;
-  letter-spacing: -0.02em; text-decoration: none;
-}
-.nav-right { display: flex; align-items: center; gap: 28px; }
-.nav-link {
-  font-size: 0.85rem; font-weight: 500;
-  color: rgba(255,255,255,0.75); text-decoration: none; transition: color 0.15s;
-}
-.nav-link:hover { color: white; }
-.nav-cta {
-  background: white; color: var(--dark);
-  font-size: 0.85rem; font-weight: 700;
-  padding: 10px 22px; border-radius: 8px;
-  text-decoration: none; cursor: pointer;
-  border: none; font-family: 'Plus Jakarta Sans', sans-serif;
-  transition: opacity 0.15s;
-}
-.nav-cta:hover { opacity: 0.9; }
+nav{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.nav-in{max-width:1080px;margin:0 auto;padding:0 24px;height:64px;display:flex;align-items:center;justify-content:space-between}
+.mark{display:flex;align-items:center;gap:9px;text-decoration:none}
+.mark-glyph{width:26px;height:26px;flex-shrink:0}
+.mark-word{font-size:1.18rem;font-weight:800;letter-spacing:-.03em;color:var(--ink)}
+.nav-r{display:flex;align-items:center;gap:22px}
+.nav-l{font-size:.87rem;font-weight:500;color:var(--body);text-decoration:none}
+.nav-l:hover{color:var(--ink)}
+.btn{background:var(--purple);color:#fff;border:none;border-radius:9px;padding:11px 20px;font-size:.88rem;font-weight:700;cursor:pointer;text-decoration:none;display:inline-block}
+.btn:hover{background:var(--purple-dark)}
+.btn:disabled{opacity:.55;cursor:not-allowed}
+.btn-lg{padding:14px 28px;font-size:.95rem}
+.btn-ghost{background:var(--shell);color:var(--body);border:1.5px solid var(--line)}
+.btn-ghost:hover{background:#EDEDF3}
+.btn-full{width:100%}
 
 /* HERO */
-.hero {
-  position: relative; min-height: 92vh;
-  display: flex; align-items: center; overflow: hidden;
-}
-.hero-bg {
-  position: absolute; inset: 0;
-  background-image: url('https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=1600&q=85&auto=format&fit=crop');
-  background-size: cover; background-position: center 30%;
-  filter: brightness(0.45);
-}
-.hero-overlay {
-  position: absolute; inset: 0;
-  background: linear-gradient(to right, rgba(15,14,26,0.7) 0%, rgba(15,14,26,0.2) 60%, transparent 100%);
-}
-.hero-content {
-  position: relative; z-index: 2;
-  padding: 120px 6% 80px; max-width: 680px;
-}
-.hero-tag {
-  display: inline-block; background: rgba(91,78,245,0.9); color: white;
-  font-size: 0.72rem; font-weight: 700; letter-spacing: 0.1em;
-  text-transform: uppercase; padding: 6px 14px; border-radius: 4px; margin-bottom: 28px;
-}
-.hero h1 {
-  font-size: clamp(2.6rem, 5vw, 4rem); font-weight: 800;
-  line-height: 1.1; letter-spacing: -0.03em; color: white; margin-bottom: 20px;
-}
-.hero-sub {
-  font-size: 1.05rem; color: rgba(255,255,255,0.75);
-  line-height: 1.75; max-width: 480px; margin-bottom: 40px; font-weight: 400;
-}
-.hero-actions { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; margin-bottom: 48px; }
-.btn-primary {
-  background: var(--purple); color: white;
-  font-size: 0.95rem; font-weight: 700; padding: 14px 30px; border-radius: 8px;
-  text-decoration: none; display: inline-flex; align-items: center; gap: 8px;
-  cursor: pointer; border: none; font-family: 'Plus Jakarta Sans', sans-serif;
-  transition: opacity 0.15s, transform 0.15s;
-}
-.btn-primary:hover { opacity: 0.88; transform: translateY(-1px); }
-.btn-outline {
-  color: rgba(255,255,255,0.85); font-size: 0.9rem; font-weight: 500;
-  text-decoration: none; display: inline-flex; align-items: center; gap: 6px; transition: color 0.15s;
-}
-.btn-outline:hover { color: white; }
-.hero-stats { display: flex; gap: 36px; flex-wrap: wrap; }
-.hero-stat-val { font-size: 1.6rem; font-weight: 800; color: white; letter-spacing: -0.03em; line-height: 1; margin-bottom: 3px; }
-.hero-stat-lbl { font-size: 0.75rem; color: rgba(255,255,255,0.55); font-weight: 500; }
+.hero{padding:84px 0 68px}
+.hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:56px;align-items:center}
+.hero h1{font-size:clamp(2.2rem,4.4vw,3.3rem);font-weight:800;line-height:1.08;letter-spacing:-.035em;margin-bottom:20px}
+.hero-p{font-size:1.03rem;color:var(--body);line-height:1.7;max-width:48ch;margin-bottom:28px}
+.hero-cta{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:22px}
+.hero-fine{display:flex;gap:18px;flex-wrap:wrap;font-size:.82rem;color:var(--faint)}
+.hero-fine span::before{content:'✓ ';color:var(--green);font-weight:700}
+
+/* PRODUCT CARD */
+.demo{background:var(--shell);border:1px solid var(--line);border-radius:16px;padding:22px}
+.demo-top{font-size:.78rem;font-weight:700;color:var(--faint);padding-bottom:13px;border-bottom:1px solid var(--line);margin-bottom:15px}
+.opp-demo{background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:11px}
+.opp-demo:last-child{margin-bottom:0}
+.od-cat{font-size:.72rem;font-weight:700;color:var(--faint);margin-bottom:7px}
+.od-line{display:flex;gap:8px;font-size:.83rem;line-height:1.5;margin-bottom:6px}
+.od-k{font-weight:700;width:66px;flex-shrink:0}
+.od-v{color:var(--body)}
+.od-v strong{color:var(--ink)}
+.od-chip{display:inline-flex;align-items:baseline;gap:6px;background:var(--green-soft);border-radius:7px;padding:5px 10px;margin-top:5px}
+.od-chip .l{font-size:.72rem;color:var(--green);font-weight:600}
+.od-chip .v{font-size:.92rem;color:var(--green);font-weight:800;letter-spacing:-.02em}
+.demo-note{font-size:.73rem;color:var(--faint);margin-top:12px;text-align:center}
 
 /* SECTIONS */
-.section { padding: 88px 6%; max-width: 1080px; margin: 0 auto; }
-.eyebrow { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--purple); margin-bottom: 14px; }
-.section h2 { font-size: clamp(1.8rem, 3vw, 2.5rem); font-weight: 800; letter-spacing: -0.035em; color: var(--dark); line-height: 1.15; margin-bottom: 12px; }
-.section-sub { font-size: 0.95rem; color: var(--mid); line-height: 1.75; max-width: 460px; margin-bottom: 52px; }
-.steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
-@media (max-width: 680px) { .steps { grid-template-columns: 1fr; } }
-.step { padding: 32px; border: 1px solid var(--border); border-radius: 14px; background: var(--off); }
-.step-num { width: 36px; height: 36px; background: var(--purple); color: white; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; font-weight: 800; margin-bottom: 18px; }
-.step h3 { font-size: 0.95rem; font-weight: 700; color: var(--dark); margin-bottom: 8px; letter-spacing: -0.01em; }
-.step p { font-size: 0.875rem; color: var(--mid); line-height: 1.7; }
+section{padding:72px 0}
+.band{background:var(--shell);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+h2{font-size:clamp(1.6rem,3vw,2.2rem);font-weight:800;letter-spacing:-.032em;line-height:1.18;margin-bottom:12px}
+.lede{font-size:.98rem;color:var(--body);line-height:1.7;max-width:56ch;margin-bottom:44px}
 
-/* FEATURES */
-.features-wrap { background: var(--off); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
-.features-inner { max-width: 1080px; margin: 0 auto; padding: 88px 6%; display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; }
-@media (max-width: 760px) { .features-inner { grid-template-columns: 1fr; gap: 48px; } }
-.features-list { display: flex; flex-direction: column; gap: 28px; }
-.feature { display: flex; gap: 16px; align-items: flex-start; }
-.feature-dot { width: 8px; height: 8px; background: var(--purple); border-radius: 50%; flex-shrink: 0; margin-top: 6px; }
-.feature h3 { font-size: 0.92rem; font-weight: 700; color: var(--dark); margin-bottom: 5px; letter-spacing: -0.01em; }
-.feature p { font-size: 0.855rem; color: var(--mid); line-height: 1.7; }
-.sms-card { background: white; border: 1.5px solid var(--border); border-radius: 16px; padding: 28px; box-shadow: 0 8px 32px rgba(0,0,0,0.06); }
-.sms-label { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 16px; padding-bottom: 14px; border-bottom: 1px solid var(--border); }
-.sms-bubble { background: var(--off); border-radius: 4px 14px 14px 14px; padding: 14px 16px; font-size: 0.875rem; color: var(--dark); line-height: 1.65; margin-bottom: 10px; }
-.sms-reply { background: var(--purple); color: white; border-radius: 14px 14px 4px 14px; padding: 10px 14px; font-size: 0.875rem; font-weight: 600; margin-left: auto; max-width: 65%; text-align: right; }
-.sms-confirmed { display: flex; align-items: center; gap: 8px; margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--border); font-size: 0.78rem; font-weight: 700; color: var(--green); letter-spacing: 0.02em; }
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;counter-reset:s}
+.step{position:relative;padding-top:18px;border-top:2px solid var(--purple)}
+.step::before{counter-increment:s;content:counter(s);position:absolute;top:-11px;left:0;background:#fff;padding-right:9px;font-size:.78rem;font-weight:800;color:var(--purple)}
+.step h3{font-size:1rem;font-weight:700;margin-bottom:7px}
+.step p{font-size:.89rem;color:var(--body);line-height:1.65}
 
-/* TESTIMONIALS */
-.testimonials { max-width: 1080px; margin: 0 auto; padding: 88px 6%; }
-.tgrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
-@media (max-width: 680px) { .tgrid { grid-template-columns: 1fr; } }
-.testimonial { background: var(--off); border: 1px solid var(--border); border-radius: 14px; padding: 28px; }
-.stars { color: #F59E0B; font-size: 0.78rem; letter-spacing: 2px; margin-bottom: 14px; }
-.testimonial blockquote { font-size: 0.875rem; color: var(--dark); line-height: 1.75; margin-bottom: 18px; }
-.t-author { font-size: 0.82rem; font-weight: 700; color: var(--dark); }
-.t-biz { font-size: 0.75rem; color: var(--muted); margin-top: 2px; }
+.jobs{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+.job{background:#fff;border:1px solid var(--line);border-radius:14px;padding:24px}
+.job h3{font-size:.98rem;font-weight:700;margin-bottom:7px}
+.job p{font-size:.88rem;color:var(--body);line-height:1.65}
+.job .tagline{font-size:.75rem;font-weight:700;color:var(--purple);margin-bottom:9px}
+
+/* SMS */
+.sms-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center}
+.thread{background:#fff;border:1px solid var(--line);border-radius:16px;padding:22px}
+.thread-h{font-size:.76rem;font-weight:700;color:var(--faint);padding-bottom:12px;border-bottom:1px solid var(--line);margin-bottom:14px}
+.bub{background:var(--shell);border-radius:4px 13px 13px 13px;padding:13px 15px;font-size:.87rem;line-height:1.6;margin-bottom:9px}
+.bub-me{background:var(--purple);color:#fff;border-radius:13px 13px 4px 13px;padding:9px 14px;font-size:.87rem;font-weight:600;margin-left:auto;width:fit-content}
+.thread-f{display:flex;align-items:center;gap:7px;margin-top:14px;padding-top:13px;border-top:1px solid var(--line);font-size:.79rem;font-weight:700;color:var(--green)}
+
+/* CALC */
+.calc{background:#fff;border:1px solid var(--line);border-radius:16px;padding:28px;max-width:520px}
+.calc-row{display:grid;grid-template-columns:1fr 110px;gap:14px;align-items:center;margin-bottom:15px}
+.calc-row label{font-size:.89rem;font-weight:600}
+.calc-row input{width:100%;padding:10px 12px;border:1.5px solid var(--line);border-radius:9px;font-size:.9rem;text-align:right;outline:none}
+.calc-row input:focus{border-color:var(--purple)}
+.calc-out{border-top:1px solid var(--line);margin-top:20px;padding-top:20px}
+.calc-num{font-size:2.4rem;font-weight:800;letter-spacing:-.045em;color:var(--ink);line-height:1}
+.calc-lbl{font-size:.87rem;color:var(--body);margin-top:7px}
+.calc-fine{font-size:.76rem;color:var(--faint);margin-top:14px;line-height:1.55}
 
 /* PRICING */
-.pricing-wrap { background: var(--dark); padding: 88px 6%; }
-.pricing-inner { max-width: 1080px; margin: 0 auto; display: grid; grid-template-columns: 1fr 420px; gap: 72px; align-items: center; }
-@media (max-width: 820px) { .pricing-inner { grid-template-columns: 1fr; gap: 44px; } }
-.pricing-left h2 { font-size: clamp(1.8rem, 3vw, 2.5rem); font-weight: 800; letter-spacing: -0.035em; color: white; line-height: 1.15; margin-bottom: 12px; }
-.pricing-left p { font-size: 0.95rem; color: rgba(255,255,255,0.5); line-height: 1.75; }
-.pricing-card { background: white; border-radius: 16px; padding: 36px; }
-.plan-label { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--purple); margin-bottom: 14px; }
-.price { font-size: 3rem; font-weight: 800; color: var(--dark); letter-spacing: -0.05em; line-height: 1; margin-bottom: 4px; }
-.price sup { font-size: 1.3rem; vertical-align: top; margin-top: 8px; }
-.price span { font-size: 0.95rem; font-weight: 400; color: var(--muted); letter-spacing: 0; }
-.trial { font-size: 0.83rem; color: var(--green); font-weight: 700; margin-bottom: 22px; }
-.divider { height: 1px; background: var(--border); margin: 20px 0; }
-.plist { list-style: none; display: flex; flex-direction: column; gap: 11px; margin-bottom: 26px; }
-.plist li { font-size: 0.875rem; color: var(--mid); display: flex; align-items: flex-start; gap: 10px; line-height: 1.5; }
-.pcheck { width: 18px; height: 18px; background: #F0FDF4; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
-.pnote { font-size: 0.75rem; color: var(--muted); text-align: center; margin-top: 10px; }
+.price-grid{display:grid;grid-template-columns:1fr 400px;gap:56px;align-items:center}
+.pcard{background:#fff;border:1.5px solid var(--purple);border-radius:16px;padding:32px}
+.pname{font-size:.78rem;font-weight:700;color:var(--purple);margin-bottom:12px}
+.pnum{font-size:2.9rem;font-weight:800;letter-spacing:-.05em;line-height:1}
+.pnum sup{font-size:1.2rem;vertical-align:top;top:.5rem;position:relative}
+.pnum span{font-size:.92rem;font-weight:400;color:var(--faint);letter-spacing:0}
+.ptrial{font-size:.85rem;color:var(--green);font-weight:700;margin:8px 0 20px}
+.plist{list-style:none;display:flex;flex-direction:column;gap:10px;margin-bottom:24px}
+.plist li{font-size:.88rem;color:var(--body);display:flex;gap:9px;line-height:1.5}
+.plist li::before{content:'✓';color:var(--green);font-weight:800;flex-shrink:0}
+.pfine{font-size:.78rem;color:var(--faint);text-align:center;margin-top:11px}
 
-/* CTA */
-.cta-section { padding: 96px 6%; text-align: center; border-top: 1px solid var(--border); }
-.cta-section h2 { font-size: clamp(1.9rem, 3.5vw, 2.8rem); font-weight: 800; letter-spacing: -0.04em; color: var(--dark); line-height: 1.12; margin-bottom: 14px; }
-.cta-section p { font-size: 0.95rem; color: var(--mid); line-height: 1.75; max-width: 420px; margin: 0 auto 36px; }
-.cta-fine { margin-top: 16px; font-size: 0.78rem; color: var(--muted); }
+/* FAQ */
+.faq{max-width:680px}
+details{border-bottom:1px solid var(--line);padding:16px 0}
+summary{font-size:.93rem;font-weight:700;cursor:pointer;list-style:none;display:flex;justify-content:space-between;gap:16px}
+summary::-webkit-details-marker{display:none}
+summary::after{content:'+';color:var(--purple);font-weight:700;flex-shrink:0}
+details[open] summary::after{content:'−'}
+details p{font-size:.88rem;color:var(--body);line-height:1.7;margin-top:11px;max-width:62ch}
+
+/* OPTIN */
+.optin{max-width:520px;margin:0 auto;text-align:center}
+.optin-row{display:flex;gap:10px;max-width:400px;margin:0 auto 15px}
+.optin-row input{flex:1;padding:11px 14px;border:1.5px solid var(--line);border-radius:9px;font-size:.88rem;outline:none}
+.consent{display:flex;gap:10px;max-width:400px;margin:0 auto;text-align:left}
+.consent input{margin-top:3px;flex-shrink:0;accent-color:var(--purple);width:15px;height:15px}
+.consent label{font-size:.75rem;color:var(--faint);line-height:1.6}
 
 /* FOOTER */
-footer { border-top: 1px solid var(--border); padding: 28px 6%; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px; }
-.footer-wordmark { font-size: 1rem; font-weight: 800; color: var(--dark); letter-spacing: -0.02em; text-decoration: none; }
-footer p { font-size: 0.75rem; color: var(--muted); }
-.footer-links { display: flex; gap: 20px; align-items: center; }
-.footer-links a { font-size: 0.75rem; color: var(--muted); text-decoration: none; transition: color 0.15s; }
-.footer-links a:hover { color: var(--purple); }
+footer{border-top:1px solid var(--line);padding:36px 0}
+.foot-in{max-width:1080px;margin:0 auto;padding:0 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px}
+.foot-links{display:flex;gap:20px;flex-wrap:wrap}
+.foot-links a{font-size:.79rem;color:var(--faint);text-decoration:none}
+.foot-links a:hover{color:var(--purple)}
+footer p{font-size:.79rem;color:var(--faint)}
 
-@media (max-width: 600px) {
-  nav { padding: 0 5%; }
-  .hero-content { padding: 100px 5% 60px; }
-  .section { padding: 64px 5%; }
-  .features-inner { padding: 64px 5%; }
-  .testimonials { padding: 64px 5%; }
-  .pricing-wrap { padding: 64px 5%; }
-  .cta-section { padding: 72px 5%; }
-  footer { padding: 24px 5%; }
-  .nav-right .nav-link { display: none; }
-}
+/* MODAL */
+.ov{position:fixed;inset:0;background:rgba(18,17,28,.6);backdrop-filter:blur(3px);display:flex;align-items:center;justify-content:center;z-index:100;padding:20px;opacity:0;pointer-events:none;transition:opacity .18s}
+.ov.on{opacity:1;pointer-events:all}
+.modal{background:#fff;border-radius:18px;width:100%;max-width:500px;max-height:90vh;overflow-y:auto;padding:34px;position:relative}
+.mx{position:absolute;top:18px;right:18px;background:var(--shell);border:1px solid var(--line);border-radius:8px;width:30px;height:30px;cursor:pointer;color:var(--faint);font-size:1rem}
+.bar{height:3px;background:var(--line);border-radius:99px;margin-bottom:26px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--purple);border-radius:99px;transition:width .3s}
+.mstep{font-size:.75rem;font-weight:700;color:var(--purple);margin-bottom:7px}
+.mtitle{font-size:1.3rem;font-weight:800;letter-spacing:-.03em;margin-bottom:6px}
+.msub{font-size:.86rem;color:var(--body);margin-bottom:24px;line-height:1.6}
+.f{margin-bottom:14px}
+.f label{display:block;font-size:.81rem;font-weight:600;margin-bottom:6px}
+.f input,.f select,.f textarea{width:100%;padding:11px 13px;border:1.5px solid var(--line);border-radius:9px;font-size:.87rem;outline:none;background:#fff}
+.f input:focus,.f select:focus,.f textarea:focus{border-color:var(--purple)}
+.f .hint{font-size:.74rem;color:var(--faint);margin-top:5px}
+.f2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.cli{background:var(--shell);border:1px solid var(--line);border-radius:11px;padding:13px;margin-bottom:9px}
+.cli-h{display:flex;justify-content:space-between;align-items:center;margin-bottom:9px}
+.cli-n{font-size:.73rem;font-weight:700;color:var(--purple)}
+.cli-x{background:none;border:none;color:var(--faint);cursor:pointer;font-size:.78rem;font-weight:600}
+.cli-x:hover{color:var(--red)}
+.addcli{width:100%;padding:10px;border:1.5px dashed var(--line);border-radius:10px;background:none;cursor:pointer;font-size:.86rem;font-weight:600;color:var(--purple)}
+.addcli:hover{border-color:var(--purple);background:var(--purple-soft)}
+.paste{background:var(--shell);border:1px solid var(--line);border-radius:11px;padding:15px;margin-bottom:13px}
+.paste label{display:block;font-size:.81rem;font-weight:600;margin-bottom:4px}
+.paste .hint{font-size:.74rem;color:var(--faint);margin-bottom:8px}
+.paste textarea{width:100%;padding:10px;border:1.5px solid var(--line);border-radius:8px;font-family:ui-monospace,monospace;font-size:.78rem;min-height:66px;outline:none;resize:vertical}
+.orline{display:flex;align-items:center;gap:12px;margin:13px 0;color:var(--faint);font-size:.77rem}
+.orline::before,.orline::after{content:'';flex:1;height:1px;background:var(--line)}
+.pills{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px}
+.pill{border:1.5px solid var(--line);border-radius:10px;padding:12px 8px;text-align:center;cursor:pointer;background:#fff}
+.pill[aria-pressed="true"]{border-color:var(--purple);background:var(--purple-soft)}
+.pill b{display:block;font-size:.95rem;font-weight:800;letter-spacing:-.02em}
+.pill i{display:block;font-size:.68rem;color:var(--faint);font-style:normal;margin-top:2px}
+.mrow{display:flex;gap:10px;margin-top:22px}
+.mrow .btn{flex:1}
+.notice{border-radius:9px;padding:10px 13px;font-size:.81rem;margin-top:12px;display:none}
+.notice.err{background:var(--red-soft);color:var(--red)}
+.notice.ok{background:var(--green-soft);color:var(--green)}
+.card-box{background:var(--shell);border:1px solid var(--line);border-radius:11px;padding:17px;margin-bottom:14px}
+.card-box .lbl{font-size:.81rem;font-weight:600;margin-bottom:10px}
+#card-el{padding:12px 13px;border:1.5px solid var(--line);border-radius:9px;background:#fff}
+.trial-box{background:var(--green-soft);border:1px solid #C6EBD5;border-radius:10px;padding:13px 15px;margin-bottom:18px}
+.trial-box b{display:block;font-size:.85rem;color:var(--green);margin-bottom:2px}
+.trial-box span{font-size:.79rem;color:var(--body)}
+.spin{display:inline-block;width:14px;height:14px;border:2px solid rgba(255,255,255,.35);border-top-color:#fff;border-radius:50%;animation:sp .7s linear infinite;vertical-align:-2px}
+@keyframes sp{to{transform:rotate(360deg)}}
 
-/* ── MODAL ── */
-.modal-overlay {
-  position: fixed; inset: 0;
-  background: rgba(15,14,26,0.6);
-  backdrop-filter: blur(4px);
-  display: flex; align-items: center; justify-content: center;
-  z-index: 1000; padding: 20px;
-  opacity: 0; pointer-events: none;
-  transition: opacity 0.2s;
+@media(max-width:860px){
+  .hero-grid,.sms-grid,.price-grid{grid-template-columns:1fr;gap:38px}
+  .steps,.jobs{grid-template-columns:1fr}
+  .nav-l{display:none}
+  section{padding:52px 0}
+  .hero{padding:52px 0 44px}
 }
-.modal-overlay.open { opacity: 1; pointer-events: all; }
-.modal {
-  background: white; border-radius: 20px;
-  width: 100%; max-width: 520px; max-height: 90vh;
-  overflow-y: auto; padding: 40px; position: relative;
-  transform: translateY(16px); transition: transform 0.2s;
-}
-.modal-overlay.open .modal { transform: translateY(0); }
-.modal-close {
-  position: absolute; top: 20px; right: 20px;
-  background: #F9F9FB; border: 1px solid #EBEBF0;
-  border-radius: 8px; width: 32px; height: 32px;
-  cursor: pointer; font-size: 1.1rem; color: #9998AB;
-  display: flex; align-items: center; justify-content: center;
-}
-.modal-close:hover { background: #EBEBF0; }
-.progress-bar { height: 4px; background: #EBEBF0; border-radius: 99px; margin-bottom: 32px; overflow: hidden; }
-.progress-fill { height: 100%; background: #5B4EF5; border-radius: 99px; transition: width 0.3s ease; }
-.step-tag { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #5B4EF5; margin-bottom: 8px; }
-.step-title { font-size: 1.5rem; font-weight: 800; letter-spacing: -0.03em; color: #0F0E1A; margin-bottom: 6px; line-height: 1.2; }
-.step-sub { font-size: 0.875rem; color: #555466; margin-bottom: 28px; line-height: 1.6; }
-.mfield { margin-bottom: 16px; }
-.mfield label { display: block; font-size: 0.82rem; font-weight: 600; color: #0F0E1A; margin-bottom: 6px; }
-.mfield input, .mfield select, .mfield textarea {
-  width: 100%; padding: 12px 14px;
-  border: 1.5px solid #EBEBF0; border-radius: 10px;
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  font-size: 0.875rem; color: #0F0E1A; outline: none;
-  transition: border-color 0.15s; background: white;
-}
-.mfield input:focus, .mfield select:focus, .mfield textarea:focus { border-color: #5B4EF5; }
-.mfield textarea { resize: vertical; min-height: 80px; }
-.mfield-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-.client-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 14px; }
-.client-entry { background: #F9F9FB; border: 1px solid #EBEBF0; border-radius: 12px; padding: 14px; }
-.client-entry-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
-.client-num { font-size: 0.72rem; font-weight: 700; color: #5B4EF5; text-transform: uppercase; letter-spacing: 0.06em; }
-.remove-btn { background: none; border: none; color: #9998AB; cursor: pointer; font-size: 0.8rem; }
-.remove-btn:hover { color: #ef4444; }
-.add-client-btn {
-  width: 100%; padding: 10px; border: 1.5px dashed #EBEBF0; border-radius: 10px;
-  background: none; cursor: pointer; font-family: 'Plus Jakarta Sans', sans-serif;
-  font-size: 0.875rem; font-weight: 600; color: #5B4EF5; transition: all 0.15s;
-}
-.add-client-btn:hover { border-color: #5B4EF5; background: #F5F3FF; }
-.import-box { background: #F9F9FB; border: 1px solid #EBEBF0; border-radius: 12px; padding: 16px; margin-bottom: 14px; }
-.import-box label { font-size: 0.82rem; font-weight: 600; color: #0F0E1A; display: block; margin-bottom: 4px; }
-.import-hint { font-size: 0.75rem; color: #9998AB; margin-bottom: 8px; }
-.import-parse-btn { background: white; border: 1.5px solid #EBEBF0; border-radius: 8px; padding: 7px 14px; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 0.82rem; font-weight: 600; color: #0F0E1A; cursor: pointer; margin-top: 8px; }
-.import-parse-btn:hover { border-color: #5B4EF5; color: #5B4EF5; }
-.or-line { display: flex; align-items: center; gap: 12px; margin: 14px 0; color: #9998AB; font-size: 0.78rem; }
-.or-line::before, .or-line::after { content: ''; flex: 1; height: 1px; background: #EBEBF0; }
-.timing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 16px; }
-.timing-opt { border: 1.5px solid #EBEBF0; border-radius: 10px; padding: 12px 8px; text-align: center; cursor: pointer; transition: all 0.15s; }
-.timing-opt:hover { border-color: #5B4EF5; }
-.timing-opt.sel { border-color: #5B4EF5; background: #F5F3FF; }
-.timing-opt input { display: none; }
-.timing-val { font-size: 1rem; font-weight: 800; color: #0F0E1A; letter-spacing: -0.02em; }
-.timing-lbl { font-size: 0.68rem; color: #9998AB; margin-top: 2px; }
-.btn-row { display: flex; gap: 10px; margin-top: 24px; }
-.mbtn-back { background: #F9F9FB; border: 1.5px solid #EBEBF0; border-radius: 10px; padding: 14px 20px; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 0.875rem; font-weight: 600; color: #555466; cursor: pointer; flex-shrink: 0; }
-.mbtn-next { flex: 1; background: #5B4EF5; color: white; border: none; border-radius: 10px; padding: 14px 20px; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 0.95rem; font-weight: 700; cursor: pointer; transition: background 0.15s; }
-.mbtn-next:hover { background: #4A3EE0; }
-.merror { background: #FEF2F2; border: 1px solid #FECACA; border-radius: 8px; padding: 10px 14px; font-size: 0.82rem; color: #DC2626; margin-top: 12px; display: none; }
-.success-screen { text-align: center; padding: 20px 0; }
-.success-icon { width: 64px; height: 64px; background: #DCFCE7; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 24px; }
 </style>
 </head>
 <body>
 
-<!-- NAV -->
 <nav>
-  <a href="/" class="nav-wordmark">Dozfi</a>
-  <div class="nav-right">
-    <a href="#how-it-works" class="nav-link">How it works</a>
-    <a href="#pricing" class="nav-link">Pricing</a>
-    <button onclick="openModal()" class="nav-cta">Start free</button>
+  <div class="nav-in">
+    <a href="/" class="mark">
+      <svg class="mark-glyph" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+        <rect width="32" height="32" rx="8" fill="#5B4EF5"/>
+        <path d="M8 21.5L13 15l4 4.5L24 10.5" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="24" cy="10.5" r="2.6" fill="#fff"/>
+      </svg>
+      <span class="mark-word">Dozfi</span>
+    </a>
+    <div class="nav-r">
+      <a href="#how" class="nav-l">How it works</a>
+      <a href="#pricing" class="nav-l">Pricing</a>
+      <a href="/dashboard.html" class="nav-l" id="navLogin">Log in</a>
+      <button class="btn" onclick="openModal()" id="navCta">Create account</button>
+    </div>
   </div>
 </nav>
 
 <!-- HERO -->
-<section class="hero">
-  <div class="hero-bg"></div>
-  <div class="hero-overlay"></div>
-  <div class="hero-content">
-    <div class="hero-tag">SMS Appointment Automation</div>
-    <h1>Your clients will actually show up.</h1>
-    <p class="hero-sub">Dozfi automatically texts your clients before every appointment. No no-shows. No chasing people down. Just a full schedule and more money every month.</p>
-    <div class="hero-actions">
-      <button onclick="openModal()" class="btn-primary">
-        Try free for 30 days
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-      </button>
-      <a href="#how-it-works" class="btn-outline">See how it works →</a>
+<header class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <h1>Find the profit your business is already leaking.</h1>
+      <p class="hero-p">Dozfi reads the appointment and customer information you already keep, works out where money is slipping away, and tells you what to do about it in plain English. Then it handles the follow-up for you.</p>
+      <div class="hero-cta">
+        <button class="btn btn-lg" onclick="openModal()">Start free for 30 days</button>
+        <a href="#how" class="nav-l" style="font-weight:600">See how it works</a>
+      </div>
+      <div class="hero-fine"><span>Setup in minutes</span><span>No contract</span><span>Cancel yourself anytime</span></div>
     </div>
-    <div class="hero-stats">
-      <div><div class="hero-stat-val">$1,200+</div><div class="hero-stat-lbl">recovered per month</div></div>
-      <div><div class="hero-stat-val">87%</div><div class="hero-stat-lbl">client show-up rate</div></div>
-      <div><div class="hero-stat-val">10 min</div><div class="hero-stat-lbl">to get set up</div></div>
+
+    <div class="demo" aria-label="Example of what Dozfi shows you">
+      <div class="demo-top">What Dozfi shows you</div>
+      <div class="opp-demo">
+        <div class="od-cat">Pricing</div>
+        <div class="od-line"><div class="od-k">Noticed</div><div class="od-v">Thursday is your busiest day — 14 of 31 bookings.</div></div>
+        <div class="od-line"><div class="od-k">Suggests</div><div class="od-v"><strong>Test a $10 increase on Thursdays. Promote Tuesday instead.</strong></div></div>
+        <div class="od-chip"><span class="l">Potential uplift</span><span class="v">+$310</span></div>
+      </div>
+      <div class="opp-demo">
+        <div class="od-cat">Revenue leakage</div>
+        <div class="od-line"><div class="od-k">Noticed</div><div class="od-v">26% of clients who replied cancelled.</div></div>
+        <div class="od-line"><div class="od-k">Suggests</div><div class="od-v"><strong>Move reminders to 48 hours ahead.</strong></div></div>
+      </div>
+      <div class="demo-note">Example only. Your numbers come from your own data.</div>
+    </div>
+  </div>
+</header>
+
+<!-- HOW -->
+<section id="how" class="band">
+  <div class="wrap">
+    <h2>Three steps, then it runs on its own.</h2>
+    <p class="lede">Dozfi does not replace your booking system, your calendar or your till. It sits alongside whatever you already use.</p>
+    <div class="steps">
+      <div class="step">
+        <h3>Bring in what you already have</h3>
+        <p>Upload a spreadsheet of clients and appointments, or paste it straight in. Dozfi matches your columns for you.</p>
+      </div>
+      <div class="step">
+        <h3>Dozfi studies your business</h3>
+        <p>It looks at when you are busy, what you charge, who cancels and who has stopped booking, then finds the patterns worth acting on.</p>
+      </div>
+      <div class="step">
+        <h3>You get recommendations and automation</h3>
+        <p>Plain-English suggestions you can act on today, plus automatic reminders and cancellation alerts running in the background.</p>
+      </div>
     </div>
   </div>
 </section>
 
-<!-- HOW IT WORKS -->
-<div id="how-it-works">
-  <div class="section">
-    <div class="eyebrow">How it works</div>
-    <h2>Set it up once.<br>It runs itself.</h2>
-    <p class="section-sub">Dozfi was built for busy owners who don't have time for complicated software.</p>
-    <div class="steps">
-      <div class="step"><div class="step-num">1</div><h3>Add your clients</h3><p>Import your client list or add them one by one. Takes a few minutes. We walk you through every step.</p></div>
-      <div class="step"><div class="step-num">2</div><h3>Set your schedule</h3><p>Tell Dozfi your hours and when to send reminders. Customize your messages. Then you're done.</p></div>
-      <div class="step"><div class="step-num">3</div><h3>Clients get texted</h3><p>Dozfi sends personalized reminders before every appointment. Clients confirm or cancel with one reply.</p></div>
-    </div>
-  </div>
-</div>
-
-<!-- FEATURES -->
-<div class="features-wrap">
-  <div class="features-inner">
-    <div class="features-list">
-      <div>
-        <div class="eyebrow" style="margin-bottom:20px;">Features</div>
-        <h2 style="margin-bottom:12px;">More than<br>just reminders.</h2>
-        <p class="section-sub" style="margin-bottom:36px;">Dozfi works quietly in the background to keep your business running at full capacity.</p>
+<!-- JOBS -->
+<section>
+  <div class="wrap">
+    <h2>What Dozfi actually looks for.</h2>
+    <p class="lede">Every recommendation tells you what Dozfi noticed, what it suggests, and why. If it doesn't have enough of your data yet, it says so instead of guessing.</p>
+    <div class="jobs">
+      <div class="job">
+        <div class="tagline">Demand</div>
+        <h3>Your busiest and slowest periods</h3>
+        <p>Know which days carry your revenue and which ones are worth promoting, so you stop discounting the days that were already full.</p>
       </div>
-      <div class="feature"><div class="feature-dot"></div><div><h3>Automatic appointment reminders</h3><p>Texts go out before every appointment without you doing a thing. Clients confirm or cancel with one reply.</p></div></div>
-      <div class="feature"><div class="feature-dot"></div><div><h3>Win-back campaigns</h3><p>Clients who haven't visited in a while get a personal message with a special offer — automatically.</p></div></div>
-      <div class="feature"><div class="feature-dot"></div><div><h3>Birthday messages</h3><p>Dozfi remembers every client's birthday and sends a warm note. The small touch that keeps people loyal.</p></div></div>
-      <div class="feature"><div class="feature-dot"></div><div><h3>Slow day promos</h3><p>When your schedule looks quiet, Dozfi sends a promo text to fill it — so you never lose money on a slow day.</p></div></div>
-    </div>
-    <div class="sms-card">
-      <div class="sms-label">Live reminder · Sent automatically at 9:00 AM</div>
-      <div class="sms-bubble">Hi Maya 👋 Just a reminder that your appointment at Luxe Hair Studio is tomorrow at 2:00 PM.<br><br>Reply <strong>YES</strong> to confirm or <strong>NO</strong> to reschedule.</div>
-      <div class="sms-reply">YES — see you tomorrow! ✓</div>
-      <div class="sms-confirmed"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Appointment confirmed · No-show prevented</div>
+      <div class="job">
+        <div class="tagline">Pricing</div>
+        <h3>Where you are charging too little</h3>
+        <p>Dozfi looks at what your appointments are actually worth and shows you where a small increase compounds across every booking.</p>
+      </div>
+      <div class="job">
+        <div class="tagline">Revenue leakage</div>
+        <h3>What cancellations are costing</h3>
+        <p>See your real cancellation rate and the money attached to it, then get a specific change to reminder timing or deposits.</p>
+      </div>
+      <div class="job">
+        <div class="tagline">Retention</div>
+        <h3>Clients who quietly stopped coming</h3>
+        <p>Dozfi flags people with no upcoming booking who haven't been in for months, and what that group used to be worth.</p>
+      </div>
     </div>
   </div>
-</div>
+</section>
 
-<!-- TESTIMONIALS -->
-<div class="testimonials">
-  <div class="eyebrow">What people say</div>
-  <h2 style="margin-bottom:12px;">Small businesses love Dozfi.</h2>
-  <p class="section-sub">Real results from real owners who were tired of losing money to no-shows.</p>
-  <div class="tgrid">
-    <div class="testimonial"><div class="stars">★★★★★</div><blockquote>"I was losing around $800 a month to no-shows. Dozfi cut that almost completely. The texts go out on their own — I don't do a thing."</blockquote><div class="t-author">Maria T.</div><div class="t-biz">Luxe Hair Studio</div></div>
-    <div class="testimonial"><div class="stars">★★★★★</div><blockquote>"I'm not a tech person at all. My daughter set it up in 15 minutes and now it just runs. My slow Tuesdays are completely gone."</blockquote><div class="t-author">Denise R.</div><div class="t-biz">Serenity Nail Spa</div></div>
-    <div class="testimonial"><div class="stars">★★★★★</div><blockquote>"Worth every penny. My clients love the reminders. I made back the first month's fee in three days."</blockquote><div class="t-author">James K.</div><div class="t-biz">FitLife Personal Training</div></div>
+<!-- SMS -->
+<section class="band">
+  <div class="wrap sms-grid">
+    <div>
+      <h2>It does the chasing, not you.</h2>
+      <p class="lede" style="margin-bottom:24px">Finding the problem is half of it. Dozfi also runs the follow-up: reminders go out before every appointment, clients confirm or cancel with one word, and you get told the moment a slot opens up.</p>
+      <ul class="plist">
+        <li>Automatic reminders at the timing you choose</li>
+        <li>One-word YES or NO replies from clients</li>
+        <li>A text to you the moment someone cancels, with the value of the slot</li>
+        <li>Opt-outs handled automatically</li>
+      </ul>
+    </div>
+    <div class="thread">
+      <div class="thread-h">Sent automatically, 24 hours ahead</div>
+      <div class="bub">Hi Maya! Your appointment at Luxe Hair Studio is tomorrow at 2:00 PM. Reply YES to confirm or NO to cancel.</div>
+      <div class="bub-me">YES</div>
+      <div class="thread-f">✓ Confirmed, and your dashboard updated</div>
+    </div>
   </div>
-</div>
+</section>
+
+<!-- CALC -->
+<section>
+  <div class="wrap">
+    <h2>What is an empty slot costing you?</h2>
+    <p class="lede">Put in your own numbers. This is the money already walking out of your calendar every month.</p>
+    <div class="calc">
+      <div class="calc-row"><label for="cVal">Average appointment value</label><input id="cVal" type="number" min="0" value="150"/></div>
+      <div class="calc-row"><label for="cNum">Empty slots per month</label><input id="cNum" type="number" min="0" value="6"/></div>
+      <div class="calc-out">
+        <div class="calc-num" id="cOut">$900</div>
+        <div class="calc-lbl">in appointments at risk every month</div>
+        <p class="calc-fine">Dozfi costs $75 a month. This is a calculation from the numbers you entered, not a promise about what Dozfi will recover.</p>
+      </div>
+    </div>
+  </div>
+</section>
 
 <!-- PRICING -->
-<div id="pricing" class="pricing-wrap">
-  <div class="pricing-inner">
-    <div class="pricing-left">
-      <div class="eyebrow" style="color:rgba(255,255,255,0.4); margin-bottom:14px;">Pricing</div>
-      <h2>One price.<br>No surprises.</h2>
-      <p style="margin-top:12px;">Most businesses recover the $75 in their first week. No contracts, no setup fees, no add-ons.</p>
+<section id="pricing" class="band">
+  <div class="wrap price-grid">
+    <div>
+      <h2>One plan. One price.</h2>
+      <p class="lede" style="margin-bottom:0">No tiers, no setup fee, no add-ons, and no phone call to cancel. Your first 30 days are free, and you can end it yourself from your dashboard in two clicks.</p>
     </div>
-    <div class="pricing-card">
-      <div class="plan-label">Dozfi Pro</div>
-      <div class="price"><sup>$</sup>75<span>/month</span></div>
-      <div class="trial">✓ First month completely free</div>
-      <div class="divider"></div>
+    <div class="pcard">
+      <div class="pname">Dozfi Pro</div>
+      <div class="pnum"><sup>$</sup>75<span> / month</span></div>
+      <div class="ptrial">First 30 days free</div>
       <ul class="plist">
-        <li><span class="pcheck"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg></span>Unlimited appointment reminders</li>
-        <li><span class="pcheck"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg></span>Win-back campaigns for lost clients</li>
-        <li><span class="pcheck"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg></span>Birthday & slow-day promo messages</li>
-        <li><span class="pcheck"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg></span>Full client dashboard</li>
-        <li><span class="pcheck"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg></span>Free personal setup help</li>
+        <li>Profit opportunities from your own data</li>
+        <li>Spreadsheet import for clients and appointments</li>
+        <li>Automatic appointment reminders</li>
+        <li>Confirmation and cancellation replies</li>
+        <li>Cancellation alerts sent straight to you</li>
+        <li>Impact dashboard with honest numbers</li>
+        <li>Same-day human support</li>
       </ul>
-      <button onclick="openModal()" class="btn-primary" style="width:100%; justify-content:center; border-radius:8px;">Start my free month</button>
-      <p class="pnote">Cancel anytime. No credit card needed to start.</p>
+      <button class="btn btn-full btn-lg" onclick="openModal()">Start my free month</button>
+      <p class="pfine">Card saved now, first charge in 30 days.</p>
     </div>
   </div>
-</div>
+</section>
 
-<!-- CTA -->
-<div class="cta-section">
-  <h2>Ready to stop losing money<br>to no-shows?</h2>
-  <p>Your first month is completely free. We'll personally help you get set up — no tech skills needed.</p>
-  <button onclick="openModal()" class="btn-primary" style="border-radius:8px;">Get started free today</button>
-  <p class="cta-fine">Questions? Email team@dozfi.com — we respond the same day.</p>
-</div>
-
-<!-- SMS OPT-IN -->
-<div id="sms-optin" style="background:#F9F9FB; border-top:1px solid #EBEBF0; padding:72px 6%; text-align:center;">
-  <div style="max-width:520px; margin:0 auto;">
-    <p style="font-size:0.72rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:#5B4EF5; margin-bottom:14px;">SMS Notifications</p>
-    <h2 style="font-family:'Plus Jakarta Sans',sans-serif; font-size:1.8rem; font-weight:800; letter-spacing:-0.03em; color:#0F0E1A; margin-bottom:12px; line-height:1.2;">Get appointment reminders by text</h2>
-    <p style="font-size:0.9rem; color:#555466; line-height:1.75; margin-bottom:28px;">Enter your number below and your service provider will send you automated SMS reminders through Dozfi.</p>
-    <div style="display:flex; gap:10px; max-width:400px; margin:0 auto 16px;">
-      <input type="tel" placeholder="Your phone number" style="flex:1; padding:12px 16px; border:1.5px solid #EBEBF0; border-radius:8px; font-family:'Plus Jakarta Sans',sans-serif; font-size:0.875rem; color:#0F0E1A; outline:none;"/>
-      <button style="background:#5B4EF5; color:white; border:none; border-radius:8px; padding:12px 20px; font-family:'Plus Jakarta Sans',sans-serif; font-size:0.875rem; font-weight:700; cursor:pointer;">Sign up</button>
-    </div>
-    <div style="display:flex; align-items:flex-start; gap:10px; max-width:400px; margin:0 auto; text-align:left;">
-      <input type="checkbox" id="sms-consent" style="margin-top:3px; flex-shrink:0; accent-color:#5B4EF5;"/>
-      <label for="sms-consent" style="font-size:0.75rem; color:#9998AB; line-height:1.6;">
-        I agree to receive automated SMS appointment reminders from Dozfi. Message frequency varies. Message and data rates may apply. Reply <strong>STOP</strong> to opt out at any time. Reply <strong>HELP</strong> for help. View our <a href="/privacy.html" style="color:#5B4EF5;">Privacy Policy</a> and <a href="/terms.html" style="color:#5B4EF5;">Terms of Service</a>.
-      </label>
+<!-- FAQ -->
+<section>
+  <div class="wrap">
+    <h2>Questions worth asking.</h2>
+    <div class="faq">
+      <details><summary>Do I have to switch my booking system?</summary><p>No. Dozfi sits alongside whatever you already use. You bring in your client and appointment data and Dozfi works from that. Nothing about your calendar, your till or your website has to change.</p></details>
+      <details><summary>How long does setup take?</summary><p>Most people are done in under ten minutes. You enter your business details, bring in your clients by pasting or uploading a spreadsheet, choose when reminders go out, and that's it.</p></details>
+      <details><summary>What happens when a client replies NO?</summary><p>Their appointment is released and you get a text straight away telling you who cancelled and what that slot was worth, so you can try to refill it while there is still time.</p></details>
+      <details><summary>Can clients stop the texts?</summary><p>Yes. Any client can reply STOP at any time and Dozfi stops messaging them immediately. That's required by carriers and it's handled for you.</p></details>
+      <details><summary>What if Dozfi doesn't have enough data about my business?</summary><p>Then it tells you that instead of inventing a recommendation. Each opportunity in your dashboard either shows real numbers from your data or explains exactly what to add before it can say anything useful.</p></details>
+      <details><summary>Do I need to be good with technology?</summary><p>No. If you can use a spreadsheet you can use Dozfi. And if you get stuck, email team@dozfi.com and a person replies the same day.</p></details>
+      <details><summary>How do I cancel?</summary><p>Log in, open Billing, and press Cancel my subscription. No email, no phone call. Cancel during your free trial and you are never charged.</p></details>
     </div>
   </div>
-</div>
+</section>
 
-<!-- FOOTER -->
+<!-- OPT-IN -->
+<section id="sms-optin" class="band">
+  <div class="wrap optin">
+    <h2 style="font-size:1.5rem">Get appointment reminders by text</h2>
+    <p class="lede" style="margin:0 auto 24px">Enter your number and your service provider will send you automated SMS appointment reminders through Dozfi.</p>
+    <div class="optin-row">
+      <input type="tel" placeholder="Your phone number" aria-label="Your phone number"/>
+      <button class="btn">Sign up</button>
+    </div>
+    <div class="consent">
+      <input type="checkbox" id="sms-consent"/>
+      <label for="sms-consent">I agree to receive automated SMS appointment reminders from Dozfi. Message frequency varies. Message and data rates may apply. Reply <strong>STOP</strong> to opt out at any time. Reply <strong>HELP</strong> for help. View our <a href="/privacy.html">Privacy Policy</a> and <a href="/terms.html">Terms of Service</a>.</label>
+    </div>
+  </div>
+</section>
+
 <footer>
-  <a href="/" class="footer-wordmark">Dozfi</a>
-  <p>© 2026 Dozfi. All rights reserved.</p>
-  <div class="footer-links">
-    <a href="/privacy.html">Privacy Policy</a>
-    <a href="/terms.html">Terms of Service</a>
-    <a href="mailto:team@dozfi.com">team@dozfi.com</a>
+  <div class="foot-in">
+    <a href="/" class="mark">
+      <svg class="mark-glyph" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+        <rect width="32" height="32" rx="8" fill="#5B4EF5"/>
+        <path d="M8 21.5L13 15l4 4.5L24 10.5" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="24" cy="10.5" r="2.6" fill="#fff"/>
+      </svg>
+      <span class="mark-word" style="font-size:1rem">Dozfi</span>
+    </a>
+    <p>© 2026 Dozfi. All rights reserved.</p>
+    <div class="foot-links">
+      <a href="/dashboard.html">Log in</a>
+      <a href="/privacy.html">Privacy Policy</a>
+      <a href="/terms.html">Terms of Service</a>
+      <a href="mailto:team@dozfi.com">team@dozfi.com</a>
+    </div>
   </div>
 </footer>
 
-<!-- SIGNUP MODAL -->
-<div class="modal-overlay" id="modalOverlay" onclick="handleOverlayClick(event)">
-  <div class="modal" id="modal">
-    <button class="modal-close" onclick="closeModal()">✕</button>
-    <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:33%"></div></div>
+<!-- ============ SIGNUP MODAL ============ -->
+<div class="ov" id="ov" onclick="if(event.target===this)closeModal()">
+  <div class="modal" id="modalBox">
+    <button class="mx" onclick="closeModal()" aria-label="Close">✕</button>
+    <div class="bar"><i id="bar" style="width:25%"></i></div>
 
-    <!-- STEP 1 -->
-    <div id="mstep1">
-      <div class="step-tag">Step 1 of 4</div>
-      <div class="step-title">Tell us about your business</div>
-      <div class="step-sub">Takes about 2 minutes. You'll be sending reminders by the end.</div>
-      <div class="mfield"><label>Your name</label><input type="text" id="ownerName" placeholder="Maria Rodriguez"/></div>
-      <div class="mfield"><label>Business name</label><input type="text" id="businessName" placeholder="Luxe Hair Studio"/></div>
-      <div class="mfield">
-        <label>Business type</label>
-        <select id="businessType">
-          <option value="">Select your business type</option>
+    <!-- 1 -->
+    <div id="s1">
+      <div class="mstep">Step 1 of 4</div>
+      <div class="mtitle">Create your account</div>
+      <div class="msub">Tell us about your business so Dozfi knows what it's looking at.</div>
+      <div class="f"><label for="oName">Your name</label><input id="oName" placeholder="Maria Rodriguez"/></div>
+      <div class="f"><label for="bName">Business name</label><input id="bName" placeholder="Luxe Hair Studio"/></div>
+      <div class="f"><label for="bType">Business type</label>
+        <select id="bType">
+          <option value="">Choose one</option>
           <option>Hair salon</option><option>Nail salon</option><option>Barbershop</option>
-          <option>Spa / esthetics</option><option>Personal training</option>
-          <option>Tattoo / piercing</option><option>Massage therapy</option>
+          <option>Spa or esthetics</option><option>Personal training</option>
+          <option>Tattoo or piercing</option><option>Massage therapy</option>
+          <option>Dental or medical practice</option><option>Pet grooming</option>
           <option>Other appointment business</option>
         </select>
       </div>
-      <div class="mfield-row">
-        <div class="mfield" style="margin:0"><label>Your email</label><input type="email" id="ownerEmail" placeholder="you@business.com"/></div>
-        <div class="mfield" style="margin:0"><label>Your phone</label><input type="tel" id="ownerPhone" placeholder="+1 (555) 000-0000"/></div>
+      <div class="f2">
+        <div class="f"><label for="oEmail">Your email</label><input id="oEmail" type="email" placeholder="you@business.com"/></div>
+        <div class="f"><label for="oPhone">Your mobile</label><input id="oPhone" type="tel" placeholder="+1 314 555 0100"/></div>
       </div>
-      <div class="btn-row"><button class="mbtn-next" onclick="goToStep2()">Next: Add your clients →</button></div>
-      <div class="merror" id="err1"></div>
+      <div class="f"><label for="oPass">Choose a password</label><input id="oPass" type="password" placeholder="At least 6 characters"/><div class="hint">You'll use this and your email to log in.</div></div>
+      <div class="mrow"><button class="btn" onclick="toStep2()">Next: add your clients</button></div>
+      <div class="notice" id="e1"></div>
     </div>
 
-    <!-- STEP 2 -->
-    <div id="mstep2" style="display:none">
-      <div class="step-tag">Step 2 of 4</div>
-      <div class="step-title">Add your clients</div>
-      <div class="step-sub">Paste from a spreadsheet or add manually. You can always add more later.</div>
-      <div class="import-box">
-        <label>Paste from Google Sheets, Excel, or Numbers</label>
-        <div class="import-hint">Copy two columns: Name and Phone. One client per row.</div>
-        <textarea id="pasteArea" style="width:100%; padding:10px; border:1.5px solid #EBEBF0; border-radius:8px; font-family:monospace; font-size:0.8rem; min-height:70px; outline:none;" placeholder="Maria Rodriguez	+13145550101&#10;James Kim	+13145550102"></textarea>
-        <button class="import-parse-btn" onclick="parsePaste()">Import from paste</button>
+    <!-- 2 -->
+    <div id="s2" style="display:none">
+      <div class="mstep">Step 2 of 4</div>
+      <div class="mtitle">Add your clients</div>
+      <div class="msub">Paste from a spreadsheet or type a few in. You can import your full list later.</div>
+      <div class="paste">
+        <label for="pasteArea">Paste from Google Sheets, Excel or Numbers</label>
+        <div class="hint">Two columns: name and phone number, one client per row.</div>
+        <textarea id="pasteArea" placeholder="Sarah Johnson	+13145550101&#10;Maria Garcia	+13145550102"></textarea>
+        <button class="btn btn-ghost" style="margin-top:8px;padding:8px 14px;font-size:.82rem" onclick="doPaste()">Add these clients</button>
       </div>
-      <div class="or-line">or add manually</div>
-      <div class="client-list" id="clientList"></div>
-      <button class="add-client-btn" onclick="addClient()">+ Add a client</button>
-      <div class="btn-row">
-        <button class="mbtn-back" onclick="goToStep(1)">← Back</button>
-        <button class="mbtn-next" onclick="goToStep3()">Next: Reminder timing →</button>
+      <div class="orline">or type them in</div>
+      <div id="cliList"></div>
+      <button class="addcli" onclick="addCli()">+ Add another client</button>
+      <div class="mrow">
+        <button class="btn btn-ghost" style="flex:0 0 auto" onclick="go(1)">Back</button>
+        <button class="btn" onclick="toStep3()">Next: reminder timing</button>
       </div>
-      <div class="merror" id="err2"></div>
+      <div class="notice" id="e2"></div>
     </div>
 
-    <!-- STEP 3 -->
-    <div id="mstep3" style="display:none">
-      <div class="step-tag">Step 3 of 4</div>
-      <div class="step-title">When should reminders go out?</div>
-      <div class="step-sub">We'll text your clients this long before their appointment.</div>
-      <div class="timing-grid">
-        <label class="timing-opt sel"><input type="radio" name="timing" value="24" checked onchange="selTiming(this)"/><div class="timing-val">24h</div><div class="timing-lbl">Before</div></label>
-        <label class="timing-opt"><input type="radio" name="timing" value="48" onchange="selTiming(this)"/><div class="timing-val">48h</div><div class="timing-lbl">Before</div></label>
-        <label class="timing-opt"><input type="radio" name="timing" value="2" onchange="selTiming(this)"/><div class="timing-val">2h</div><div class="timing-lbl">Before</div></label>
+    <!-- 3 -->
+    <div id="s3" style="display:none">
+      <div class="mstep">Step 3 of 4</div>
+      <div class="mtitle">When should reminders go out?</div>
+      <div class="msub">Dozfi texts your clients this far ahead of their appointment. You can change it any time.</div>
+      <div class="pills" id="pills">
+        <button class="pill" data-h="2"><b>2h</b><i>before</i></button>
+        <button class="pill" data-h="24" aria-pressed="true"><b>24h</b><i>before</i></button>
+        <button class="pill" data-h="48"><b>48h</b><i>before</i></button>
       </div>
-      <div class="mfield">
-        <label>Average appointment value ($)</label>
-        <input type="number" id="apptValue" placeholder="e.g. 150" min="0" step="1"/>
-        <div style="font-size:0.75rem; color:#9998AB; margin-top:5px;">This lets Dozfi show you how much revenue it's protecting each month.</div>
+      <div class="f"><label for="aVal">Average appointment value</label><input id="aVal" type="number" min="0" placeholder="150"/><div class="hint">In dollars. This is what powers your pricing and leakage insights.</div></div>
+      <div class="mrow">
+        <button class="btn btn-ghost" style="flex:0 0 auto" onclick="go(2)">Back</button>
+        <button class="btn" onclick="go(4)">Next: payment</button>
       </div>
-      <div class="mfield"><label>Anything else? (optional)</label><textarea id="notes" placeholder="E.g. I use Vagaro for scheduling..."></textarea></div>
-      <div class="btn-row">
-        <button class="mbtn-back" onclick="goToStep(2)">← Back</button>
-        <button class="mbtn-next" id="submitBtn" onclick="submitSignup()">Start my free month 🎉</button>
-      </div>
-      <div class="merror" id="err3"></div>
+      <div class="notice" id="e3"></div>
     </div>
 
-    <!-- STEP 4: Payment -->
-    <div id="mstep4" style="display:none">
-      <div class="step-tag">Step 4 of 4</div>
-      <div class="step-title">Start your free month</div>
-      <div class="step-sub">No charge today. Your card is saved and you'll be billed $75 after your 30-day free trial ends. Cancel anytime before then.</div>
-      <div style="background:#F9F9FB; border:1px solid #EBEBF0; border-radius:12px; padding:20px; margin-bottom:16px;">
-        <div style="font-size:0.82rem; font-weight:600; color:#0F0E1A; margin-bottom:12px;">Card details</div>
-        <div id="card-element" style="padding:12px 14px; border:1.5px solid #EBEBF0; border-radius:10px; background:white;"></div>
-        <div id="card-errors" style="color:#DC2626; font-size:0.78rem; margin-top:8px;"></div>
+    <!-- 4 -->
+    <div id="s4" style="display:none">
+      <div class="mstep">Step 4 of 4</div>
+      <div class="mtitle">Start your free month</div>
+      <div class="msub">Nothing is charged today. Your card is saved and the first $75 is taken after 30 days, unless you cancel before then.</div>
+      <div class="card-box">
+        <div class="lbl">Card details</div>
+        <div id="card-el"></div>
+        <div id="cardErr" style="color:var(--red);font-size:.78rem;margin-top:8px"></div>
       </div>
-      <div style="display:flex; align-items:center; gap:8px; margin-bottom:16px;">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-        <span style="font-size:0.75rem; color:#9998AB;">Secured by Stripe. Dozfi never sees your card number.</span>
+      <div class="trial-box"><b>First 30 days free</b><span>Then $75 a month. Cancel yourself from your dashboard at any time.</span></div>
+      <p style="font-size:.75rem;color:var(--faint);margin-bottom:18px">Payments are handled by Stripe. Dozfi never sees or stores your card number.</p>
+      <div class="mrow">
+        <button class="btn btn-ghost" style="flex:0 0 auto" onclick="go(3)">Back</button>
+        <button class="btn" id="payBtn" onclick="finish()">Start my free trial</button>
       </div>
-      <div style="background:#F0FDF4; border:1px solid #BBF7D0; border-radius:10px; padding:12px 14px; margin-bottom:20px;">
-        <div style="font-size:0.82rem; font-weight:700; color:#16A34A;">✓ First 30 days completely free</div>
-        <div style="font-size:0.75rem; color:#555466; margin-top:3px;">Then $75/month. Cancel anytime before your trial ends and you won't be charged.</div>
-      </div>
-      <div class="btn-row">
-        <button class="mbtn-back" onclick="goToStep(3)">← Back</button>
-        <button class="mbtn-next" id="payBtn" onclick="submitPayment()">Start free trial →</button>
-      </div>
-      <div class="merror" id="err4"></div>
-    </div>
-
-    <!-- SUCCESS -->
-    <div id="mstepSuccess" style="display:none">
-      <div class="success-screen">
-        <div class="success-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg></div>
-        <div class="step-title">You're all set! 🎉</div>
-        <p style="font-size:0.9rem; color:#555466; line-height:1.7; max-width:340px; margin:12px auto 0;">We've got everything. Check your phone — we'll send a welcome text and reach out to get your reminders running.</p>
-      </div>
+      <div class="notice" id="e4"></div>
     </div>
   </div>
 </div>
 
 <script>
-const BACKEND = 'https://dozfi-backend.vercel.app';
+const API = 'https://dozfi-backend.vercel.app';
 const STRIPE_KEY = 'pk_test_51TstHLC5qfJXtZk3fgdSOadeNczcBElyF3pmf1tifLr0QMRI5VAqoLeh3JmgBNbAxDPHFcTFYRXV0vZ9l8OspiTe00bsu35NeR';
-let clientCount = 0;
-let formData = {};
-let stripe, cardElement;
+let form = {}, cliN = 0, stripe = null, card = null, customerId = null;
+
+const $ = id => document.getElementById(id);
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+function note(id, msg, ok) {
+  const el = $(id);
+  el.className = 'notice ' + (ok ? 'ok' : 'err');
+  el.textContent = msg; el.style.display = 'block';
+}
+function clearNote(id) { $(id).style.display = 'none'; }
+
+/* nav reflects whether they already have an account here */
+if (localStorage.getItem('dozfi_biz')) {
+  $('navCta').textContent = 'Go to dashboard';
+  $('navCta').onclick = () => location.href = '/dashboard.html';
+  $('navLogin').style.display = 'none';
+}
+
+/* calculator */
+function calc() {
+  const v = parseFloat($('cVal').value) || 0, n = parseFloat($('cNum').value) || 0;
+  $('cOut').textContent = '$' + Math.round(v * n).toLocaleString();
+}
+$('cVal').oninput = calc; $('cNum').oninput = calc;
+
+/* modal */
+function openModal() {
+  $('ov').classList.add('on');
+  document.body.style.overflow = 'hidden';
+  if (cliN === 0) addCli();
+}
+function closeModal() {
+  $('ov').classList.remove('on');
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+function go(n) {
+  ['s1','s2','s3','s4'].forEach(id => $(id).style.display = 'none');
+  $('s' + n).style.display = 'block';
+  $('bar').style.width = (n * 25) + '%';
+  $('modalBox').scrollTop = 0;
+  if (n === 4) initStripe();
+}
 
 function initStripe() {
   if (stripe) return;
   stripe = Stripe(STRIPE_KEY);
-  const elements = stripe.elements();
-  cardElement = elements.create('card', {
-    style: {
-      base: {
-        fontFamily: "'Plus Jakarta Sans', sans-serif",
-        fontSize: '15px',
-        color: '#0F0E1A',
-        '::placeholder': { color: '#9998AB' }
-      }
-    }
+  card = stripe.elements().create('card', {
+    style: { base: { fontFamily: "'Plus Jakarta Sans',sans-serif", fontSize: '15px', color: '#12111C', '::placeholder': { color: '#8E8DA0' } } }
   });
-  cardElement.mount('#card-element');
-  cardElement.on('change', e => {
-    const el = document.getElementById('card-errors');
-    el.textContent = e.error ? e.error.message : '';
-  });
+  card.mount('#card-el');
+  card.on('change', e => { $('cardErr').textContent = e.error ? e.error.message : ''; });
 }
 
-function openModal() {
-  document.getElementById('modalOverlay').classList.add('open');
-  document.body.style.overflow = 'hidden';
-  if (clientCount === 0) addClient();
-}
-
-function closeModal() {
-  document.getElementById('modalOverlay').classList.remove('open');
-  document.body.style.overflow = '';
-}
-
-function handleOverlayClick(e) {
-  if (e.target === document.getElementById('modalOverlay')) closeModal();
-}
-
-function goToStep(n) {
-  ['mstep1','mstep2','mstep3','mstep4','mstepSuccess'].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.style.display = 'none';
-  });
-  const target = n === 'success' ? 'mstepSuccess' : 'mstep' + n;
-  document.getElementById(target).style.display = 'block';
-  const pct = n === 1 ? 25 : n === 2 ? 50 : n === 3 ? 75 : n === 4 ? 90 : 100;
-  document.getElementById('progressFill').style.width = pct + '%';
-  document.getElementById('modal').scrollTop = 0;
-  if (n === 4) initStripe();
-}
-
-function goToStep2() {
-  const name = document.getElementById('ownerName').value.trim();
-  const biz = document.getElementById('businessName').value.trim();
-  const type = document.getElementById('businessType').value;
-  const email = document.getElementById('ownerEmail').value.trim();
-  const phone = document.getElementById('ownerPhone').value.trim();
-  if (!name || !biz || !type || !email || !phone) { showErr('err1', 'Please fill in all fields.'); return; }
-  if (!email.includes('@')) { showErr('err1', 'Please enter a valid email.'); return; }
-  formData = { ownerName: name, businessName: biz, businessType: type, ownerEmail: email, ownerPhone: phone };
-  hideErr('err1');
-  goToStep(2);
-}
-
-function goToStep3() {
-  const clients = getClients();
-  if (clients.length === 0) { showErr('err2', 'Please add at least one client.'); return; }
-  for (const c of clients) {
-    if (!c.name || !c.phone) { showErr('err2', 'Every client needs a name and phone number.'); return; }
+/* step 1 */
+function toStep2() {
+  clearNote('e1');
+  const v = {
+    ownerName: $('oName').value.trim(), businessName: $('bName').value.trim(),
+    businessType: $('bType').value, ownerEmail: $('oEmail').value.trim(),
+    ownerPhone: $('oPhone').value.trim(), password: $('oPass').value
+  };
+  if (!v.ownerName || !v.businessName || !v.businessType || !v.ownerEmail || !v.ownerPhone) {
+    return note('e1', 'Fill in every field so Dozfi can set up your account.');
   }
-  formData.clients = clients;
-  hideErr('err2');
-  goToStep(3);
+  if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v.ownerEmail)) return note('e1', "That email doesn't look right. Check it and try again.");
+  if (v.password.length < 6) return note('e1', 'Your password needs at least 6 characters.');
+  form = v;
+  go(2);
 }
 
-function addClient() {
-  clientCount++;
-  const id = clientCount;
-  const list = document.getElementById('clientList');
-  const div = document.createElement('div');
-  div.className = 'client-entry';
-  div.id = 'ce-' + id;
-  div.innerHTML = `
-    <div class="client-entry-header">
-      <span class="client-num">Client ${id}</span>
-      <button class="remove-btn" onclick="removeClient(${id})">Remove</button>
-    </div>
-    <div class="mfield-row">
-      <div class="mfield" style="margin:0"><input type="text" placeholder="Name" class="cname" /></div>
-      <div class="mfield" style="margin:0"><input type="tel" placeholder="Phone number" class="cphone" /></div>
-    </div>`;
-  list.appendChild(div);
+/* clients */
+function addCli(name, phone) {
+  cliN++;
+  const d = document.createElement('div');
+  d.className = 'cli'; d.id = 'c' + cliN;
+  d.innerHTML = `<div class="cli-h"><span class="cli-n">Client ${cliN}</span>
+    <button class="cli-x" onclick="document.getElementById('c${cliN}').remove()">Remove</button></div>
+    <div class="f2"><div class="f" style="margin:0"><input class="cn" placeholder="Name" value="${esc(name||'')}"/></div>
+    <div class="f" style="margin:0"><input class="cp" placeholder="Phone number" value="${esc(phone||'')}"/></div></div>`;
+  $('cliList').appendChild(d);
 }
 
-function removeClient(id) {
-  const el = document.getElementById('ce-' + id);
-  if (el) el.remove();
+function doPaste() {
+  const t = $('pasteArea').value.trim();
+  clearNote('e2');
+  if (!t) return note('e2', 'Paste your list into the box first.');
+  let added = 0;
+  t.split('\n').forEach(line => {
+    const p = line.split(/\t|,/).map(x => x.trim().replace(/^"|"$/g, ''));
+    if (p.length >= 2 && p[0] && p[1]) { addCli(p[0], p[1]); added++; }
+  });
+  $('pasteArea').value = '';
+  note('e2', added
+    ? `${added} client${added === 1 ? '' : 's'} added below. Check them over before continuing.`
+    : "Dozfi couldn't find a name and phone number in that. Each row needs both, separated by a tab or comma.", added > 0);
 }
 
 function getClients() {
-  const clients = [];
-  document.querySelectorAll('.client-entry').forEach(entry => {
-    const name = entry.querySelector('.cname')?.value.trim();
-    const phone = entry.querySelector('.cphone')?.value.trim();
-    if (name || phone) clients.push({ name, phone });
+  const out = [];
+  document.querySelectorAll('.cli').forEach(el => {
+    const n = el.querySelector('.cn').value.trim(), p = el.querySelector('.cp').value.trim();
+    if (n || p) out.push({ name: n, phone: p });
   });
-  return clients;
+  return out;
 }
 
-function parsePaste() {
-  const text = document.getElementById('pasteArea').value.trim();
-  if (!text) return;
-  const lines = text.split('\n').filter(l => l.trim());
-  let added = 0;
-  lines.forEach(line => {
-    const parts = line.split(/\t|,/).map(p => p.trim().replace(/^"|"$/g, ''));
-    if (parts.length >= 2 && parts[0] && parts[1]) {
-      clientCount++;
-      const id = clientCount;
-      const list = document.getElementById('clientList');
-      const div = document.createElement('div');
-      div.className = 'client-entry';
-      div.id = 'ce-' + id;
-      div.innerHTML = `
-        <div class="client-entry-header">
-          <span class="client-num">Client ${id}</span>
-          <button class="remove-btn" onclick="removeClient(${id})">Remove</button>
-        </div>
-        <div class="mfield-row">
-          <div class="mfield" style="margin:0"><input type="text" placeholder="Name" class="cname" value="${parts[0]}"/></div>
-          <div class="mfield" style="margin:0"><input type="tel" placeholder="Phone number" class="cphone" value="${parts[1]}"/></div>
-        </div>`;
-      list.appendChild(div);
-      added++;
-    }
-  });
-  document.getElementById('pasteArea').value = '';
-  if (added > 0) showErr('err2', `✓ Imported ${added} client${added > 1 ? 's' : ''}.`);
+function toStep3() {
+  clearNote('e2');
+  const cs = getClients();
+  if (!cs.length) return note('e2', 'Add at least one client so Dozfi has something to work with.');
+  if (cs.some(c => !c.name || !c.phone)) return note('e2', 'Every client needs both a name and a phone number.');
+  form.clients = cs;
+  go(3);
 }
 
-function selTiming(input) {
-  document.querySelectorAll('.timing-opt').forEach(el => el.classList.remove('sel'));
-  input.closest('.timing-opt').classList.add('sel');
-}
+/* timing pills */
+document.querySelectorAll('#pills .pill').forEach(p => p.onclick = () => {
+  document.querySelectorAll('#pills .pill').forEach(x => x.setAttribute('aria-pressed', 'false'));
+  p.setAttribute('aria-pressed', 'true');
+});
 
-async function submitSignup() {
-  const timing = document.querySelector('input[name="timing"]:checked')?.value || '24';
-  const notes = document.getElementById('notes').value.trim();
-  const apptValue = parseFloat(document.getElementById('apptValue').value) || 0;
-  formData.timing = timing;
-  formData.notes = notes;
-  formData.appointmentValue = apptValue;
-  goToStep(4);
-}
+/* finish */
+async function finish() {
+  clearNote('e4');
+  const b = $('payBtn');
+  b.disabled = true; b.innerHTML = '<span class="spin"></span> Setting up…';
 
-async function submitPayment() {
-  const btn = document.getElementById('payBtn');
-  btn.textContent = 'Processing...';
-  btn.disabled = true;
+  const sel = document.querySelector('#pills .pill[aria-pressed="true"]');
+  form.timing = sel ? sel.dataset.h : '24';
+  form.appointmentValue = parseFloat($('aVal').value) || 0;
+  form.notifySms = true;
+  form.notifyEmail = false;
 
   try {
-    // Create setup intent on backend
-    const res = await fetch(BACKEND + '/create-setup-intent', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email: formData.ownerEmail, name: formData.ownerName })
+    const r1 = await fetch(API + '/create-setup-intent', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: form.ownerEmail, name: form.ownerName })
     });
-    const { clientSecret, error: backendError } = await res.json();
-    if (backendError) throw new Error(backendError);
+    const si = await r1.json();
+    if (!si.clientSecret) throw new Error(si.error || "Dozfi couldn't open the secure payment form. Please try again.");
+    customerId = si.customerId;
 
-    // Confirm card setup with Stripe
-    const { setupIntent, error: stripeError } = await stripe.confirmCardSetup(clientSecret, {
-      payment_method: {
-        card: cardElement,
-        billing_details: { name: formData.ownerName, email: formData.ownerEmail }
-      }
+    const { setupIntent, error } = await stripe.confirmCardSetup(si.clientSecret, {
+      payment_method: { card, billing_details: { name: form.ownerName, email: form.ownerEmail } }
     });
-
-    if (stripeError) {
-      document.getElementById('card-errors').textContent = stripeError.message;
-      btn.textContent = 'Start free trial →';
-      btn.disabled = false;
+    if (error) {
+      $('cardErr').textContent = error.message;
+      b.disabled = false; b.textContent = 'Start my free trial';
       return;
     }
 
-    // Save business with payment method
-    formData.paymentMethodId = setupIntent.payment_method;
-    await fetch(BACKEND + '/signup', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(formData)
-    });
+    form.paymentMethodId = setupIntent.payment_method;
+    form.stripeCustomerId = customerId;
 
-    document.getElementById('progressFill').style.width = '100%';
-    goToStep('success');
+    const r2 = await fetch(API + '/signup', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(form)
+    });
+    const d = await r2.json();
+    if (!d.success) throw new Error(d.error || "Dozfi couldn't finish creating your account. Please try again.");
+
+    localStorage.setItem('dozfi_biz', JSON.stringify(d.business));
+    sessionStorage.setItem('dozfi_new', '1');
+    $('bar').style.width = '100%';
+    location.href = '/dashboard.html';
 
   } catch (err) {
-    showErr('err4', 'Something went wrong. Please try again.');
-    btn.textContent = 'Start free trial →';
-    btn.disabled = false;
+    note('e4', err.message);
+    b.disabled = false; b.textContent = 'Start my free trial';
   }
-}
-
-function showErr(id, msg) {
-  const el = document.getElementById(id);
-  el.textContent = msg;
-  el.style.display = 'block';
-}
-function hideErr(id) {
-  document.getElementById(id).style.display = 'none';
 }
 </script>
 </body>
