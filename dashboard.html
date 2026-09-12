@@ -170,6 +170,11 @@ a{color:var(--purple)}
 .bub-out{background:var(--purple);color:#fff;align-self:flex-end;border-bottom-right-radius:4px}
 .bub-time{font-size:.68rem;color:var(--faint);margin-top:3px}
 .bub-out .bub-time{color:rgba(255,255,255,.7);text-align:right}
+.subtab-row{display:flex;gap:4px;border-bottom:1.5px solid var(--line);margin-bottom:20px}
+.subtab{background:none;border:none;padding:10px 4px;margin-right:20px;font-size:.87rem;font-weight:600;color:var(--faint);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1.5px}
+.subtab[aria-selected="true"]{color:var(--purple);border-bottom-color:var(--purple)}
+.subpage{display:none}
+.subpage.on{display:block}
 .seg-row{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:12px}
 .seg{border:1.5px solid var(--line);border-radius:99px;padding:6px 13px;font-size:.8rem;font-weight:600;cursor:pointer;background:#fff}
 .seg[aria-pressed="true"]{border-color:var(--purple);background:var(--purple-soft);color:var(--purple)}
@@ -248,15 +253,11 @@ a{color:var(--purple)}
       <div class="side-biz" id="sideBiz"></div>
     </div>
     <div class="side-nav">
-      <button class="nav-i" data-page="opportunities" aria-current="page"><span class="ic">◈</span> Opportunities <span class="nav-badge" id="oppBadge" style="display:none">0</span></button>
-      <button class="nav-i" data-page="impact"><span class="ic">◱</span> Impact</button>
-      <button class="nav-i" data-page="clients"><span class="ic">◍</span> Clients</button>
-      <button class="nav-i" data-page="import"><span class="ic">↥</span> Import</button>
-      <button class="nav-i" data-page="calendar"><span class="ic">▦</span> Calendar</button>
+      <button class="nav-i" data-page="home" aria-current="page"><span class="ic">◈</span> Home <span class="nav-badge" id="oppBadge" style="display:none">0</span></button>
+      <button class="nav-i" data-page="customers"><span class="ic">◍</span> Customers</button>
       <button class="nav-i" data-page="messages"><span class="ic">◌</span> Messages</button>
-      <button class="nav-i" data-page="automations"><span class="ic">◆</span> Automations</button>
+      <button class="nav-i" data-page="results"><span class="ic">◱</span> Results</button>
       <button class="nav-i" data-page="settings"><span class="ic">⚙</span> Settings</button>
-      <button class="nav-i" data-page="billing"><span class="ic">▤</span> Billing</button>
     </div>
     <div class="side-foot">
       <button class="nav-i" onclick="openHelp()"><span class="ic">?</span> Get help</button>
@@ -267,7 +268,7 @@ a{color:var(--purple)}
   <main class="main">
 
     <!-- ===== OPPORTUNITIES ===== -->
-    <section class="page on" id="page-opportunities">
+    <section class="page on" id="page-home">
       <div id="welcomeBanner" style="display:none"></div>
       <div class="head">
         <h1 class="h1" id="oppTitle">Opportunities</h1>
@@ -277,9 +278,9 @@ a{color:var(--purple)}
     </section>
 
     <!-- ===== IMPACT ===== -->
-    <section class="page" id="page-impact">
+    <section class="page" id="page-results">
       <div class="head">
-        <h1 class="h1">Impact</h1>
+        <h1 class="h1">Results</h1>
         <p class="sub">Each number below is tracked separately so you can see exactly what Dozfi did, and what it only identified.</p>
       </div>
       <div class="metrics">
@@ -320,80 +321,81 @@ a{color:var(--purple)}
       </div>
     </section>
 
-    <!-- ===== CALENDAR ===== -->
-    <section class="page" id="page-calendar">
+    <!-- ===== CUSTOMERS ===== -->
+    <section class="page" id="page-customers">
       <div class="head">
-        <div><h1 class="h1">Calendar</h1>
-        <p class="sub">Every appointment on file. Click a day to see who's booked, what's been sent, and what they said back.</p></div>
+        <div><h1 class="h1">Customers</h1>
+        <p class="sub">Who Dozfi is texting, and the schedule those texts run on.</p></div>
       </div>
-      <div class="card">
-        <div class="card-h">
-          <button class="btn btn-ghost btn-sm" id="calPrevBtn">← Prev</button>
-          <div class="card-t" id="calMonthLabel" style="text-align:center;flex:1"></div>
-          <button class="btn btn-ghost btn-sm" id="calNextBtn">Next →</button>
-        </div>
-        <div id="calGrid"></div>
-      </div>
-      <div class="card" id="calDayCard" style="display:none">
-        <div class="card-h"><div class="card-t" id="calDayTitle">—</div></div>
-        <div id="calDayBody"></div>
-      </div>
-    </section>
 
-    <!-- ===== CLIENTS ===== -->
-    <section class="page" id="page-clients">
-      <div class="head">
-        <h1 class="h1">Clients</h1>
-        <p class="sub">Everyone Dozfi can send reminders to. Appointment values power your pricing and leakage insights.</p>
+      <div class="subtab-row" data-group="customers">
+        <button class="subtab" data-tab="cust-list" aria-selected="true">List</button>
+        <button class="subtab" data-tab="cust-calendar" aria-selected="false">Calendar</button>
+        <button class="subtab" data-tab="cust-import" aria-selected="false">Import</button>
       </div>
-      <div class="card">
-        <div class="card-h"><div><div class="card-t">Add a client</div><div class="card-d">Adding a few at a time? Use this. Have a spreadsheet? Use Import instead.</div></div></div>
-        <div class="two">
-          <div class="f"><label for="ncName">Name</label><input id="ncName" placeholder="Maria Rodriguez"/></div>
-          <div class="f"><label for="ncPhone">Phone number</label><input id="ncPhone" placeholder="+1 314 555 0101"/></div>
-          <div class="f"><label for="ncAppt">Next appointment</label><input id="ncAppt" type="datetime-local"/></div>
-          <div class="f"><label for="ncValue">Appointment value</label><input id="ncValue" type="number" min="0" placeholder="150"/><div class="hint">What this appointment is worth to you, in dollars.</div></div>
-        </div>
-        <button class="btn" id="ncBtn">Add client</button>
-        <div class="notice" id="ncMsg"></div>
-      </div>
-      <div class="card">
-        <div class="card-h">
-          <div><div class="card-t">Your clients</div><div class="card-d" id="clientCount"></div></div>
-          <div style="position:relative;max-width:260px;width:100%">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--faint)" stroke-width="2" style="position:absolute;left:11px;top:50%;transform:translateY(-50%)"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-            <input id="clientSearchBox" placeholder="Search by name or phone" style="width:100%;padding:9px 12px 9px 33px;border:1.5px solid var(--line);border-radius:9px;font-size:.85rem;outline:none;font-family:inherit"/>
-          </div>
-        </div>
-        <div id="clientsBox"><div class="loading">Loading…</div></div>
-      </div>
-    </section>
 
-    <!-- ===== IMPORT ===== -->
-    <section class="page" id="page-import">
-      <div class="head">
-        <h1 class="h1">Import clients</h1>
-        <p class="sub">Upload the client list you already keep. Dozfi reads CSV and Excel files and matches your columns for you.</p>
-      </div>
-      <div class="card">
-        <div class="drop" id="drop">
-          <div class="drop-h">Choose a file or drag it here</div>
-          <div class="drop-p">CSV, XLSX or XLS — up to about 5,000 rows</div>
-          <input type="file" id="fileInput" accept=".csv,.xlsx,.xls" hidden/>
-        </div>
-        <div class="notice" id="importMsg"></div>
-        <div id="mapBox" style="display:none">
-          <div class="card-h" style="margin-top:22px"><div><div class="card-t">Check the columns</div><div class="card-d">Dozfi guessed these from your headings. Change anything that looks wrong.</div></div></div>
-          <div class="map-grid">
-            <div class="f"><label for="mapName">Name column</label><select id="mapName"></select></div>
-            <div class="f"><label for="mapPhone">Phone column</label><select id="mapPhone"></select></div>
-            <div class="f"><label for="mapAppt">Appointment date column</label><select id="mapAppt"></select></div>
-            <div class="f"><label for="mapValue">Appointment value column</label><select id="mapValue"></select></div>
+      <div class="subpage on" id="tab-cust-list">
+        <div class="card">
+          <div class="card-h"><div><div class="card-t">Add a customer</div><div class="card-d">Adding a few at a time? Use this. Have a spreadsheet? Use the Import tab instead.</div></div></div>
+          <div class="two">
+            <div class="f"><label for="ncName">Name</label><input id="ncName" placeholder="Maria Rodriguez"/></div>
+            <div class="f"><label for="ncPhone">Phone number</label><input id="ncPhone" placeholder="+1 314 555 0101"/></div>
+            <div class="f"><label for="ncAppt">Next appointment</label><input id="ncAppt" type="datetime-local"/></div>
+            <div class="f"><label for="ncValue">Appointment value</label><input id="ncValue" type="number" min="0" placeholder="150"/><div class="hint">What this appointment is worth to you, in dollars.</div></div>
           </div>
-          <div class="preview" id="preview"></div>
-          <div style="display:flex;gap:9px;margin-top:16px">
-            <button class="btn" id="importBtn">Import clients</button>
-            <button class="btn btn-ghost" onclick="resetImport()">Start over</button>
+          <button class="btn" id="ncBtn">Add customer</button>
+          <div class="notice" id="ncMsg"></div>
+        </div>
+        <div class="card">
+          <div class="card-h">
+            <div><div class="card-t">Your customers</div><div class="card-d" id="clientCount"></div></div>
+            <div style="position:relative;max-width:260px;width:100%">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--faint)" stroke-width="2" style="position:absolute;left:11px;top:50%;transform:translateY(-50%)"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+              <input id="clientSearchBox" placeholder="Search by name or phone" style="width:100%;padding:9px 12px 9px 33px;border:1.5px solid var(--line);border-radius:9px;font-size:.85rem;outline:none;font-family:inherit"/>
+            </div>
+          </div>
+          <div class="card-d" style="margin-bottom:12px">Click a name to see everything sent to them and everything they've said back.</div>
+          <div id="clientsBox"><div class="loading">Loading…</div></div>
+        </div>
+      </div>
+
+      <div class="subpage" id="tab-cust-calendar">
+        <div class="card">
+          <div class="card-h">
+            <button class="btn btn-ghost btn-sm" id="calPrevBtn">← Prev</button>
+            <div class="card-t" id="calMonthLabel" style="text-align:center;flex:1"></div>
+            <button class="btn btn-ghost btn-sm" id="calNextBtn">Next →</button>
+          </div>
+          <div id="calGrid"></div>
+        </div>
+        <div class="card" id="calDayCard" style="display:none">
+          <div class="card-h"><div class="card-t" id="calDayTitle">—</div></div>
+          <div id="calDayBody"></div>
+        </div>
+      </div>
+
+      <div class="subpage" id="tab-cust-import">
+        <div class="card">
+          <div class="card-h"><div><div class="card-t">Import your customer list</div><div class="card-d">Upload the spreadsheet you already keep. Dozfi reads CSV and Excel files and matches your columns for you.</div></div></div>
+          <div class="drop" id="drop">
+            <div class="drop-h">Choose a file or drag it here</div>
+            <div class="drop-p">CSV, XLSX or XLS — up to about 5,000 rows</div>
+            <input type="file" id="fileInput" accept=".csv,.xlsx,.xls" hidden/>
+          </div>
+          <div class="notice" id="importMsg"></div>
+          <div id="mapBox" style="display:none">
+            <div class="card-h" style="margin-top:22px"><div><div class="card-t">Check the columns</div><div class="card-d">Dozfi guessed these from your headings. Change anything that looks wrong.</div></div></div>
+            <div class="map-grid">
+              <div class="f"><label for="mapName">Name column</label><select id="mapName"></select></div>
+              <div class="f"><label for="mapPhone">Phone column</label><select id="mapPhone"></select></div>
+              <div class="f"><label for="mapAppt">Appointment date column</label><select id="mapAppt"></select></div>
+              <div class="f"><label for="mapValue">Appointment value column</label><select id="mapValue"></select></div>
+            </div>
+            <div class="preview" id="preview"></div>
+            <div style="display:flex;gap:9px;margin-top:16px">
+              <button class="btn" id="importBtn">Import customers</button>
+              <button class="btn btn-ghost" onclick="resetImport()">Start over</button>
+            </div>
           </div>
         </div>
       </div>
@@ -402,134 +404,142 @@ a{color:var(--purple)}
     <!-- ===== MESSAGES ===== -->
     <section class="page" id="page-messages">
       <div class="head">
-        <h1 class="h1">Messages</h1>
-        <p class="sub">Every text Dozfi has sent for you, and every cancellation it caught.</p>
+        <div><h1 class="h1">Messages</h1>
+        <p class="sub">See and control everything Dozfi sends on your behalf.</p></div>
       </div>
 
-      <div class="card" style="border-color:var(--purple);border-width:1.5px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap">
-        <div>
-          <div class="card-t">What Dozfi sends automatically</div>
-          <div class="card-d">See every automation, exactly what it says and when it fires, and build your own.</div>
-        </div>
-        <button class="btn" onclick="document.querySelector('[data-page=automations]').click()">Manage automations</button>
+      <div class="subtab-row" data-group="messages">
+        <button class="subtab" data-tab="msg-send" aria-selected="true">Send message</button>
+        <button class="subtab" data-tab="msg-auto" aria-selected="false">Automatic messages</button>
+        <button class="subtab" data-tab="msg-history" aria-selected="false">History</button>
       </div>
 
-      <div class="card">
-        <div class="card-h"><div><div class="card-t">Send a message</div><div class="card-d">Write once, send to as many clients as you pick. Use <code>{name}</code> to personalize each text.</div></div></div>
-        <div class="f"><label for="composeText">Message</label><textarea id="composeText" placeholder="Hi {name}, we have an opening tomorrow if you'd like to come in..." style="min-height:80px"></textarea></div>
-        <div style="font-size:.82rem;font-weight:600;margin-bottom:8px">Send to a group</div>
-        <div class="seg-row" id="segRow">
-          <button class="seg" data-seg="all">Everyone <span class="cnt" id="seg-all">–</span></button>
-          <button class="seg" data-seg="upcoming">Upcoming appts <span class="cnt" id="seg-upcoming">–</span></button>
-          <button class="seg" data-seg="new">New (30 days) <span class="cnt" id="seg-new">–</span></button>
-          <button class="seg" data-seg="dormant">Haven't booked (60+ days) <span class="cnt" id="seg-dormant">–</span></button>
-          <button class="seg" data-seg="confirmed">Confirmed <span class="cnt" id="seg-confirmed">–</span></button>
-          <button class="seg" data-seg="cancelled">Cancelled <span class="cnt" id="seg-cancelled">–</span></button>
+      <div class="subpage on" id="tab-msg-send">
+        <div class="card">
+          <div class="card-h"><div><div class="card-t">Send a message</div><div class="card-d">Write once, send to as many customers as you pick. Use <code>{name}</code> to personalize each text.</div></div></div>
+          <div class="f"><label for="composeText">Message</label><textarea id="composeText" placeholder="Hi {name}, we have an opening tomorrow if you'd like to come in..." style="min-height:80px"></textarea></div>
+          <div style="font-size:.82rem;font-weight:600;margin-bottom:8px">Send to a group</div>
+          <div class="seg-row" id="segRow">
+            <button class="seg" data-seg="all">Everyone <span class="cnt" id="seg-all">–</span></button>
+            <button class="seg" data-seg="upcoming">Upcoming appts <span class="cnt" id="seg-upcoming">–</span></button>
+            <button class="seg" data-seg="new">New (30 days) <span class="cnt" id="seg-new">–</span></button>
+            <button class="seg" data-seg="dormant">Haven't booked (60+ days) <span class="cnt" id="seg-dormant">–</span></button>
+            <button class="seg" data-seg="confirmed">Confirmed <span class="cnt" id="seg-confirmed">–</span></button>
+            <button class="seg" data-seg="cancelled">Cancelled <span class="cnt" id="seg-cancelled">–</span></button>
+          </div>
+          <div style="font-size:.82rem;font-weight:600;margin:14px 0 8px">Or pick individual customers</div>
+          <div style="position:relative;max-width:100%;margin-bottom:10px">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--faint)" stroke-width="2" style="position:absolute;left:11px;top:50%;transform:translateY(-50%)"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+            <input id="composeSearch" placeholder="Search customers to add" style="width:100%;padding:9px 12px 9px 33px;border:1.5px solid var(--line);border-radius:9px;font-size:.85rem;outline:none;font-family:inherit"/>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+            <button class="btn-ghost btn-sm" id="selectAllBtn" style="border:1.5px solid var(--line);border-radius:9px;padding:7px 13px;font-size:.82rem;font-weight:600;cursor:pointer;background:#fff">Select all customers</button>
+            <button class="btn-ghost btn-sm" id="selectNoneBtn" style="border:1.5px solid var(--line);border-radius:9px;padding:7px 13px;font-size:.82rem;font-weight:600;cursor:pointer;background:#fff">Clear selection</button>
+          </div>
+          <div id="composePickList" style="max-height:180px;overflow-y:auto;border:1px solid var(--line);border-radius:10px;margin-bottom:12px"></div>
+          <div style="display:flex;align-items:center;gap:12px">
+            <button class="btn" id="composeSendBtn">Send message</button>
+            <span class="card-d" id="composeCount" style="margin:0">0 customers selected</span>
+          </div>
+          <div class="notice" id="composeMsg"></div>
         </div>
-        <div style="font-size:.82rem;font-weight:600;margin:14px 0 8px">Or pick individual clients</div>
-        <div style="position:relative;max-width:100%;margin-bottom:10px">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--faint)" stroke-width="2" style="position:absolute;left:11px;top:50%;transform:translateY(-50%)"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-          <input id="composeSearch" placeholder="Search clients to add" style="width:100%;padding:9px 12px 9px 33px;border:1.5px solid var(--line);border-radius:9px;font-size:.85rem;outline:none;font-family:inherit"/>
-        </div>
-        <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
-          <button class="btn-ghost btn-sm" id="selectAllBtn" style="border:1.5px solid var(--line);border-radius:9px;padding:7px 13px;font-size:.82rem;font-weight:600;cursor:pointer;background:#fff">Select all clients</button>
-          <button class="btn-ghost btn-sm" id="selectNoneBtn" style="border:1.5px solid var(--line);border-radius:9px;padding:7px 13px;font-size:.82rem;font-weight:600;cursor:pointer;background:#fff">Clear selection</button>
-        </div>
-        <div id="composePickList" style="max-height:180px;overflow-y:auto;border:1px solid var(--line);border-radius:10px;margin-bottom:12px"></div>
-        <div style="display:flex;align-items:center;gap:12px">
-          <button class="btn" id="composeSendBtn">Send message</button>
-          <span class="card-d" id="composeCount" style="margin:0">0 clients selected</span>
-        </div>
-        <div class="notice" id="composeMsg"></div>
       </div>
 
-      <div class="card">
-        <div class="card-h">
-          <div class="card-t">History</div>
-          <div style="display:flex;gap:8px;flex-wrap:wrap">
-            <div style="position:relative;max-width:220px;width:100%">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--faint)" stroke-width="2" style="position:absolute;left:11px;top:50%;transform:translateY(-50%)"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-              <input id="msgSearchBox" placeholder="Search messages" style="width:100%;padding:9px 12px 9px 33px;border:1.5px solid var(--line);border-radius:9px;font-size:.85rem;outline:none;font-family:inherit"/>
+      <div class="subpage" id="tab-msg-auto">
+        <div class="card" id="builtinCard" style="border-color:var(--purple);border-width:1.5px">
+          <div class="card-h">
+            <div><div class="card-t">Automatic sending</div><div class="card-d">The master switch. When off, nothing below sends on its own, no matter what's toggled.</div></div>
+            <label style="display:flex;align-items:center;gap:9px;cursor:pointer">
+              <span id="masterStatusLabel" style="font-size:.85rem;font-weight:700;color:var(--faint)">Off</span>
+              <span id="masterSwitch" style="position:relative;width:44px;height:25px;background:var(--line);border-radius:99px;transition:background .15s;flex-shrink:0" onclick="toggleMasterSending()">
+                <span id="masterKnob" style="position:absolute;top:3px;left:3px;width:19px;height:19px;background:#fff;border-radius:50%;transition:left .15s;box-shadow:0 1px 3px rgba(0,0,0,.25)"></span>
+              </span>
+            </label>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top:16px">
+          <div class="card-h">
+            <div><div class="card-t">Appointment reminder</div><div class="card-d">Sends before every appointment. This is the one thing most businesses want on.</div></div>
+            <label style="display:flex;align-items:center;gap:9px;cursor:pointer">
+              <span id="builtinStatusLabel" style="font-size:.85rem;font-weight:700;color:var(--faint)">Off</span>
+              <span id="builtinSwitch" style="position:relative;width:44px;height:25px;background:var(--line);border-radius:99px;transition:background .15s;flex-shrink:0" onclick="toggleBuiltinReminder()">
+                <span id="builtinKnob" style="position:absolute;top:3px;left:3px;width:19px;height:19px;background:#fff;border-radius:50%;transition:left .15s;box-shadow:0 1px 3px rgba(0,0,0,.25)"></span>
+              </span>
+            </label>
+          </div>
+          <div id="builtinBody">
+            <div style="font-size:.82rem;font-weight:600;margin-bottom:8px">Send how long before the appointment?</div>
+            <div class="pill-row" id="builtinTimingPills">
+              <button class="pill" data-h="2">2 hours</button>
+              <button class="pill" data-h="24">24 hours</button>
+              <button class="pill" data-h="48">2 days</button>
             </div>
-            <input id="msgDateFilter" type="date" style="padding:9px 12px;border:1.5px solid var(--line);border-radius:9px;font-size:.85rem;outline:none;font-family:inherit"/>
-            <select id="msgSortOrder" style="padding:9px 12px;border:1.5px solid var(--line);border-radius:9px;font-size:.85rem;outline:none;font-family:inherit;background:#fff">
-              <option value="new">Newest first</option>
-              <option value="old">Oldest first</option>
+            <div class="f" style="margin-top:10px">
+              <label for="builtinTemplate">What it says</label>
+              <textarea id="builtinTemplate" style="min-height:64px"></textarea>
+              <div class="hint">Use <code>{name}</code>, <code>{business}</code>, <code>{time}</code> and Dozfi fills them in.</div>
+            </div>
+            <button class="btn btn-sm" id="builtinSaveBtn">Save</button>
+            <div class="notice" id="builtinMsg"></div>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top:16px">
+          <div class="card-h"><div><div class="card-t">Your own automations</div><div class="card-d">Follow-ups, thank-you texts, anything else you want sent automatically.</div></div></div>
+          <div id="autoList"><div class="loading">Loading…</div></div>
+          <div style="text-align:center;margin-top:16px">
+            <button class="btn btn-ghost" id="showBuildFormBtn">+ Build a new automation</button>
+          </div>
+        </div>
+
+        <div class="card" id="buildFormCard" style="display:none">
+          <div class="card-h">
+            <div><div class="card-t">Build a new automation</div><div class="card-d">Pick when it should send and write exactly what it says.</div></div>
+            <button class="row-x" onclick="document.getElementById('buildFormCard').style.display='none'">Cancel</button>
+          </div>
+          <div class="f"><label for="autoName">Name</label><input id="autoName" placeholder="e.g. Thank you follow-up"/></div>
+          <div class="f">
+            <label for="autoTrigger">When should this send?</label>
+            <select id="autoTrigger">
+              <option value="before_appointment">Before an appointment</option>
+              <option value="after_appointment">After a visit</option>
+              <option value="on_confirm">The moment a customer confirms</option>
+              <option value="on_cancel">The moment a customer cancels</option>
             </select>
           </div>
-        </div>
-        <div id="msgBox"><div class="loading">Loading…</div></div>
-      </div>
-    </section>
-
-    <!-- ===== AUTOMATIONS ===== -->
-    <section class="page" id="page-automations">
-      <div class="head">
-        <div><h1 class="h1">Automations</h1>
-        <p class="sub">What Dozfi sends automatically, and when. Turn things on or off, or build your own.</p></div>
-      </div>
-
-      <div class="card" id="builtinCard" style="border-color:var(--purple);border-width:1.5px">
-        <div class="card-h">
-          <div><div class="card-t">Dozfi's standard reminder</div><div class="card-d">Sends automatically before every appointment. This is the one thing most businesses want on.</div></div>
-          <label style="display:flex;align-items:center;gap:9px;cursor:pointer">
-            <span id="builtinStatusLabel" style="font-size:.85rem;font-weight:700;color:var(--faint)">Off</span>
-            <span id="builtinSwitch" style="position:relative;width:44px;height:25px;background:var(--line);border-radius:99px;transition:background .15s;flex-shrink:0" onclick="toggleBuiltinReminder()">
-              <span id="builtinKnob" style="position:absolute;top:3px;left:3px;width:19px;height:19px;background:#fff;border-radius:50%;transition:left .15s;box-shadow:0 1px 3px rgba(0,0,0,.25)"></span>
-            </span>
-          </label>
-        </div>
-        <div id="builtinBody">
-          <div style="font-size:.82rem;font-weight:600;margin-bottom:8px">Send how long before the appointment?</div>
-          <div class="pill-row" id="builtinTimingPills">
-            <button class="pill" data-h="2">2 hours</button>
-            <button class="pill" data-h="24">24 hours</button>
-            <button class="pill" data-h="48">2 days</button>
+          <div class="f" id="autoOffsetWrap">
+            <label for="autoOffset">How many hours <span id="autoOffsetDir">before</span>?</label>
+            <input id="autoOffset" type="number" min="1" max="720" placeholder="24"/>
           </div>
-          <div class="f" style="margin-top:10px">
-            <label for="builtinTemplate">What it says</label>
-            <textarea id="builtinTemplate" style="min-height:64px"></textarea>
-            <div class="hint">Use <code>{name}</code>, <code>{business}</code>, <code>{time}</code> and Dozfi fills them in.</div>
+          <div class="f">
+            <label for="autoTemplate">Message</label>
+            <textarea id="autoTemplate" style="min-height:70px" placeholder="Hi {name}, thanks for coming in! We'd love to see you again — reply anytime to rebook with {business}."></textarea>
+            <div class="hint">Use <code>{name}</code>, <code>{business}</code>, <code>{time}</code>, <code>{client}</code>, <code>{value}</code> and Dozfi fills them in.</div>
           </div>
-          <button class="btn btn-sm" id="builtinSaveBtn">Save</button>
-          <div class="notice" id="builtinMsg"></div>
+          <button class="btn" id="autoCreateBtn">Create automation</button>
+          <div class="notice" id="autoCreateMsg"></div>
         </div>
       </div>
 
-      <div class="card" style="margin-top:22px">
-        <div class="card-h"><div><div class="card-t">Your own automations</div><div class="card-d">Anything beyond the standard reminder — follow-ups, custom timing, whatever you want sent automatically.</div></div></div>
-        <div id="autoList"><div class="loading">Loading…</div></div>
-        <div style="text-align:center;margin-top:16px">
-          <button class="btn btn-ghost" id="showBuildFormBtn">+ Build a new automation</button>
+      <div class="subpage" id="tab-msg-history">
+        <div class="card">
+          <div class="card-h">
+            <div class="card-t">Everything sent, across every customer</div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <div style="position:relative;max-width:220px;width:100%">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--faint)" stroke-width="2" style="position:absolute;left:11px;top:50%;transform:translateY(-50%)"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+                <input id="msgSearchBox" placeholder="Search messages" style="width:100%;padding:9px 12px 9px 33px;border:1.5px solid var(--line);border-radius:9px;font-size:.85rem;outline:none;font-family:inherit"/>
+              </div>
+              <input id="msgDateFilter" type="date" style="padding:9px 12px;border:1.5px solid var(--line);border-radius:9px;font-size:.85rem;outline:none;font-family:inherit"/>
+              <select id="msgSortOrder" style="padding:9px 12px;border:1.5px solid var(--line);border-radius:9px;font-size:.85rem;outline:none;font-family:inherit;background:#fff">
+                <option value="new">Newest first</option>
+                <option value="old">Oldest first</option>
+              </select>
+            </div>
+          </div>
+          <div id="msgBox"><div class="loading">Loading…</div></div>
         </div>
-      </div>
-
-      <div class="card" id="buildFormCard" style="display:none">
-        <div class="card-h">
-          <div><div class="card-t">Build a new automation</div><div class="card-d">Pick when it should send and write exactly what it says.</div></div>
-          <button class="row-x" onclick="document.getElementById('buildFormCard').style.display='none'">Cancel</button>
-        </div>
-        <div class="f"><label for="autoName">Name</label><input id="autoName" placeholder="e.g. Thank you follow-up"/></div>
-        <div class="f">
-          <label for="autoTrigger">When should this send?</label>
-          <select id="autoTrigger">
-            <option value="before_appointment">Before an appointment</option>
-            <option value="after_appointment">After a visit</option>
-            <option value="on_confirm">The moment a client confirms</option>
-            <option value="on_cancel">The moment a client cancels</option>
-          </select>
-        </div>
-        <div class="f" id="autoOffsetWrap">
-          <label for="autoOffset">How many hours <span id="autoOffsetDir">before</span>?</label>
-          <input id="autoOffset" type="number" min="1" max="720" placeholder="24"/>
-        </div>
-        <div class="f">
-          <label for="autoTemplate">Message</label>
-          <textarea id="autoTemplate" style="min-height:70px" placeholder="Hi {name}, thanks for coming in! We'd love to see you again — reply anytime to rebook with {business}."></textarea>
-          <div class="hint">Use <code>{name}</code>, <code>{business}</code>, <code>{time}</code>, <code>{client}</code>, <code>{value}</code> and Dozfi fills them in.</div>
-        </div>
-        <button class="btn" id="autoCreateBtn">Create automation</button>
-        <div class="notice" id="autoCreateMsg"></div>
       </div>
     </section>
 
@@ -537,101 +547,96 @@ a{color:var(--purple)}
     <section class="page" id="page-settings">
       <div class="head">
         <h1 class="h1">Settings</h1>
-        <p class="sub">Your business details and how Dozfi contacts your clients.</p>
+        <p class="sub">Your business details and how Dozfi contacts your customers.</p>
       </div>
 
-      <div class="card">
-        <div class="card-h"><div class="card-t">Business details</div></div>
-        <div class="two">
-          <div class="f"><label for="stBizName">Business name</label><input id="stBizName"/></div>
-          <div class="f"><label for="stOwner">Your name</label><input id="stOwner"/></div>
-          <div class="f"><label for="stPhone">Your mobile number</label><input id="stPhone"/><div class="hint">Cancellation alerts and reset codes go here.</div></div>
-          <div class="f"><label for="stValue">Default appointment value</label><input id="stValue" type="number" min="0"/><div class="hint">Used when a client has no value of their own.</div></div>
-        </div>
-        <div class="f"><label for="stAddress">Business address</label><input id="stAddress" placeholder="123 Main St, Ballwin, MO 63011"/><div class="hint">Optional. Shown to clients only if you include it in a message.</div></div>
-        <button class="btn" id="stSaveBtn">Save changes</button>
-        <div class="notice" id="stMsg"></div>
+      <div class="subtab-row" data-group="settings">
+        <button class="subtab" data-tab="set-business" aria-selected="true">Business</button>
+        <button class="subtab" data-tab="set-billing" aria-selected="false">Billing</button>
       </div>
 
-      <div class="card">
-        <div class="card-h"><div><div class="card-t">Sending mode</div><div class="card-d">A master switch for every scheduled automation. Edit individual automations and their timing on the Automations page.</div></div></div>
-        <div class="pill-row">
-          <button class="pill" id="modeAuto" data-mode="automatic">Automatic</button>
-          <button class="pill" id="modeManual" data-mode="manual">Manual — pause all scheduled sends</button>
-        </div>
-        <div style="margin-top:12px">
-          <button class="btn btn-ghost btn-sm" onclick="document.querySelector('[data-page=automations]').click()">Go to Automations →</button>
-        </div>
-
-        <div class="f" style="margin-top:20px">
-          <label for="stConfirmTemplate">Auto-reply when a client confirms (YES)</label>
-          <textarea id="stConfirmTemplate" style="min-height:60px" placeholder="You're all set, {name} — see you then! Thanks for confirming with {business}."></textarea>
-          <div class="hint">Sent instantly the moment a client replies YES.</div>
-        </div>
-
-        <div class="f" style="margin-top:16px">
-          <label for="stCancelTemplate">Auto-reply when a client cancels (NO)</label>
-          <textarea id="stCancelTemplate" style="min-height:60px" placeholder="No problem, {name} — thanks for letting us know. Reach out to {business} anytime you'd like to rebook."></textarea>
-          <div class="hint">Sent instantly the moment a client replies NO. Their slot opens up right after.</div>
-        </div>
-
-        <div class="f" style="margin-top:16px">
-          <label for="stAlertTemplate">Alert sent to you when someone cancels</label>
-          <textarea id="stAlertTemplate" style="min-height:60px" placeholder="{client} just cancelled — {value} slot now open. Log in at dozfi.com to see the opening."></textarea>
-          <div class="hint">Use <code>{client}</code> and <code>{value}</code>. This one only goes to your own number — clients never see it.</div>
-        </div>
-
-        <div class="f" style="margin-top:16px">
-          <label for="stFallbackTemplate">Reply when a client texts something else</label>
-          <textarea id="stFallbackTemplate" style="min-height:60px" placeholder="Hey {name}! Thanks for the message — if this is about your appointment, just reply YES if you're coming or NO if you need to cancel. Otherwise, {business} will get back to you soon."></textarea>
-          <div class="hint">Used as-is unless AI smart replies are turned on below — then it's only the backup if AI can't respond.</div>
-        </div>
-
-        <div class="toggle-row" style="margin-top:16px;padding-top:16px;border-top:1px solid var(--line)">
-          <input type="checkbox" id="prefAiReplies"/>
-          <label for="prefAiReplies"><div class="toggle-t">AI smart replies</div><div class="toggle-d">Instead of one fixed reply, Dozfi reads what the client actually wrote and answers naturally — like a real front-desk reply. YES, NO, STOP and HELP still work exactly as before either way.</div></label>
-        </div>
-
-        <div style="margin-top:18px">
-          <div class="toggle-row">
-            <input type="checkbox" id="prefSms"/>
-            <label for="prefSms"><div class="toggle-t">Text message reminders</div><div class="toggle-d">Live now. Clients reply YES to confirm or NO to cancel.</div></label>
+      <div class="subpage on" id="tab-set-business">
+        <div class="card">
+          <div class="card-h"><div class="card-t">Business details</div></div>
+          <div class="two">
+            <div class="f"><label for="stBizName">Business name</label><input id="stBizName"/></div>
+            <div class="f"><label for="stOwner">Your name</label><input id="stOwner"/></div>
+            <div class="f"><label for="stPhone">Your mobile number</label><input id="stPhone"/><div class="hint">Cancellation alerts and reset codes go here.</div></div>
+            <div class="f"><label for="stValue">Default appointment value</label><input id="stValue" type="number" min="0"/><div class="hint">Used when a customer has no value of their own.</div></div>
           </div>
-          <div class="toggle-row">
-            <input type="checkbox" id="prefEmail"/>
-            <label for="prefEmail"><div class="toggle-t">Email reminders</div><div class="toggle-d">Turn this on to be included when email sending goes live. Nothing is sent by email yet.</div></label>
-          </div>
+          <div class="f"><label for="stAddress">Business address</label><input id="stAddress" placeholder="123 Main St, Ballwin, MO 63011"/><div class="hint">Optional. Shown to customers only if you include it in a message.</div></div>
+          <button class="btn" id="stSaveBtn">Save changes</button>
+          <div class="notice" id="stMsg"></div>
         </div>
-        <button class="btn" id="prefSaveBtn" style="margin-top:16px">Save preferences</button>
-        <div class="notice" id="prefMsg"></div>
+
+        <div class="card">
+          <div class="card-h"><div><div class="card-t">How replies are worded</div><div class="card-d">The master on/off switch and each individual automation live on Messages → Automatic messages. This is just the wording.</div></div></div>
+
+          <div class="f">
+            <label for="stConfirmTemplate">Auto-reply when a customer confirms (YES)</label>
+            <textarea id="stConfirmTemplate" style="min-height:60px" placeholder="You're all set, {name} — see you then! Thanks for confirming with {business}."></textarea>
+            <div class="hint">Sent instantly the moment a customer replies YES.</div>
+          </div>
+
+          <div class="f" style="margin-top:16px">
+            <label for="stCancelTemplate">Auto-reply when a customer cancels (NO)</label>
+            <textarea id="stCancelTemplate" style="min-height:60px" placeholder="No problem, {name} — thanks for letting us know. Reach out to {business} anytime you'd like to rebook."></textarea>
+            <div class="hint">Sent instantly the moment a customer replies NO. Their slot opens up right after.</div>
+          </div>
+
+          <div class="f" style="margin-top:16px">
+            <label for="stAlertTemplate">Alert sent to you when someone cancels</label>
+            <textarea id="stAlertTemplate" style="min-height:60px" placeholder="{client} just cancelled — {value} slot now open. Log in at dozfi.com to see the opening."></textarea>
+            <div class="hint">Use <code>{client}</code> and <code>{value}</code>. This one only goes to your own number — customers never see it.</div>
+          </div>
+
+          <div class="f" style="margin-top:16px">
+            <label for="stFallbackTemplate">Reply when a customer texts something else</label>
+            <textarea id="stFallbackTemplate" style="min-height:60px" placeholder="Hey {name}! Thanks for the message — if this is about your appointment, just reply YES if you're coming or NO if you need to cancel. Otherwise, {business} will get back to you soon."></textarea>
+            <div class="hint">Used as-is unless AI smart replies are turned on below — then it's only the backup if AI can't respond.</div>
+          </div>
+
+          <div class="toggle-row" style="margin-top:16px;padding-top:16px;border-top:1px solid var(--line)">
+            <input type="checkbox" id="prefAiReplies"/>
+            <label for="prefAiReplies"><div class="toggle-t">AI smart replies</div><div class="toggle-d">Instead of one fixed reply, Dozfi reads what the customer actually wrote and answers naturally — like a real front-desk reply. YES, NO, STOP and HELP still work exactly as before either way.</div></label>
+          </div>
+
+          <div style="margin-top:18px">
+            <div class="toggle-row">
+              <input type="checkbox" id="prefSms"/>
+              <label for="prefSms"><div class="toggle-t">Text message reminders</div><div class="toggle-d">Live now. Customers reply YES to confirm or NO to cancel.</div></label>
+            </div>
+            <div class="toggle-row">
+              <input type="checkbox" id="prefEmail"/>
+              <label for="prefEmail"><div class="toggle-t">Email reminders</div><div class="toggle-d">Turn this on to be included when email sending goes live. Nothing is sent by email yet.</div></label>
+            </div>
+          </div>
+          <button class="btn" id="prefSaveBtn" style="margin-top:16px">Save preferences</button>
+          <div class="notice" id="prefMsg"></div>
+        </div>
+
+        <div class="card">
+          <div class="card-h"><div class="card-t">Account</div></div>
+          <div class="kv"><span>Email</span><span id="stEmail">—</span></div>
+          <div class="kv"><span>Password</span><span><button class="link-btn" onclick="signOut(true)">Reset from the sign-in screen</button></span></div>
+        </div>
       </div>
 
-      <div class="card">
-        <div class="card-h"><div class="card-t">Account</div></div>
-        <div class="kv"><span>Email</span><span id="stEmail">—</span></div>
-        <div class="kv"><span>Password</span><span><button class="link-btn" onclick="signOut(true)">Reset from the sign-in screen</button></span></div>
-      </div>
-    </section>
-
-    <!-- ===== BILLING ===== -->
-    <section class="page" id="page-billing">
-      <div class="head">
-        <h1 class="h1">Billing</h1>
-        <p class="sub">One plan, $75 a month. Cancel yourself from this page at any time — no email required.</p>
-      </div>
-      <div class="card">
-        <div class="card-h"><div class="card-t">Your plan</div></div>
-        <div id="billBox"><div class="loading">Loading…</div></div>
-      </div>
-      <div class="card">
-        <div class="card-h"><div class="card-t">Invoices</div></div>
-        <div id="invBox"><div class="loading">Loading…</div></div>
-      </div>
-      <div class="danger" id="dangerBox">
-        <div class="card-t" style="color:var(--red)">Cancel subscription</div>
-        <p style="font-size:.85rem;color:var(--body);margin:7px 0 15px;line-height:1.6;max-width:60ch">Cancel before your trial ends and you are never charged. Cancel later and billing stops at the end of the period you already paid for — you keep access until then.</p>
-        <button class="btn btn-ghost" id="cancelBtn" style="border-color:var(--red);color:var(--red)">Cancel my subscription</button>
-        <div class="notice" id="cancelMsg"></div>
+      <div class="subpage" id="tab-set-billing">
+        <div class="card">
+          <div class="card-h"><div class="card-t">Your plan</div></div>
+          <div id="billBox"><div class="loading">Loading…</div></div>
+        </div>
+        <div class="card">
+          <div class="card-h"><div class="card-t">Invoices</div></div>
+          <div id="invBox"><div class="loading">Loading…</div></div>
+        </div>
+        <div class="danger" id="dangerBox">
+          <div class="card-t" style="color:var(--red)">Cancel subscription</div>
+          <p style="font-size:.85rem;color:var(--body);margin:7px 0 15px;line-height:1.6;max-width:60ch">Cancel before your trial ends and you are never charged. Cancel later and billing stops at the end of the period you already paid for — you keep access until then.</p>
+          <button class="btn btn-ghost" id="cancelBtn" style="border-color:var(--red);color:var(--red)">Cancel my subscription</button>
+          <div class="notice" id="cancelMsg"></div>
+        </div>
       </div>
     </section>
 
@@ -648,8 +653,8 @@ a{color:var(--purple)}
       <div style="font-size:.85rem;font-weight:700;margin-bottom:8px">Common questions</div>
       <div style="font-size:.82rem;color:var(--body);line-height:1.7">
         <div><strong>Why do some opportunities say Dozfi needs more data?</strong> Dozfi will not invent a recommendation. Add more appointments and values and it fills in.</div>
-        <div style="margin-top:9px"><strong>Nothing has sent yet.</strong> Reminders only go out when a client has a future appointment date on file.</div>
-        <div style="margin-top:9px"><strong>Can I cancel myself?</strong> Yes — Billing, then Cancel my subscription.</div>
+        <div style="margin-top:9px"><strong>Nothing has sent yet.</strong> Reminders only go out when a customer has a future appointment date on file.</div>
+        <div style="margin-top:9px"><strong>Can I cancel myself?</strong> Yes — Settings → Billing, then Cancel my subscription.</div>
       </div>
     </div>
     <button class="btn btn-full btn-ghost" onclick="closeHelp()">Close</button>
@@ -803,6 +808,27 @@ document.querySelectorAll('.nav-i[data-page]').forEach(btn => {
   };
 });
 
+/* ---------- sub-tabs ---------- */
+function switchSubtab(group, tab) {
+  document.querySelectorAll(`.subtab-row[data-group="${group}"] .subtab`).forEach(b => b.setAttribute('aria-selected', String(b.dataset.tab === tab)));
+  const row = document.querySelector(`.subtab-row[data-group="${group}"]`);
+  const parent = row ? row.parentElement : document;
+  parent.querySelectorAll('.subpage').forEach(p => p.classList.remove('on'));
+  const target = $('tab-' + tab);
+  if (target) target.classList.add('on');
+}
+document.querySelectorAll('.subtab-row').forEach(row => {
+  row.querySelectorAll('.subtab').forEach(btn => {
+    btn.onclick = () => switchSubtab(row.dataset.group, btn.dataset.tab);
+  });
+});
+
+function goToPage(page, subtabGroup, subtab) {
+  document.querySelector(`.nav-i[data-page="${page}"]`)?.click();
+  if (subtabGroup && subtab) switchSubtab(subtabGroup, subtab);
+  window.scrollTo(0, 0);
+}
+
 /* ---------- insights ---------- */
 const ICONS = {
   calendar: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>',
@@ -886,7 +912,7 @@ async function loadStats() {
 
     $('respRate').innerHTML = s.remindersSent === 0
       ? `<div class="empty"><div class="empty-h">No reminders sent yet</div><div class="empty-p">Add a client with a future appointment date and Dozfi takes it from there.</div>
-         <button class="btn btn-ghost btn-sm" onclick="document.querySelector('[data-page=clients]').click()">Add a client</button></div>`
+         <button class="btn btn-ghost btn-sm" onclick="goToPage('customers','customers','cust-list')">Add a customer</button></div>`
       : `<div style="font-size:2.4rem;font-weight:800;letter-spacing:-.04em;color:var(--purple)">${s.responseRate}%</div>
          <div style="font-size:.83rem;color:var(--body);margin-top:6px;line-height:1.6">${responded} of ${s.remindersSent} reminders got a reply. Anything unanswered stays in your Clients list as still waiting.</div>`;
   } catch (e) {
@@ -1085,7 +1111,7 @@ function renderClientRows(cs) {
     $('clientsBox').innerHTML = `<div class="empty">
       <div class="empty-h">No clients yet</div>
       <div class="empty-p">Add one above, or bring in the list you already keep in a spreadsheet.</div>
-      <button class="btn btn-sm" onclick="document.querySelector('[data-page=import]').click()">Import a spreadsheet</button></div>`;
+      <button class="btn btn-sm" onclick="goToPage('customers','customers','cust-import')">Import a spreadsheet</button></div>`;
     return;
   }
   $('clientsBox').innerHTML = `<table class="tbl">
@@ -1231,54 +1257,11 @@ $('importBtn').onclick = async () => {
   b.disabled = false; b.textContent = 'Import clients';
 };
 
-/* ---------- messages ---------- */
-let allMessages = [];
-
+/* ---------- messages (kept only so loadMessages()/loadStats() calls don't break) ---------- */
 async function loadMessages() {
-  try {
-    const d = await api('/messages/' + biz.id);
-    allMessages = d.messages || [];
-    applyMessageFilters();
-  } catch (e) {
-    $('msgBox').innerHTML = `<div class="empty"><div class="empty-h">Couldn't load your messages</div><div class="empty-p">${esc(e.message)}</div><button class="btn btn-ghost btn-sm" onclick="loadMessages()">Try again</button></div>`;
-  }
+  // Message history now lives only inside each client's conversation (see openConversation()).
+  // This still refreshes usage stats elsewhere in the app.
 }
-
-function renderMessageRows(ms) {
-  if (!ms.length) {
-    $('msgBox').innerHTML = `<div class="empty"><div class="empty-h">Nothing found</div>
-      <div class="empty-p">No messages match your search or date filter. Clear them to see everything sent.</div></div>`;
-    return;
-  }
-  $('msgBox').innerHTML = `<table class="tbl"><thead><tr><th>Date & time</th><th>To</th><th>Message</th><th>Type</th></tr></thead>
-    <tbody>${ms.map(m => `<tr>
-      <td class="muted" style="white-space:nowrap">${new Date(m.created_at).toLocaleDateString([], {month:'short',day:'numeric',year:'numeric'})} · ${new Date(m.created_at).toLocaleTimeString([], {hour:'numeric',minute:'2-digit'})}</td>
-      <td class="muted">${esc(m.to_phone)}</td>
-      <td style="max-width:340px">${esc(m.message.length > 100 ? m.message.slice(0,100) + '…' : m.message)}</td>
-      <td><span class="tag ${m.type === 'cancellation' ? 'no' : 'sent'}">${esc(m.type)}</span></td></tr>`).join('')}</tbody></table>`;
-}
-
-function applyMessageFilters() {
-  const q = ($('msgSearchBox')?.value || '').trim().toLowerCase();
-  const dateVal = $('msgDateFilter')?.value;
-  const sortVal = $('msgSortOrder')?.value || 'new';
-
-  let filtered = allMessages.filter(m => {
-    const matchesText = !q || (m.message || '').toLowerCase().includes(q) || (m.to_phone || '').includes(q);
-    const matchesDate = !dateVal || new Date(m.created_at).toISOString().split('T')[0] === dateVal;
-    return matchesText && matchesDate;
-  });
-  filtered = filtered.slice().sort((a, b) =>
-    sortVal === 'old'
-      ? new Date(a.created_at) - new Date(b.created_at)
-      : new Date(b.created_at) - new Date(a.created_at));
-
-  renderMessageRows(filtered);
-}
-
-document.getElementById('msgSearchBox')?.addEventListener('input', applyMessageFilters);
-document.getElementById('msgDateFilter')?.addEventListener('change', applyMessageFilters);
-document.getElementById('msgSortOrder')?.addEventListener('change', applyMessageFilters);
 
 /* ---------- automation transparency ---------- */
 /* ---------- automations (custom rules engine) ---------- */
@@ -1619,15 +1602,27 @@ function loadSettings() {
     "{client} just cancelled — {value} slot now open. Log in at dozfi.com to see the opening.";
   $('stFallbackTemplate').value = biz.fallback_reply_template ||
     "Hey {name}! Thanks for the message — if this is about your appointment, just reply YES if you're coming or NO if you need to cancel. Otherwise, {business} will get back to you soon.";
-  setMode(biz.send_mode || 'automatic');
+  renderMasterSwitch();
 }
 
-function setMode(m) {
-  $('modeAuto').setAttribute('aria-pressed', String(m !== 'manual'));
-  $('modeManual').setAttribute('aria-pressed', String(m === 'manual'));
+function renderMasterSwitch() {
+  const on = biz.send_mode !== 'manual';
+  $('masterSwitch').style.background = on ? 'var(--purple)' : 'var(--line)';
+  $('masterKnob').style.left = on ? '22px' : '3px';
+  $('masterStatusLabel').textContent = on ? 'On' : 'Off';
+  $('masterStatusLabel').style.color = on ? 'var(--purple)' : 'var(--faint)';
 }
-$('modeAuto').onclick = () => setMode('automatic');
-$('modeManual').onclick = () => setMode('manual');
+
+async function toggleMasterSending() {
+  const newMode = biz.send_mode === 'manual' ? 'automatic' : 'manual';
+  $('masterSwitch').style.background = newMode !== 'manual' ? 'var(--purple)' : 'var(--line)';
+  $('masterKnob').style.left = newMode !== 'manual' ? '22px' : '3px';
+  try {
+    const d = await api('/business/' + biz.id, { method:'PATCH', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ send_mode: newMode }) });
+    biz = d.business; localStorage.setItem('dozfi_biz', JSON.stringify(biz));
+    renderMasterSwitch();
+  } catch (e) { renderMasterSwitch(); }
+}
 
 $('stSaveBtn').onclick = async () => {
   const b = $('stSaveBtn'); b.disabled = true; b.innerHTML = '<span class="spin"></span> Saving…';
@@ -1649,12 +1644,9 @@ $('stSaveBtn').onclick = async () => {
 };
 
 $('prefSaveBtn').onclick = async () => {
-  const mode = $('modeManual').getAttribute('aria-pressed') === 'true' ? 'manual' : 'automatic';
-
   const b = $('prefSaveBtn'); b.disabled = true; b.innerHTML = '<span class="spin"></span> Saving…';
   try {
     const d = await api('/business/' + biz.id, { method:'PATCH', headers:{'Content-Type':'application/json'}, body: JSON.stringify({
-      send_mode: mode,
       confirm_reply_template: $('stConfirmTemplate').value.trim(),
       cancel_reply_template: $('stCancelTemplate').value.trim(),
       cancellation_alert_template: $('stAlertTemplate').value.trim(),
