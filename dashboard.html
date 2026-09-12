@@ -175,6 +175,20 @@ a{color:var(--purple)}
 .seg[aria-pressed="true"]{border-color:var(--purple);background:var(--purple-soft);color:var(--purple)}
 .seg .cnt{color:var(--faint);font-weight:500;margin-left:4px}
 .seg[aria-pressed="true"] .cnt{color:var(--purple)}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:10px;overflow:hidden;margin-top:12px}
+.cal-dow{background:var(--shell);padding:8px 4px;text-align:center;font-size:.68rem;font-weight:700;color:var(--faint);text-transform:uppercase;letter-spacing:.04em}
+.cal-cell{background:#fff;min-height:76px;padding:7px;cursor:pointer;transition:background .12s}
+.cal-cell:hover{background:var(--purple-soft)}
+.cal-cell.other-month{background:var(--shell)}
+.cal-cell.today{box-shadow:inset 0 0 0 2px var(--purple)}
+.cal-daynum{font-size:.78rem;font-weight:700;color:var(--ink);margin-bottom:4px}
+.cal-cell.other-month .cal-daynum{color:var(--faint)}
+.cal-dot-row{display:flex;flex-wrap:wrap;gap:3px}
+.cal-dot{width:6px;height:6px;border-radius:50%;background:var(--purple)}
+.cal-dot.dot-yes{background:var(--green)}
+.cal-dot.dot-no{background:var(--red)}
+.cal-count{font-size:.68rem;color:var(--faint);margin-top:2px}
+@media(max-width:640px){.cal-cell{min-height:52px;padding:5px}.cal-daynum{font-size:.72rem}}
 
 @media(max-width:960px){
   .side{position:static;width:100%;flex-direction:row;align-items:center;padding:12px;overflow-x:auto}
@@ -238,8 +252,9 @@ a{color:var(--purple)}
       <button class="nav-i" data-page="impact"><span class="ic">◱</span> Impact</button>
       <button class="nav-i" data-page="clients"><span class="ic">◍</span> Clients</button>
       <button class="nav-i" data-page="import"><span class="ic">↥</span> Import</button>
+      <button class="nav-i" data-page="calendar"><span class="ic">▦</span> Calendar</button>
       <button class="nav-i" data-page="messages"><span class="ic">◌</span> Messages</button>
-      <button class="nav-i" data-page="automations"><span class="ic">⚡</span> Automations</button>
+      <button class="nav-i" data-page="automations"><span class="ic">◆</span> Automations</button>
       <button class="nav-i" data-page="settings"><span class="ic">⚙</span> Settings</button>
       <button class="nav-i" data-page="billing"><span class="ic">▤</span> Billing</button>
     </div>
@@ -302,6 +317,26 @@ a{color:var(--purple)}
           <div class="card-h"><div><div class="card-t">Response rate</div><div class="card-d">How many reminders got any reply at all.</div></div></div>
           <div id="respRate"><div class="loading">Loading…</div></div>
         </div>
+      </div>
+    </section>
+
+    <!-- ===== CALENDAR ===== -->
+    <section class="page" id="page-calendar">
+      <div class="head">
+        <div><h1 class="h1">Calendar</h1>
+        <p class="sub">Every appointment on file. Click a day to see who's booked, what's been sent, and what they said back.</p></div>
+      </div>
+      <div class="card">
+        <div class="card-h">
+          <button class="btn btn-ghost btn-sm" id="calPrevBtn">← Prev</button>
+          <div class="card-t" id="calMonthLabel" style="text-align:center;flex:1"></div>
+          <button class="btn btn-ghost btn-sm" id="calNextBtn">Next →</button>
+        </div>
+        <div id="calGrid"></div>
+      </div>
+      <div class="card" id="calDayCard" style="display:none">
+        <div class="card-h"><div class="card-t" id="calDayTitle">—</div></div>
+        <div id="calDayBody"></div>
       </div>
     </section>
 
@@ -431,12 +466,48 @@ a{color:var(--purple)}
     <section class="page" id="page-automations">
       <div class="head">
         <div><h1 class="h1">Automations</h1>
-        <p class="sub">Every automatic message Dozfi can send, exactly what it says, and when it fires. Turn any of them off, edit the wording, or build your own from scratch.</p></div>
+        <p class="sub">What Dozfi sends automatically, and when. Turn things on or off, or build your own.</p></div>
       </div>
 
-      <div class="card">
+      <div class="card" id="builtinCard" style="border-color:var(--purple);border-width:1.5px">
+        <div class="card-h">
+          <div><div class="card-t">Dozfi's standard reminder</div><div class="card-d">Sends automatically before every appointment. This is the one thing most businesses want on.</div></div>
+          <label style="display:flex;align-items:center;gap:9px;cursor:pointer">
+            <span id="builtinStatusLabel" style="font-size:.85rem;font-weight:700;color:var(--faint)">Off</span>
+            <span id="builtinSwitch" style="position:relative;width:44px;height:25px;background:var(--line);border-radius:99px;transition:background .15s;flex-shrink:0" onclick="toggleBuiltinReminder()">
+              <span id="builtinKnob" style="position:absolute;top:3px;left:3px;width:19px;height:19px;background:#fff;border-radius:50%;transition:left .15s;box-shadow:0 1px 3px rgba(0,0,0,.25)"></span>
+            </span>
+          </label>
+        </div>
+        <div id="builtinBody">
+          <div style="font-size:.82rem;font-weight:600;margin-bottom:8px">Send how long before the appointment?</div>
+          <div class="pill-row" id="builtinTimingPills">
+            <button class="pill" data-h="2">2 hours</button>
+            <button class="pill" data-h="24">24 hours</button>
+            <button class="pill" data-h="48">2 days</button>
+          </div>
+          <div class="f" style="margin-top:10px">
+            <label for="builtinTemplate">What it says</label>
+            <textarea id="builtinTemplate" style="min-height:64px"></textarea>
+            <div class="hint">Use <code>{name}</code>, <code>{business}</code>, <code>{time}</code> and Dozfi fills them in.</div>
+          </div>
+          <button class="btn btn-sm" id="builtinSaveBtn">Save</button>
+          <div class="notice" id="builtinMsg"></div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:22px">
+        <div class="card-h"><div><div class="card-t">Your own automations</div><div class="card-d">Anything beyond the standard reminder — follow-ups, custom timing, whatever you want sent automatically.</div></div></div>
+        <div id="autoList"><div class="loading">Loading…</div></div>
+        <div style="text-align:center;margin-top:16px">
+          <button class="btn btn-ghost" id="showBuildFormBtn">+ Build a new automation</button>
+        </div>
+      </div>
+
+      <div class="card" id="buildFormCard" style="display:none">
         <div class="card-h">
           <div><div class="card-t">Build a new automation</div><div class="card-d">Pick when it should send and write exactly what it says.</div></div>
+          <button class="row-x" onclick="document.getElementById('buildFormCard').style.display='none'">Cancel</button>
         </div>
         <div class="f"><label for="autoName">Name</label><input id="autoName" placeholder="e.g. Thank you follow-up"/></div>
         <div class="f">
@@ -444,8 +515,8 @@ a{color:var(--purple)}
           <select id="autoTrigger">
             <option value="before_appointment">Before an appointment</option>
             <option value="after_appointment">After a visit</option>
-            <option value="on_confirm">The moment a client confirms (replies YES)</option>
-            <option value="on_cancel">The moment a client cancels (replies NO)</option>
+            <option value="on_confirm">The moment a client confirms</option>
+            <option value="on_cancel">The moment a client cancels</option>
           </select>
         </div>
         <div class="f" id="autoOffsetWrap">
@@ -459,11 +530,6 @@ a{color:var(--purple)}
         </div>
         <button class="btn" id="autoCreateBtn">Create automation</button>
         <div class="notice" id="autoCreateMsg"></div>
-      </div>
-
-      <div class="card">
-        <div class="card-h"><div class="card-t">Your automations</div></div>
-        <div id="autoList"><div class="loading">Loading…</div></div>
       </div>
     </section>
 
@@ -513,6 +579,17 @@ a{color:var(--purple)}
           <label for="stAlertTemplate">Alert sent to you when someone cancels</label>
           <textarea id="stAlertTemplate" style="min-height:60px" placeholder="{client} just cancelled — {value} slot now open. Log in at dozfi.com to see the opening."></textarea>
           <div class="hint">Use <code>{client}</code> and <code>{value}</code>. This one only goes to your own number — clients never see it.</div>
+        </div>
+
+        <div class="f" style="margin-top:16px">
+          <label for="stFallbackTemplate">Reply when a client texts something else</label>
+          <textarea id="stFallbackTemplate" style="min-height:60px" placeholder="Hey {name}! Thanks for the message — if this is about your appointment, just reply YES if you're coming or NO if you need to cancel. Otherwise, {business} will get back to you soon."></textarea>
+          <div class="hint">Used as-is unless AI smart replies are turned on below — then it's only the backup if AI can't respond.</div>
+        </div>
+
+        <div class="toggle-row" style="margin-top:16px;padding-top:16px;border-top:1px solid var(--line)">
+          <input type="checkbox" id="prefAiReplies"/>
+          <label for="prefAiReplies"><div class="toggle-t">AI smart replies</div><div class="toggle-d">Instead of one fixed reply, Dozfi reads what the client actually wrote and answers naturally — like a real front-desk reply. YES, NO, STOP and HELP still work exactly as before either way.</div></label>
         </div>
 
         <div style="margin-top:18px">
@@ -898,6 +975,97 @@ function drawImpactChart() {
 /* ---------- clients ---------- */
 let allClients = [];
 
+/* ---------- calendar ---------- */
+let calViewDate = new Date();
+calViewDate.setDate(1);
+
+function renderCalendar() {
+  const grid = $('calGrid');
+  if (!grid) return;
+  const year = calViewDate.getFullYear(), month = calViewDate.getMonth();
+  $('calMonthLabel').textContent = calViewDate.toLocaleDateString([], { month: 'long', year: 'numeric' });
+
+  const firstDay = new Date(year, month, 1);
+  const startOffset = firstDay.getDay();
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+  const daysInPrevMonth = new Date(year, month, 0).getDate();
+  const todayKey = new Date().toDateString();
+
+  const byDate = {};
+  (allClients || []).forEach(c => {
+    if (!c.next_appointment) return;
+    const d = new Date(c.next_appointment);
+    const key = d.toDateString();
+    if (!byDate[key]) byDate[key] = [];
+    byDate[key].push(c);
+  });
+
+  let cells = '';
+  ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].forEach(d => cells += `<div class="cal-dow">${d}</div>`);
+
+  for (let i = 0; i < startOffset; i++) {
+    const dayNum = daysInPrevMonth - startOffset + i + 1;
+    cells += `<div class="cal-cell other-month"><div class="cal-daynum">${dayNum}</div></div>`;
+  }
+  for (let d = 1; d <= daysInMonth; d++) {
+    const dateObj = new Date(year, month, d);
+    const key = dateObj.toDateString();
+    const appts = byDate[key] || [];
+    const isToday = key === todayKey;
+    const dots = appts.slice(0, 6).map(c =>
+      `<span class="cal-dot ${c.last_reply === 'YES' ? 'dot-yes' : c.last_reply === 'NO' ? 'dot-no' : ''}"></span>`).join('');
+    cells += `<div class="cal-cell ${isToday ? 'today' : ''}" onclick="openCalDay('${key}')">
+      <div class="cal-daynum">${d}</div>
+      <div class="cal-dot-row">${dots}</div>
+      ${appts.length ? `<div class="cal-count">${appts.length} booked</div>` : ''}
+    </div>`;
+  }
+  const totalCells = startOffset + daysInMonth;
+  const trailing = (7 - (totalCells % 7)) % 7;
+  for (let i = 1; i <= trailing; i++) {
+    cells += `<div class="cal-cell other-month"><div class="cal-daynum">${i}</div></div>`;
+  }
+
+  grid.innerHTML = `<div class="cal-grid">${cells}</div>`;
+}
+
+function openCalDay(dateKey) {
+  const dateObj = new Date(dateKey);
+  const appts = (allClients || []).filter(c => c.next_appointment && new Date(c.next_appointment).toDateString() === dateKey);
+
+  $('calDayCard').style.display = 'block';
+  $('calDayTitle').textContent = dateObj.toLocaleDateString([], { weekday: 'long', month: 'long', day: 'numeric' });
+
+  if (!appts.length) {
+    $('calDayBody').innerHTML = `<div class="empty"><div class="empty-p">No appointments booked this day.</div></div>`;
+  } else {
+    $('calDayBody').innerHTML = appts.map(c => `
+      <div style="border:1px solid var(--line);border-radius:10px;padding:13px;margin-bottom:9px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap">
+        <div>
+          <button class="link-btn" style="font-weight:700;font-size:.87rem" onclick="openConversation('${c.id}')">${esc(c.name)}</button>
+          <div class="card-d" style="margin-top:2px">${new Date(c.next_appointment).toLocaleTimeString([], {hour:'numeric',minute:'2-digit'})} · ${esc(c.phone)}${c.appointment_value ? ' · ' + money(c.appointment_value) : ''}</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px">
+          ${c.status === 'opted_out' ? '<span class="tag no">Opted out</span>' : c.last_reply === 'YES' ? '<span class="tag ok">Confirmed</span>' : c.last_reply === 'NO' ? '<span class="tag no">Cancelled</span>' : '<span class="tag wait">Waiting</span>'}
+          <button class="btn btn-ghost btn-sm" onclick="openConversation('${c.id}')">View texts</button>
+        </div>
+      </div>`).join('');
+  }
+  $('calDayCard').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+$('calPrevBtn')?.addEventListener('click', () => {
+  calViewDate.setMonth(calViewDate.getMonth() - 1);
+  renderCalendar();
+  $('calDayCard').style.display = 'none';
+});
+$('calNextBtn')?.addEventListener('click', () => {
+  calViewDate.setMonth(calViewDate.getMonth() + 1);
+  renderCalendar();
+  $('calDayCard').style.display = 'none';
+});
+
+
 async function loadClients() {
   try {
     const d = await api('/clients/' + biz.id);
@@ -906,6 +1074,7 @@ async function loadClients() {
     renderClientRows(allClients);
     renderComposePickList(allClients);
     if (typeof loadSegments === 'function') loadSegments();
+    renderCalendar();
   } catch (e) {
     $('clientsBox').innerHTML = `<div class="empty"><div class="empty-h">Couldn't load your clients</div><div class="empty-p">${esc(e.message)}</div><button class="btn btn-ghost btn-sm" onclick="loadClients()">Try again</button></div>`;
   }
@@ -1123,8 +1292,6 @@ const TRIGGER_LABELS = {
 };
 
 async function loadAutomations() {
-  const box = $('autoList');
-  if (!box) return;
   try {
     const d = await api('/automation-rules/' + biz.id);
     allRules = d.rules || [];
@@ -1135,9 +1302,11 @@ async function loadAutomations() {
         allRules = d2.rules || [];
       } catch (e) { /* ignore, show empty state */ }
     }
+    renderBuiltinReminder();
     renderAutomationsList();
   } catch (e) {
-    box.innerHTML = `<div class="empty"><div class="empty-h">Couldn't load your automations</div><div class="empty-p">${esc(e.message)}</div><button class="btn btn-ghost btn-sm" onclick="loadAutomations()">Try again</button></div>`;
+    const box = $('autoList');
+    if (box) box.innerHTML = `<div class="empty"><div class="empty-h">Couldn't load your automations</div><div class="empty-p">${esc(e.message)}</div><button class="btn btn-ghost btn-sm" onclick="loadAutomations()">Try again</button></div>`;
   }
 }
 
@@ -1151,21 +1320,76 @@ function fillPreview(tpl) {
     .replace(/\{value\}/gi, '$150');
 }
 
+/* ---- built-in reminder: one clear switch ---- */
+function getBuiltinRule() { return allRules.find(r => r.is_builtin && r.builtin_key === 'reminder'); }
+
+function renderBuiltinReminder() {
+  const rule = getBuiltinRule();
+  const on = !!(rule && rule.is_active);
+  $('builtinSwitch').style.background = on ? 'var(--purple)' : 'var(--line)';
+  $('builtinKnob').style.left = on ? '22px' : '3px';
+  $('builtinStatusLabel').textContent = on ? 'On' : 'Off';
+  $('builtinStatusLabel').style.color = on ? 'var(--purple)' : 'var(--faint)';
+  $('builtinBody').style.opacity = on ? '1' : '.55';
+
+  const hours = rule ? rule.trigger_offset_hours : 24;
+  document.querySelectorAll('#builtinTimingPills .pill').forEach(p =>
+    p.setAttribute('aria-pressed', String(Number(p.dataset.h) === Number(hours))));
+  $('builtinTemplate').value = rule ? rule.message_template :
+    "Hi {name}, this is {business}! Just a quick reminder — you're booked for {time}. Text back yes if you're all set, or no if something came up.";
+}
+
+async function toggleBuiltinReminder() {
+  const rule = getBuiltinRule();
+  if (!rule) return;
+  const newState = !rule.is_active;
+  $('builtinSwitch').style.background = newState ? 'var(--purple)' : 'var(--line)';
+  $('builtinKnob').style.left = newState ? '22px' : '3px';
+  try {
+    await api('/automation-rules/' + rule.id, { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ is_active: newState }) });
+    await loadAutomations();
+  } catch (e) { renderBuiltinReminder(); }
+}
+
+document.querySelectorAll('#builtinTimingPills .pill').forEach(p => p.onclick = () => {
+  document.querySelectorAll('#builtinTimingPills .pill').forEach(x => x.setAttribute('aria-pressed', 'false'));
+  p.setAttribute('aria-pressed', 'true');
+});
+
+$('builtinSaveBtn')?.addEventListener('click', async () => {
+  const rule = getBuiltinRule();
+  if (!rule) return;
+  const pill = document.querySelector('#builtinTimingPills .pill[aria-pressed="true"]');
+  const hours = pill ? Number(pill.dataset.h) : 24;
+  const tpl = $('builtinTemplate').value.trim();
+  if (!tpl) return note('builtinMsg', 'Write what the reminder says.');
+  const btn = $('builtinSaveBtn'); btn.disabled = true; btn.innerHTML = '<span class="spin"></span> Saving…';
+  try {
+    await api('/automation-rules/' + rule.id, { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ trigger_offset_hours: hours, message_template: tpl }) });
+    note('builtinMsg', 'Saved.', true);
+    loadAutomations();
+    setTimeout(() => clearNote('builtinMsg'), 3000);
+  } catch (e) { note('builtinMsg', e.message); }
+  btn.disabled = false; btn.textContent = 'Save';
+});
+
+/* ---- custom automations list ---- */
 function renderAutomationsList() {
   const box = $('autoList');
-  if (!allRules.length) {
-    box.innerHTML = `<div class="empty"><div class="empty-h">No automations yet</div><div class="empty-p">Build your first one above — a reminder, a follow-up, or anything else you want sent automatically.</div></div>`;
+  const custom = allRules.filter(r => !r.is_builtin);
+  if (!custom.length) {
+    box.innerHTML = `<div class="empty"><div class="empty-h">Nothing custom yet</div><div class="empty-p">Follow-ups, thank-you texts, anything beyond the standard reminder — build one below.</div></div>`;
     return;
   }
-  box.innerHTML = allRules.map(r => `
+  box.innerHTML = custom.map(r => `
     <div style="border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:10px" id="rule-${r.id}">
       <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px;flex-wrap:wrap">
-        <div style="font-weight:700;font-size:.9rem">${esc(r.name)}${r.is_builtin ? ' <span class="card-d" style="font-weight:500">(built in)</span>' : ''}</div>
+        <div style="font-weight:700;font-size:.9rem">${esc(r.name)}</div>
         <div style="display:flex;align-items:center;gap:8px">
           <span class="tag ${r.is_active ? 'ok' : 'wait'}">${r.is_active ? 'On' : 'Off'}</span>
           <button class="btn btn-ghost btn-sm" onclick="toggleRule('${r.id}', ${!r.is_active})">${r.is_active ? 'Turn off' : 'Turn on'}</button>
           <button class="btn btn-ghost btn-sm" onclick="startEditRule('${r.id}')">Edit</button>
-          ${!r.is_builtin ? `<button class="row-x" onclick="deleteRule('${r.id}', '${esc(r.name).replace(/'/g,"\\'")}')">Remove</button>` : ''}
+          <button class="row-x" onclick="deleteRule('${r.id}', '${esc(r.name).replace(/'/g,"\\'")}')">Remove</button>
         </div>
       </div>
       <div class="card-d" style="margin-bottom:8px">${TRIGGER_LABELS[r.trigger_type] ? TRIGGER_LABELS[r.trigger_type](r.trigger_offset_hours) : r.trigger_type}</div>
@@ -1230,6 +1454,11 @@ function deleteRule(id, name) {
   });
 }
 
+$('showBuildFormBtn')?.addEventListener('click', () => {
+  $('buildFormCard').style.display = 'block';
+  $('buildFormCard').scrollIntoView({ behavior: 'smooth', block: 'center' });
+});
+
 $('autoTrigger')?.addEventListener('change', () => {
   const t = $('autoTrigger').value;
   const needsOffset = t === 'before_appointment' || t === 'after_appointment';
@@ -1257,6 +1486,7 @@ $('autoCreateBtn')?.addEventListener('click', async () => {
     });
     note('autoCreateMsg', 'Automation created and turned on.', true);
     $('autoName').value = ''; $('autoTemplate').value = ''; $('autoOffset').value = '';
+    $('buildFormCard').style.display = 'none';
     loadAutomations();
     setTimeout(() => clearNote('autoCreateMsg'), 3000);
   } catch (e) { note('autoCreateMsg', e.message); }
@@ -1380,12 +1610,15 @@ function loadSettings() {
   $('stEmail').textContent = biz.owner_email || '—';
   $('prefSms').checked = biz.notify_sms !== false;
   $('prefEmail').checked = biz.notify_email === true;
+  $('prefAiReplies').checked = biz.ai_smart_replies === true;
   $('stConfirmTemplate').value = biz.confirm_reply_template ||
     "You're all set, {name} — see you then! Thanks for confirming with {business}.";
   $('stCancelTemplate').value = biz.cancel_reply_template ||
     "No problem, {name} — thanks for letting us know. Reach out to {business} anytime you'd like to rebook.";
   $('stAlertTemplate').value = biz.cancellation_alert_template ||
     "{client} just cancelled — {value} slot now open. Log in at dozfi.com to see the opening.";
+  $('stFallbackTemplate').value = biz.fallback_reply_template ||
+    "Hey {name}! Thanks for the message — if this is about your appointment, just reply YES if you're coming or NO if you need to cancel. Otherwise, {business} will get back to you soon.";
   setMode(biz.send_mode || 'automatic');
 }
 
@@ -1425,8 +1658,10 @@ $('prefSaveBtn').onclick = async () => {
       confirm_reply_template: $('stConfirmTemplate').value.trim(),
       cancel_reply_template: $('stCancelTemplate').value.trim(),
       cancellation_alert_template: $('stAlertTemplate').value.trim(),
+      fallback_reply_template: $('stFallbackTemplate').value.trim(),
       notify_sms: $('prefSms').checked,
-      notify_email: $('prefEmail').checked
+      notify_email: $('prefEmail').checked,
+      ai_smart_replies: $('prefAiReplies').checked
     })});
     biz = d.business; localStorage.setItem('dozfi_biz', JSON.stringify(biz));
     note('prefMsg', 'Preferences saved.', true);
