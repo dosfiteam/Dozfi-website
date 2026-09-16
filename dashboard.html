@@ -331,7 +331,7 @@ a{color:var(--purple)}
       <div class="subtab-row" data-group="customers">
         <button class="subtab" data-tab="cust-list" aria-selected="true">List</button>
         <button class="subtab" data-tab="cust-calendar" aria-selected="false">Calendar</button>
-        <button class="subtab" data-tab="cust-import" aria-selected="false">Import</button>
+        <button class="subtab" data-tab="cust-import" aria-selected="false">Connect</button>
       </div>
 
       <div class="subpage on" id="tab-cust-list">
@@ -375,6 +375,13 @@ a{color:var(--purple)}
       </div>
 
       <div class="subpage" id="tab-cust-import">
+        <div class="card">
+          <div class="card-h"><div><div class="card-t">Connect your booking system</div><div class="card-d">The easiest way to keep Dozfi automatically up to date. Connect once and your appointments and customers stay in sync on their own.</div></div></div>
+          <div class="notice" id="connMsg"></div>
+          <div id="connList"><div class="card-d" style="padding:8px 0">Loading…</div></div>
+          <div class="card-d" style="margin-top:18px;padding-top:16px;border-top:1.5px solid var(--line)">Don't see yours? Upload a spreadsheet instead — below.</div>
+        </div>
+
         <div class="card">
           <div class="card-h"><div><div class="card-t">Import your customer list</div><div class="card-d">Upload the spreadsheet you already keep. Dozfi reads CSV and Excel files and matches your columns for you.</div></div></div>
           <div class="drop" id="drop">
@@ -816,12 +823,124 @@ function switchSubtab(group, tab) {
   parent.querySelectorAll('.subpage').forEach(p => p.classList.remove('on'));
   const target = $('tab-' + tab);
   if (target) target.classList.add('on');
+  if (tab === 'cust-import' && typeof loadIntegrations === 'function') loadIntegrations();
 }
 document.querySelectorAll('.subtab-row').forEach(row => {
   row.querySelectorAll('.subtab').forEach(btn => {
     btn.onclick = () => switchSubtab(row.dataset.group, btn.dataset.tab);
   });
 });
+
+/* ---------- booking system connections ---------- */
+const PROVIDER_LABELS = { square:'Square', acuity:'Acuity Scheduling', google_calendar:'Google Calendar' };
+
+function agoText(ts) {
+  if (!ts) return 'Importing\u2026';
+  const mins = Math.floor((Date.now() - new Date(ts)) / 60000);
+  if (mins < 1) return 'Last synced: just now';
+  if (mins < 60) return 'Last synced: ' + mins + ' minute' + (mins === 1 ? '' : 's') + ' ago';
+  const hrs = Math.floor(mins / 60);
+  if (hrs < 24) return 'Last synced: ' + hrs + ' hour' + (hrs === 1 ? '' : 's') + ' ago';
+  return 'Last synced: ' + Math.floor(hrs / 24) + ' day(s) ago';
+}
+
+async function loadIntegrations() {
+  const box = $('connList');
+  if (!box || !biz) return;
+  try {
+    const [provRes, mineRes] = await Promise.all([
+      api('/integrations/providers'),
+      api('/integrations/' + biz.id)
+    ]);
+    const available = provRes.providers || [];
+    const mine = mineRes.integrations || [];
+    const byProvider = {};
+    mine.forEach(i => { byProvider[i.provider] = i; });
+
+    let html = '';
+    available.forEach(p => {
+      const conn = byProvider[p.provider];
+      const label = PROVIDER_LABELS[p.provider] || p.provider;
+      if (conn && conn.status === 'connected') {
+        html += '<div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 0;border-bottom:1.5px solid var(--line)">'
+             +   '<div><div style="font-weight:600">' + esc(label) + ' connected \u2713</div>'
+             +   '<div class="card-d">Your appointments and customers stay updated automatically.<br>' + esc(agoText(conn.lastSyncedAt)) + '</div></div>'
+             +   '<div style="display:flex;gap:8px;flex-shrink:0">'
+             +     '<button class="btn btn-ghost" onclick="syncNow(\'' + conn.id + '\')">Update now</button>'
+             +     '<button class="btn btn-ghost" onclick="disconnectIntegration(\'' + conn.id + '\',\'' + esc(label) + '\')">Disconnect</button>'
+             +   '</div></div>';
+      } else if (conn && conn.needsAttention) {
+        html += '<div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 0;border-bottom:1.5px solid var(--line)">'
+             +   '<div><div style="font-weight:600">' + esc(label) + ' connection expired</div>'
+             +   '<div class="card-d">Reconnect so your appointments keep updating.</div></div>'
+             +   '<button class="btn" onclick="connectProvider(\'' + p.provider + '\')">Reconnect</button></div>';
+      } else {
+        html += '<div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 0;border-bottom:1.5px solid var(--line)">'
+             +   '<div><div style="font-weight:600">' + esc(label) + '</div>'
+             +   (p.available ? '' : '<div class="card-d">Coming soon.</div>') + '</div>'
+             +   '<button class="btn" ' + (p.available ? '' : 'disabled style="opacity:.45;cursor:not-allowed"')
+             +     ' onclick="connectProvider(\'' + p.provider + '\')">Connect ' + esc(label.split(' ')[0]) + '</button></div>';
+      }
+    });
+
+    if (mineRes.needsReview > 0) {
+      html += '<div class="notice err" style="display:block;margin-top:16px">We couldn\'t confidently match '
+           + mineRes.needsReview + ' customer' + (mineRes.needsReview === 1 ? '' : 's')
+           + '. They need a phone number before Dozfi can text them.</div>';
+    }
+    box.innerHTML = html || '<div class="card-d">No booking systems available yet.</div>';
+  } catch (e) {
+    box.innerHTML = '<div class="card-d">Could not load your connections. Refresh to try again.</div>';
+  }
+}
+
+async function connectProvider(provider) {
+  clearNote('connMsg');
+  try {
+    const d = await api('/integrations/' + biz.id + '/connect/' + provider, { method:'POST' });
+    if (d.authUrl) window.location.href = d.authUrl;
+    else note('connMsg', d.error || 'Could not start the connection.', false);
+  } catch (e) {
+    note('connMsg', 'Could not start the connection. Please try again.', false);
+  }
+}
+
+async function syncNow(id) {
+  clearNote('connMsg');
+  try {
+    await api('/integrations/' + id + '/sync', { method:'POST' });
+    note('connMsg', 'Updated.', true);
+  } catch (e) {
+    note('connMsg', 'Could not update right now. Dozfi will keep retrying on its own.', false);
+  }
+  loadIntegrations();
+  if (typeof loadClients === 'function') loadClients();
+}
+
+async function disconnectIntegration(id, label) {
+  if (!confirm('Disconnect ' + label + '? Dozfi will stop updating automatically.')) return;
+  try { await api('/integrations/' + id, { method:'DELETE' }); } catch (e) {}
+  loadIntegrations();
+}
+
+// Returning from the provider's approval screen.
+(function handleOAuthReturn() {
+  const params = new URLSearchParams(window.location.search);
+  const c = params.get('connected');
+  if (!c) return;
+  history.replaceState({}, '', window.location.pathname);
+  window.addEventListener('load', () => {
+    setTimeout(() => {
+      goToPage('customers', 'customers', 'cust-import');
+      if (c === 'error' || c === 'cancelled') {
+        note('connMsg', 'That connection didn\'t complete. Please try again.', false);
+      } else {
+        note('connMsg', (PROVIDER_LABELS[c] || 'Your booking system') + ' is connected. Importing your appointments now\u2026', true);
+      }
+      loadIntegrations();
+    }, 600);
+  });
+})();
 
 function goToPage(page, subtabGroup, subtab) {
   document.querySelector(`.nav-i[data-page="${page}"]`)?.click();
