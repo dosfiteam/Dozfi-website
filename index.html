@@ -3,20 +3,20 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Dozfi — Find the profit your business is leaking</title>
-<meta name="description" content="Dozfi is an AI profit optimizer for small businesses. It reads the appointment and customer data you already have, finds where revenue is leaking, tells you what to do about it in plain English, and handles the follow-up automatically. $75 a month."/>
+<title>Dozfi — Stop losing money to no-shows</title>
+<meta name="description" content="Appointment reminders that show you who confirmed, who cancelled, and who still needs a reply. $75/month, 30-day free trial."/>
 <meta name="brand-owner" content="Elektra Bannatyne DBA Dozfi"/>
 <link rel="canonical" href="https://dozfi.com/"/>
 <meta name="robots" content="index,follow"/>
 <meta property="og:type" content="website"/>
 <meta property="og:site_name" content="Dozfi"/>
-<meta property="og:title" content="Dozfi — Find the profit your business is leaking"/>
-<meta property="og:description" content="An AI profit optimizer for small businesses. Dozfi finds where your revenue is leaking, tells you what to do, and handles the follow-up."/>
+<meta property="og:title" content="Dozfi — Stop losing money to no-shows"/>
+<meta property="og:description" content="Appointment reminders that show you who confirmed, who cancelled, and who still needs a reply. $75/month, 30-day free trial."/>
 <meta property="og:url" content="https://dozfi.com/"/>
 <meta property="og:image" content="https://dozfi.com/og.png"/>
 <meta name="twitter:card" content="summary_large_image"/>
-<meta name="twitter:title" content="Dozfi — Find the profit your business is leaking"/>
-<meta name="twitter:description" content="An AI profit optimizer for small businesses."/>
+<meta name="twitter:title" content="Dozfi — Stop losing money to no-shows"/>
+<meta name="twitter:description" content="Appointment reminders that show you who confirmed, who cancelled, and who still needs a reply. $75/month, 30-day free trial."/>
 <link rel="icon" type="image/svg+xml" href="/favicon.svg"/>
 <link rel="apple-touch-icon" href="/favicon.svg"/>
 <meta name="theme-color" content="#5B4EF5"/>
@@ -29,7 +29,7 @@
   "name":"Dozfi",
   "applicationCategory":"BusinessApplication",
   "operatingSystem":"Web",
-  "description":"An AI profit optimizer for small businesses. Dozfi analyzes the appointment and customer data you already have, finds where revenue is leaking, and automates the follow-up.",
+  "description":"Appointment reminders that show you who confirmed, who cancelled, and who still needs a reply. $75/month, 30-day free trial.",
   "url":"https://dozfi.com/",
   "offers":{"@type":"Offer","price":"75","priceCurrency":"USD","description":"Dozfi Pro, billed monthly. First 30 days free."}
 }
@@ -88,6 +88,12 @@ nav{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.92);backdrop-f
 .od-chip{display:inline-flex;align-items:baseline;gap:6px;background:var(--green-soft);border-radius:7px;padding:5px 10px;margin-top:5px}
 .od-chip .l{font-size:.72rem;color:var(--green);font-weight:600}
 .od-chip .v{font-size:.92rem;color:var(--green);font-weight:800;letter-spacing:-.02em}
+.sd-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--line);font-size:.83rem}
+.sd-row:last-child{border-bottom:none}
+.sd-t{font-weight:800;width:66px;flex-shrink:0}
+.sd-n{flex:1;color:var(--body)}
+.sd-tag{font-size:.7rem;font-weight:700;padding:3px 8px;border-radius:99px;white-space:nowrap}
+.sd-tag.ok{background:#e7f6ee;color:#1f8a4c}.sd-tag.no{background:#fdecec;color:#c0392b}.sd-tag.wait{background:#fdf3e1;color:#b4740a}
 .demo-note{font-size:.73rem;color:var(--faint);margin-top:12px;text-align:center}
 
 /* SECTIONS */
@@ -96,7 +102,8 @@ section{padding:72px 0}
 h2{font-size:clamp(1.6rem,3vw,2.2rem);font-weight:800;letter-spacing:-.032em;line-height:1.18;margin-bottom:12px}
 .lede{font-size:.98rem;color:var(--body);line-height:1.7;max-width:56ch;margin-bottom:44px}
 
-.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;counter-reset:s}
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;row-gap:34px;counter-reset:s}
+@media (max-width:1000px){.steps{grid-template-columns:repeat(2,1fr)}}
 .step{position:relative;padding-top:18px;border-top:2px solid var(--purple)}
 .step::before{counter-increment:s;content:counter(s);position:absolute;top:-11px;left:0;background:#fff;padding-right:9px;font-size:.78rem;font-weight:800;color:var(--purple)}
 .step h3{font-size:1rem;font-weight:700;margin-bottom:7px}
@@ -247,29 +254,28 @@ footer p{font-size:.79rem;color:var(--faint)}
 <header class="hero">
   <div class="wrap hero-grid">
     <div>
-      <h1>Find the profit your business is already leaking.</h1>
-      <p class="hero-p">Dozfi reads the appointment and customer information you already keep, works out where money is slipping away, and tells you what to do about it in plain English. Then it handles the follow-up for you.</p>
+      <h1>Stop losing money to no-shows.</h1>
+      <p class="hero-p">Dozfi texts your customers before every appointment and shows you who confirmed, who cancelled, and who still needs a reply.</p>
       <div class="hero-cta">
-        <button class="btn btn-lg" onclick="openModal()">Start free for 30 days</button>
+        <button class="btn btn-lg" onclick="openModal()">Start free</button>
         <a href="#how" class="nav-l" style="font-weight:600">See how it works</a>
       </div>
       <div class="hero-fine"><span>Setup in minutes</span><span>No contract</span><span>Cancel yourself anytime</span></div>
     </div>
 
     <div class="demo" aria-label="Example of what Dozfi shows you">
-      <div class="demo-top">What Dozfi shows you</div>
+      <div class="demo-top">Today</div>
       <div class="opp-demo">
-        <div class="od-cat">Pricing</div>
-        <div class="od-line"><div class="od-k">Noticed</div><div class="od-v">Thursday is your busiest day — 14 of 31 bookings.</div></div>
-        <div class="od-line"><div class="od-k">Suggests</div><div class="od-v"><strong>Test a $10 increase on Thursdays. Promote Tuesday instead.</strong></div></div>
-        <div class="od-chip"><span class="l">Potential uplift</span><span class="v">+$310</span></div>
+        <div class="sd-row"><span class="sd-t">10:00 AM</span><span class="sd-n">Sarah Miller · $120</span><span class="sd-tag wait">Scheduled</span></div>
+        <div class="sd-row"><span class="sd-t">12:30 PM</span><span class="sd-n">Emma Jones · $180</span><span class="sd-tag ok">Confirmed</span></div>
+        <div class="sd-row"><span class="sd-t">3:00 PM</span><span class="sd-n">Olivia Smith · $90</span><span class="sd-tag no">Cancelled</span></div>
       </div>
       <div class="opp-demo">
-        <div class="od-cat">Revenue leakage</div>
-        <div class="od-line"><div class="od-k">Noticed</div><div class="od-v">26% of clients who replied cancelled.</div></div>
-        <div class="od-line"><div class="od-k">Suggests</div><div class="od-v"><strong>Move reminders to 48 hours ahead.</strong></div></div>
+        <div class="od-cat">Reply from Olivia</div>
+        <div class="od-v" style="font-size:.86rem">"So sorry, can't make it today."</div>
+        <div class="od-chip" style="background:var(--red-soft,#fdecec)"><span class="l" style="color:var(--red,#c0392b)">Marked cancelled · $90 slot opened</span></div>
       </div>
-      <div class="demo-note">Example only. Your numbers come from your own data.</div>
+      <div class="demo-note">Example only.</div>
     </div>
   </div>
 </header>
@@ -277,50 +283,24 @@ footer p{font-size:.79rem;color:var(--faint)}
 <!-- HOW -->
 <section id="how" class="band">
   <div class="wrap">
-    <h2>Three steps, then it runs on its own.</h2>
+    <h2>How it works</h2>
     <p class="lede">Dozfi does not replace your booking system, your calendar or your till. It sits alongside whatever you already use.</p>
     <div class="steps">
       <div class="step">
-        <h3>Bring in what you already have</h3>
-        <p>Upload a spreadsheet of clients and appointments, or paste it straight in. Dozfi matches your columns for you.</p>
+        <h3>Add your customers and appointments</h3>
+        <p>Manually add them or import a spreadsheet.</p>
       </div>
       <div class="step">
-        <h3>Dozfi studies your business</h3>
-        <p>It looks at when you are busy, what you charge, who cancels and who has stopped booking, then finds the patterns worth acting on.</p>
+        <h3>Turn on reminders</h3>
+        <p>Choose when reminders go out and edit the message.</p>
       </div>
       <div class="step">
-        <h3>You get recommendations and automation</h3>
-        <p>Plain-English suggestions you can act on today, plus automatic reminders and cancellation alerts running in the background.</p>
+        <h3>Customers reply by text</h3>
+        <p>Dozfi tracks confirmations, cancellations, opt-outs, and replies that need review.</p>
       </div>
-    </div>
-  </div>
-</section>
-
-<!-- JOBS -->
-<section>
-  <div class="wrap">
-    <h2>What Dozfi actually looks for.</h2>
-    <p class="lede">Every recommendation tells you what Dozfi noticed, what it suggests, and why. If it doesn't have enough of your data yet, it says so instead of guessing.</p>
-    <div class="jobs">
-      <div class="job">
-        <div class="tagline">Demand</div>
-        <h3>Your busiest and slowest periods</h3>
-        <p>Know which days carry your revenue and which ones are worth promoting, so you stop discounting the days that were already full.</p>
-      </div>
-      <div class="job">
-        <div class="tagline">Pricing</div>
-        <h3>Where you are charging too little</h3>
-        <p>Dozfi looks at what your appointments are actually worth and shows you where a small increase compounds across every booking.</p>
-      </div>
-      <div class="job">
-        <div class="tagline">Revenue leakage</div>
-        <h3>What cancellations are costing</h3>
-        <p>See your real cancellation rate and the money attached to it, then get a specific change to reminder timing or deposits.</p>
-      </div>
-      <div class="job">
-        <div class="tagline">Retention</div>
-        <h3>Clients who quietly stopped coming</h3>
-        <p>Dozfi flags people with no upcoming booking who haven't been in for months, and what that group used to be worth.</p>
+      <div class="step">
+        <h3>See what happened</h3>
+        <p>View message history, appointment status, cancellations, and estimated appointment value.</p>
       </div>
     </div>
   </div>
@@ -331,10 +311,10 @@ footer p{font-size:.79rem;color:var(--faint)}
   <div class="wrap sms-grid">
     <div>
       <h2>It does the chasing, not you.</h2>
-      <p class="lede" style="margin-bottom:24px">Finding the problem is half of it. Dozfi also runs the follow-up: reminders go out before every appointment, clients confirm or cancel with one word, and you get told the moment a slot opens up.</p>
+      <p class="lede" style="margin-bottom:24px">Reminders go out before every appointment, customers confirm or cancel with one word, and you're told the moment a slot opens up.</p>
       <ul class="plist">
         <li>Automatic reminders at the timing you choose</li>
-        <li>One-word YES or NO replies from clients</li>
+        <li>One-word YES or NO replies from customers</li>
         <li>A text to you the moment someone cancels, with the value of the slot</li>
         <li>Opt-outs handled automatically</li>
       </ul>
@@ -377,12 +357,12 @@ footer p{font-size:.79rem;color:var(--faint)}
       <div class="pnum"><sup>$</sup>75<span> / month</span></div>
       <div class="ptrial">First 30 days free</div>
       <ul class="plist">
-        <li>Profit opportunities from your own data</li>
-        <li>Spreadsheet import for clients and appointments</li>
         <li>Automatic appointment reminders</li>
-        <li>Confirmation and cancellation replies</li>
+        <li>One-word YES or NO replies from customers</li>
         <li>Cancellation alerts sent straight to you</li>
-        <li>Impact dashboard with honest numbers</li>
+        <li>Unclear replies flagged for you, never guessed</li>
+        <li>Spreadsheet import for customers and appointments</li>
+        <li>Honest results: confirmed and cancelled value</li>
         <li>Same-day human support</li>
       </ul>
       <button class="btn btn-full btn-lg" onclick="openModal()">Start my free month</button>
@@ -396,13 +376,13 @@ footer p{font-size:.79rem;color:var(--faint)}
   <div class="wrap">
     <h2>Questions worth asking.</h2>
     <div class="faq">
-      <details><summary>Do I have to switch my booking system?</summary><p>No. Dozfi sits alongside whatever you already use. You bring in your client and appointment data and Dozfi works from that. Nothing about your calendar, your till or your website has to change.</p></details>
-      <details><summary>How long does setup take?</summary><p>Most people are done in under ten minutes. You enter your business details, bring in your clients by pasting or uploading a spreadsheet, choose when reminders go out, and that's it.</p></details>
-      <details><summary>What happens when a client replies NO?</summary><p>Their appointment is released and you get a text straight away telling you who cancelled and what that slot was worth, so you can try to refill it while there is still time.</p></details>
-      <details><summary>Can clients stop the texts?</summary><p>Yes. Any client can reply STOP at any time and Dozfi stops messaging them immediately. That's required by carriers and it's handled for you.</p></details>
-      <details><summary>What if Dozfi doesn't have enough data about my business?</summary><p>Then it tells you that instead of inventing a recommendation. Each opportunity in your dashboard either shows real numbers from your data or explains exactly what to add before it can say anything useful.</p></details>
-      <details><summary>Do I need to be good with technology?</summary><p>No. If you can use a spreadsheet you can use Dozfi. And if you get stuck, email team@dozfi.com and a person replies the same day.</p></details>
-      <details><summary>How do I cancel?</summary><p>Log in, open Billing, and press Cancel my subscription. No email, no phone call. Cancel during your free trial and you are never charged.</p></details>
+      <details><summary>Do I have to switch my booking system?</summary><p>No. Keep booking the way you do now. You add your customers and appointments to Dozfi, by hand or from a spreadsheet, and Dozfi handles the reminders.</p></details>
+      <details><summary>How long does setup take?</summary><p>Most people are done in under ten minutes: add your customers, add their appointments, and turn on reminders.</p></details>
+      <details><summary>What happens when a customer replies NO?</summary><p>The appointment is marked Cancelled and you get a text right away saying who cancelled and what the appointment was worth, so you can try to fill the slot.</p></details>
+      <details><summary>Can customers stop the texts?</summary><p>Yes. Any customer can reply STOP at any time and Dozfi stops texting them immediately. Carriers require this, and it's handled for you.</p></details>
+      <details><summary>What if a customer replies with a question?</summary><p>Dozfi marks it Needs review and shows it on your Home page, so you can answer it yourself. It never guesses.</p></details>
+      <details><summary>Do I need to be good with technology?</summary><p>No. If you can send a text, you can use Dozfi. If you get stuck, email team@dozfi.com and a person replies the same day.</p></details>
+      <details><summary>How do I cancel?</summary><p>Log in, open Settings → Billing, and press Cancel subscription. No email, no phone call. Cancel during your free trial and you're never charged.</p></details>
     </div>
   </div>
 </section>
@@ -447,16 +427,16 @@ footer p{font-size:.79rem;color:var(--faint)}
 <div class="ov" id="ov" onclick="if(event.target===this)closeModal()">
   <div class="modal" id="modalBox">
     <button class="mx" onclick="closeModal()" aria-label="Close">✕</button>
-    <div class="bar"><i id="bar" style="width:25%"></i></div>
+    <div class="bar"><i id="bar" style="width:50%"></i></div>
 
     <!-- 1 -->
     <div id="s1">
-      <div class="mstep">Step 1 of 4</div>
+      <div class="mstep">Step 1 of 2</div>
       <div class="mtitle">Create your account</div>
-      <div class="msub">Tell us about your business so Dozfi knows what it's looking at.</div>
+      <div class="msub">Just the basics. You'll add customers and appointments in your dashboard.</div>
       <div class="f"><label for="oName">Your name</label><input id="oName" placeholder="Maria Rodriguez"/></div>
       <div class="f"><label for="bName">Business name</label><input id="bName" placeholder="Luxe Hair Studio"/></div>
-      <div class="f"><label for="bType">Business type</label>
+      <div class="f"><label for="bType">Business type, optional</label>
         <select id="bType">
           <option value="">Choose one</option>
           <option>Hair salon</option><option>Nail salon</option><option>Barbershop</option>
@@ -471,52 +451,13 @@ footer p{font-size:.79rem;color:var(--faint)}
         <div class="f"><label for="oPhone">Your mobile</label><input id="oPhone" type="tel" placeholder="+1 314 555 0100"/></div>
       </div>
       <div class="f"><label for="oPass">Choose a password</label><input id="oPass" type="password" placeholder="At least 6 characters"/><div class="hint">You'll use this and your email to log in.</div></div>
-      <div class="mrow"><button class="btn" onclick="toStep2()">Next: add your clients</button></div>
+      <div class="mrow"><button class="btn" onclick="toStep2()">Next: start your free trial</button></div>
       <div class="notice" id="e1"></div>
     </div>
 
     <!-- 2 -->
     <div id="s2" style="display:none">
-      <div class="mstep">Step 2 of 4</div>
-      <div class="mtitle">Add your clients</div>
-      <div class="msub">Paste from a spreadsheet or type a few in. You can import your full list later.</div>
-      <div class="paste">
-        <label for="pasteArea">Paste from Google Sheets, Excel or Numbers</label>
-        <div class="hint">Two columns: name and phone number, one client per row.</div>
-        <textarea id="pasteArea" placeholder="Sarah Johnson	+13145550101&#10;Maria Garcia	+13145550102"></textarea>
-        <button class="btn btn-ghost" style="margin-top:8px;padding:8px 14px;font-size:.82rem" onclick="doPaste()">Add these clients</button>
-      </div>
-      <div class="orline">or type them in</div>
-      <div id="cliList"></div>
-      <button class="addcli" onclick="addCli()">+ Add another client</button>
-      <div class="mrow">
-        <button class="btn btn-ghost" style="flex:0 0 auto" onclick="go(1)">Back</button>
-        <button class="btn" onclick="toStep3()">Next: reminder timing</button>
-      </div>
-      <div class="notice" id="e2"></div>
-    </div>
-
-    <!-- 3 -->
-    <div id="s3" style="display:none">
-      <div class="mstep">Step 3 of 4</div>
-      <div class="mtitle">When should reminders go out?</div>
-      <div class="msub">Dozfi texts your clients this far ahead of their appointment. You can change it any time.</div>
-      <div class="pills" id="pills">
-        <button class="pill" data-h="2"><b>2h</b><i>before</i></button>
-        <button class="pill" data-h="24" aria-pressed="true"><b>24h</b><i>before</i></button>
-        <button class="pill" data-h="48"><b>48h</b><i>before</i></button>
-      </div>
-      <div class="f"><label for="aVal">Average appointment value</label><input id="aVal" type="number" min="0" placeholder="150"/><div class="hint">In dollars. This is what powers your pricing and leakage insights.</div></div>
-      <div class="mrow">
-        <button class="btn btn-ghost" style="flex:0 0 auto" onclick="go(2)">Back</button>
-        <button class="btn" onclick="go(4)">Next: payment</button>
-      </div>
-      <div class="notice" id="e3"></div>
-    </div>
-
-    <!-- 4 -->
-    <div id="s4" style="display:none">
-      <div class="mstep">Step 4 of 4</div>
+      <div class="mstep">Step 2 of 2</div>
       <div class="mtitle">Start your free month</div>
       <div class="msub">Nothing is charged today. Your card is saved and the first $75 is taken after 30 days, unless you cancel before then.</div>
       <div class="card-box">
@@ -527,10 +468,10 @@ footer p{font-size:.79rem;color:var(--faint)}
       <div class="trial-box"><b>First 30 days free</b><span>Then $75 a month. Cancel yourself from your dashboard at any time.</span></div>
       <p style="font-size:.75rem;color:var(--faint);margin-bottom:18px">Payments are handled by Stripe. Dozfi never sees or stores your card number.</p>
       <div class="mrow">
-        <button class="btn btn-ghost" style="flex:0 0 auto" onclick="go(3)">Back</button>
+        <button class="btn btn-ghost" style="flex:0 0 auto" onclick="go(1)">Back</button>
         <button class="btn" id="payBtn" onclick="finish()">Start my free trial</button>
       </div>
-      <div class="notice" id="e4"></div>
+      <div class="notice" id="e2"></div>
     </div>
   </div>
 </div>
@@ -568,7 +509,6 @@ $('cVal').oninput = calc; $('cNum').oninput = calc;
 function openModal() {
   $('ov').classList.add('on');
   document.body.style.overflow = 'hidden';
-  if (cliN === 0) addCli();
 }
 function closeModal() {
   $('ov').classList.remove('on');
@@ -577,11 +517,11 @@ function closeModal() {
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
 
 function go(n) {
-  ['s1','s2','s3','s4'].forEach(id => $(id).style.display = 'none');
+  ['s1','s2'].forEach(id => $(id).style.display = 'none');
   $('s' + n).style.display = 'block';
-  $('bar').style.width = (n * 25) + '%';
+  $('bar').style.width = (n * 50) + '%';
   $('modalBox').scrollTop = 0;
-  if (n === 4) initStripe();
+  if (n === 2) initStripe();
 }
 
 function initStripe() {
@@ -602,8 +542,8 @@ function toStep2() {
     businessType: $('bType').value, ownerEmail: $('oEmail').value.trim(),
     ownerPhone: $('oPhone').value.trim(), password: $('oPass').value
   };
-  if (!v.ownerName || !v.businessName || !v.businessType || !v.ownerEmail || !v.ownerPhone) {
-    return note('e1', 'Fill in every field so Dozfi can set up your account.');
+  if (!v.ownerName || !v.businessName || !v.ownerEmail || !v.ownerPhone) {
+    return note('e1', 'Fill in your name, business name, email and mobile number.');
   }
   if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v.ownerEmail)) return note('e1', "That email doesn't look right. Check it and try again.");
   if (v.password.length < 6) return note('e1', 'Your password needs at least 6 characters.');
@@ -611,66 +551,16 @@ function toStep2() {
   go(2);
 }
 
-/* clients */
-function addCli(name, phone) {
-  cliN++;
-  const d = document.createElement('div');
-  d.className = 'cli'; d.id = 'c' + cliN;
-  d.innerHTML = `<div class="cli-h"><span class="cli-n">Client ${cliN}</span>
-    <button class="cli-x" onclick="document.getElementById('c${cliN}').remove()">Remove</button></div>
-    <div class="f2"><div class="f" style="margin:0"><input class="cn" placeholder="Name" value="${esc(name||'')}"/></div>
-    <div class="f" style="margin:0"><input class="cp" placeholder="Phone number" value="${esc(phone||'')}"/></div></div>`;
-  $('cliList').appendChild(d);
-}
-
-function doPaste() {
-  const t = $('pasteArea').value.trim();
-  clearNote('e2');
-  if (!t) return note('e2', 'Paste your list into the box first.');
-  let added = 0;
-  t.split('\n').forEach(line => {
-    const p = line.split(/\t|,/).map(x => x.trim().replace(/^"|"$/g, ''));
-    if (p.length >= 2 && p[0] && p[1]) { addCli(p[0], p[1]); added++; }
-  });
-  $('pasteArea').value = '';
-  note('e2', added
-    ? `${added} client${added === 1 ? '' : 's'} added below. Check them over before continuing.`
-    : "Dozfi couldn't find a name and phone number in that. Each row needs both, separated by a tab or comma.", added > 0);
-}
-
-function getClients() {
-  const out = [];
-  document.querySelectorAll('.cli').forEach(el => {
-    const n = el.querySelector('.cn').value.trim(), p = el.querySelector('.cp').value.trim();
-    if (n || p) out.push({ name: n, phone: p });
-  });
-  return out;
-}
-
-function toStep3() {
-  clearNote('e2');
-  const cs = getClients();
-  if (!cs.length) return note('e2', 'Add at least one client so Dozfi has something to work with.');
-  if (cs.some(c => !c.name || !c.phone)) return note('e2', 'Every client needs both a name and a phone number.');
-  form.clients = cs;
-  go(3);
-}
-
-/* timing pills */
-document.querySelectorAll('#pills .pill').forEach(p => p.onclick = () => {
-  document.querySelectorAll('#pills .pill').forEach(x => x.setAttribute('aria-pressed', 'false'));
-  p.setAttribute('aria-pressed', 'true');
-});
-
 /* finish */
 async function finish() {
-  clearNote('e4');
+  clearNote('e2');
   const b = $('payBtn');
   b.disabled = true; b.innerHTML = '<span class="spin"></span> Setting up…';
 
-  const sel = document.querySelector('#pills .pill[aria-pressed="true"]');
-  form.timing = sel ? sel.dataset.h : '24';
-  form.appointmentValue = parseFloat($('aVal').value) || 0;
+  // Reminder timing and appointment value are set later in the dashboard.
+  form.timing = '24';
+  form.appointmentValue = 0;
+  form.clients = [];
   form.notifySms = true;
   form.notifyEmail = false;
 
@@ -708,7 +598,7 @@ async function finish() {
     location.href = '/dashboard.html';
 
   } catch (err) {
-    note('e4', err.message);
+    note('e2', err.message);
     b.disabled = false; b.textContent = 'Start my free trial';
   }
 }
