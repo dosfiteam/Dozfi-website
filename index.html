@@ -227,6 +227,8 @@ footer p{font-size:.79rem;color:var(--faint)}
   section{padding:52px 0}
   .hero{padding:52px 0 44px}
 }
+.chg{display:inline-flex!important;align-items:center;gap:7px;border:1.5px solid var(--line,#E6E5EE);border-radius:9px;padding:8px 12px;font-size:.82rem!important;font-weight:600;cursor:pointer;margin:0!important}
+.chg input{width:auto!important;padding:0!important;margin:0;accent-color:#5B4EF5}
 </style>
 </head>
 <body>
@@ -436,15 +438,23 @@ footer p{font-size:.79rem;color:var(--faint)}
       <div class="msub">Just the basics. You'll add customers and appointments in your dashboard.</div>
       <div class="f"><label for="oName">Your name</label><input id="oName" placeholder="Maria Rodriguez"/></div>
       <div class="f"><label for="bName">Business name</label><input id="bName" placeholder="Luxe Hair Studio"/></div>
-      <div class="f"><label for="bType">Business type, optional</label>
-        <select id="bType">
-          <option value="">Choose one</option>
-          <option>Hair salon</option><option>Nail salon</option><option>Barbershop</option>
-          <option>Spa or esthetics</option><option>Personal training</option>
-          <option>Tattoo or piercing</option><option>Massage therapy</option>
-          <option>Dental or medical practice</option><option>Pet grooming</option>
-          <option>Other appointment business</option>
-        </select>
+      <div class="f"><label for="bType">What kind of business is it?</label>
+        <input id="bType" list="bTypes" maxlength="120" placeholder="Type anything, like Mobile dog grooming"/>
+        <datalist id="bTypes">
+          <option>Hair salon</option><option>Barbershop</option><option>Nail salon</option><option>Spa or esthetics</option>
+          <option>Massage therapy</option><option>Personal training</option><option>Tattoo or piercing</option>
+          <option>Dental office</option><option>Medical clinic</option><option>Chiropractor</option><option>Physical therapy</option>
+          <option>Pet grooming</option><option>Tutoring</option><option>Auto repair</option><option>Cleaning service</option>
+          <option>Photography</option><option>Consulting</option>
+        </datalist>
+      </div>
+      <div class="f"><label>How do you charge customers? <span style="font-weight:500;color:var(--faint)">Pick all that apply</span></label>
+        <div id="bCharge" style="display:flex;flex-wrap:wrap;gap:8px">
+          <label class="chg"><input type="checkbox" value="fixed"/> Fixed prices</label>
+          <label class="chg"><input type="checkbox" value="hourly"/> By the hour</label>
+          <label class="chg"><input type="checkbox" value="quote"/> Quotes or prices that vary</label>
+          <label class="chg"><input type="checkbox" value="recurring"/> Memberships or recurring</label>
+        </div>
       </div>
       <div class="f2">
         <div class="f"><label for="oEmail">Your email</label><input id="oEmail" type="email" placeholder="you@business.com"/></div>
@@ -539,7 +549,8 @@ function toStep2() {
   clearNote('e1');
   const v = {
     ownerName: $('oName').value.trim(), businessName: $('bName').value.trim(),
-    businessType: $('bType').value, ownerEmail: $('oEmail').value.trim(),
+    businessType: $('bType').value.trim(), ownerEmail: $('oEmail').value.trim(),
+    pricingMethods: [...document.querySelectorAll('#bCharge input:checked')].map(cb => cb.value),
     ownerPhone: $('oPhone').value.trim(), password: $('oPass').value
   };
   if (!v.ownerName || !v.businessName || !v.ownerEmail || !v.ownerPhone) {
