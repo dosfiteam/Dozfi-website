@@ -136,7 +136,7 @@ a{color:var(--purple)}
 .pill-row{display:flex;gap:8px;flex-wrap:wrap}
 .pill{border:1.5px solid var(--line);border-radius:9px;padding:10px 16px;cursor:pointer;font-size:.85rem;font-weight:600;background:#fff}
 .pill[aria-pressed="true"]{border-color:var(--purple);background:var(--purple-soft);color:var(--purple)}
-.choice-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.choice-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
 .choice{border:1.5px solid var(--line);border-radius:12px;padding:16px;cursor:pointer;background:#fff;text-align:left}
 .choice:hover{border-color:var(--purple)}
 .choice[aria-pressed="true"]{border-color:var(--purple);background:var(--purple-soft)}
@@ -168,7 +168,7 @@ a{color:var(--purple)}
 .banner-p{font-size:.81rem;color:var(--body);line-height:1.5}
 
 /* ===== PROFILE ===== */
-.sheet{position:fixed;inset:0;background:rgba(18,17,28,.55);display:none;align-items:center;justify-content:center;padding:18px;z-index:70}
+.sheet{position:fixed;inset:0;background:rgba(18,17,28,.55);display:none;align-items:center;justify-content:center;padding:18px;z-index:80}
 .sheet.on{display:flex}
 .sheet-box{background:#fff;border-radius:16px;padding:28px;max-width:440px;width:100%;max-height:90vh;overflow-y:auto}
 .sheet-box.wide{max-width:540px}
@@ -206,6 +206,7 @@ textarea.reply:focus{border-color:var(--purple)}
 
 /* ===== MISC ===== */
 .two{display:grid;grid-template-columns:1fr 1fr;gap:0 16px}
+.three{display:grid;grid-template-columns:repeat(3,1fr);gap:0 16px}
 .kv{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px solid var(--line);font-size:.87rem}
 .kv:last-child{border-bottom:none}
 .kv span:first-child{color:var(--faint)}
@@ -221,13 +222,97 @@ textarea.reply:focus{border-color:var(--purple)}
 .toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(20px);background:var(--ink);color:#fff;padding:12px 18px;border-radius:11px;font-size:.86rem;font-weight:600;box-shadow:0 6px 22px rgba(18,17,28,.25);opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;z-index:90;max-width:calc(100vw - 32px)}
 .toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
 
+/* ===== SCHEDULE ===== */
+.cal-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+.cal-nav{display:flex;align-items:center;gap:6px}
+.cal-arrow{width:34px;height:34px;border:1.5px solid var(--line);border-radius:9px;background:#fff;cursor:pointer;font-size:1rem;font-weight:700;color:var(--body)}
+.cal-arrow:hover{background:var(--shell)}
+.cal-label{font-weight:800;font-size:.95rem;margin-left:6px}
+.wk{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:8px}
+.wk-day{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 8px;min-height:150px}
+.wk-day.today{border-color:var(--purple);box-shadow:0 0 0 1px var(--purple)}
+.wk-day.closed{background:var(--shell)}
+.wk-h{font-size:.76rem;font-weight:800;color:var(--faint);margin-bottom:7px;display:flex;justify-content:space-between;gap:4px;cursor:pointer}
+.wk-h b{color:var(--ink)}
+.chip{display:block;width:100%;text-align:left;border:none;border-left:3px solid var(--amber);background:var(--amber-soft);border-radius:6px;padding:5px 7px;margin-bottom:5px;font-size:.74rem;line-height:1.35;cursor:pointer;color:var(--ink);overflow:hidden}
+.chip:hover{filter:brightness(.97)}
+.chip .t{font-weight:800;display:block}
+.chip .n{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.chip.ok{border-color:var(--green);background:var(--green-soft)}
+.chip.no{border-color:var(--red);background:var(--red-soft);opacity:.7;text-decoration:line-through}
+.chip.rev{border-color:var(--purple);background:var(--purple-soft)}
+.chip.none{border-color:var(--faint);background:var(--shell)}
+.chip.ns{border-color:var(--red);background:var(--red-soft)}
+.mo{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--line);gap:1px}
+.mo-h{background:var(--shell);font-size:.72rem;font-weight:800;color:var(--faint);padding:7px 8px;text-align:center}
+.mo-c{background:#fff;min-height:96px;padding:6px;cursor:pointer}
+.mo-c:hover{background:#FBFBFD}
+.mo-c.out{background:var(--shell);color:var(--faint)}
+.mo-c.today .mo-d{background:var(--purple);color:#fff}
+.mo-d{font-size:.74rem;font-weight:800;display:inline-block;min-width:22px;height:22px;line-height:22px;text-align:center;border-radius:99px;margin-bottom:3px}
+.mo-c .chip{padding:3px 6px;margin-bottom:3px;font-size:.7rem}
+.mo-more{font-size:.7rem;color:var(--purple);font-weight:700}
+.day-line{display:flex;gap:12px;align-items:flex-start;padding:12px 0;border-bottom:1px solid var(--line);cursor:pointer}
+.day-line:last-child{border-bottom:none}
+.day-line:hover .cust-name{color:var(--purple)}
+.day-line .tm{min-width:92px;font-weight:800;font-size:.86rem}
+.day-line .tm span{display:block;font-weight:500;color:var(--faint);font-size:.76rem}
+.day-line.cx{opacity:.6}
+.alert-row{display:flex;gap:10px;align-items:flex-start;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--line);font-size:.85rem;flex-wrap:wrap}
+.alert-row:last-child{border-bottom:none}
+
+/* side panel */
+.panel-bg{position:fixed;inset:0;background:rgba(18,17,28,.35);z-index:75;display:none}
+.panel-bg.on{display:block}
+.panel{position:fixed;top:0;right:0;bottom:0;width:400px;max-width:100%;background:#fff;z-index:76;box-shadow:-8px 0 30px rgba(18,17,28,.15);padding:24px;overflow-y:auto;transform:translateX(105%);transition:transform .2s}
+.panel.on{transform:translateX(0)}
+.panel .kv span:last-child{max-width:60%}
+.panel-acts{display:flex;flex-direction:column;gap:8px;margin-top:18px}
+.panel-acts .btn{width:100%}
+
+/* ===== OPPORTUNITIES ===== */
+.opp{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px}
+.opp+.opp{margin-top:14px}
+.opp-type{font-size:.72rem;font-weight:800;color:var(--purple);text-transform:uppercase;letter-spacing:.05em}
+.opp-t{font-size:1rem;font-weight:800;margin:3px 0 2px}
+.ev{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+.ev div{background:var(--shell);border:1px solid var(--line);border-radius:10px;padding:8px 12px;font-size:.76rem;color:var(--body)}
+.ev b{display:block;font-size:1rem;color:var(--ink)}
+.opp-s{font-size:.9rem;font-weight:600;margin-bottom:6px}
+.opp-why{font-size:.8rem;color:var(--body);line-height:1.55}
+.opp details{margin-top:6px}
+.opp summary{font-size:.8rem;font-weight:700;color:var(--purple);cursor:pointer}
+
+/* ===== RESULTS EXTRAS ===== */
+.bars{display:flex;flex-direction:column;gap:7px}
+.bar-r{display:grid;grid-template-columns:42px 1fr 40px;gap:10px;align-items:center;font-size:.8rem}
+.bar-t{background:var(--shell);border-radius:99px;height:12px;overflow:hidden}
+.bar-f{background:var(--purple);height:100%;border-radius:99px}
+.calc-out{background:var(--green-soft);border-radius:12px;padding:14px 16px;margin-top:6px}
+.calc-big{font-size:1.5rem;font-weight:800;color:var(--green);letter-spacing:-.03em}
+
+/* ===== AVAILABILITY ===== */
+.hours-row{display:grid;grid-template-columns:120px 1fr 1fr 1fr 1fr;gap:8px;align-items:center;padding:8px 0;border-bottom:1px solid var(--line);font-size:.85rem}
+.hours-row:last-child{border-bottom:none}
+.hours-row input[type=time]{padding:7px 8px;border:1.5px solid var(--line);border-radius:8px;font-size:.82rem;width:100%}
+.hours-row input:disabled{background:var(--shell);color:var(--faint)}
+.hours-head{font-size:.72rem;font-weight:700;color:var(--faint);border-bottom:1px solid var(--line)}
+.hr-lbl{display:none;grid-column:1 / -1;font-size:.72rem;font-weight:700;color:var(--faint);margin-bottom:-2px}
+.dchip{display:inline-flex;align-items:center;gap:6px;background:var(--shell);border:1px solid var(--line);border-radius:99px;padding:4px 6px 4px 11px;font-size:.78rem;font-weight:600;margin:0 6px 6px 0}
+.dchip button{border:none;background:none;color:var(--faint);cursor:pointer;font-size:.9rem;padding:0 4px}
+.checks{display:flex;gap:8px;flex-wrap:wrap}
+.checks label{display:flex;align-items:center;gap:7px;border:1.5px solid var(--line);border-radius:9px;padding:9px 13px;font-size:.84rem;font-weight:600;cursor:pointer;background:#fff}
+.checks input{accent-color:var(--purple)}
+.conflict{background:var(--amber-soft);border:1px solid #F3DDB0;border-radius:10px;padding:12px 14px;margin-top:12px;font-size:.84rem;color:#7A4E05}
+.conflict ul{margin:4px 0 10px 18px}
+
 @media(max-width:960px){
   .side{position:static;width:100%;flex-direction:row;align-items:center;padding:12px;overflow-x:auto}
   .side-mark{margin:0 14px 0 6px} .side-biz{display:none}
   .side-nav{flex-direction:row;gap:4px} .nav-i{white-space:nowrap;padding:8px 11px}
   .side-foot{border:none;padding:0;margin-left:auto;flex-direction:row}
   .main{margin-left:0;padding:20px 16px 90px}
-  .metrics{grid-template-columns:1fr 1fr} .two,.map-grid,.choice-row{grid-template-columns:1fr}
+  .metrics{grid-template-columns:1fr 1fr} .two,.three,.map-grid,.choice-row{grid-template-columns:1fr}
 }
 @media(max-width:700px){
   .tbl.stack thead{display:none}
@@ -236,6 +321,14 @@ textarea.reply:focus{border-color:var(--purple)}
   .tbl.stack td{display:block;border:none;padding:3px 0}
   .tbl.stack .row-acts{justify-content:flex-start;margin-top:6px}
   .help-fab{display:none!important}
+  .wk{grid-template-columns:1fr}
+  .wk-day{min-height:0}
+  .mo-c{min-height:58px;padding:4px}
+  .mo-c .chip .n{display:none}
+  .hours-row{grid-template-columns:1fr 1fr;row-gap:6px}
+  .hours-row .hr-day{grid-column:1 / -1}
+  .hours-head{display:none}
+  .hr-lbl{display:block}
 }
 </style>
 </head>
@@ -287,8 +380,10 @@ textarea.reply:focus{border-color:var(--purple)}
     </div>
     <div class="side-nav">
       <button class="nav-i" data-page="home" aria-current="page"><span class="ic">◈</span> Home <span class="nav-badge" id="reviewBadge" style="display:none">0</span></button>
+      <button class="nav-i" data-page="schedule"><span class="ic">▦</span> Schedule</button>
       <button class="nav-i" data-page="customers"><span class="ic">◍</span> Customers</button>
       <button class="nav-i" data-page="messages"><span class="ic">◌</span> Messages</button>
+      <button class="nav-i" data-page="opportunities"><span class="ic">✦</span> Opportunities</button>
       <button class="nav-i" data-page="results"><span class="ic">◱</span> Results</button>
       <button class="nav-i" data-page="settings"><span class="ic">⚙</span> Settings</button>
     </div>
@@ -310,6 +405,30 @@ textarea.reply:focus{border-color:var(--purple)}
       <div id="homeBody"><div class="loading"><span class="spin"></span> Loading…</div></div>
     </section>
 
+    <!-- ===== SCHEDULE ===== -->
+    <section class="page" id="page-schedule">
+      <div class="head head-row">
+        <div><h1 class="h1">Schedule</h1>
+        <p class="sub">Every appointment, by day, week or month. Click one to see it or change it.</p></div>
+        <div class="act-row"><button class="btn btn-sm" onclick="openAppt()">Add appointment</button></div>
+      </div>
+      <div id="schedAlerts"></div>
+      <div class="cal-bar">
+        <div class="segctl" id="calSwitch">
+          <button data-view="day" aria-pressed="true">Today</button>
+          <button data-view="week" aria-pressed="false">Week</button>
+          <button data-view="month" aria-pressed="false">Month</button>
+        </div>
+        <div class="cal-nav">
+          <button class="cal-arrow" id="calPrev" aria-label="Earlier">‹</button>
+          <button class="btn btn-ghost btn-sm" id="calToday">Today</button>
+          <button class="cal-arrow" id="calNext" aria-label="Later">›</button>
+          <span class="cal-label" id="calLabel"></span>
+        </div>
+      </div>
+      <div id="calBox"><div class="loading"><span class="spin"></span> Loading…</div></div>
+    </section>
+
     <!-- ===== CUSTOMERS ===== -->
     <section class="page" id="page-customers">
       <div class="head head-row">
@@ -324,7 +443,6 @@ textarea.reply:focus{border-color:var(--purple)}
 
       <div class="subtab-row" data-group="customers">
         <button class="subtab" data-tab="cust-list" aria-selected="true">List</button>
-        <button class="subtab" data-tab="cust-schedule" aria-selected="false">Schedule</button>
         <button class="subtab" data-tab="cust-import" aria-selected="false">Import</button>
       </div>
 
@@ -351,20 +469,6 @@ textarea.reply:focus{border-color:var(--purple)}
         </div>
       </div>
 
-      <div class="subpage" id="tab-cust-schedule">
-        <div class="card">
-          <div class="card-h">
-            <div class="segctl" id="schedSwitch">
-              <button data-range="today" aria-pressed="true">Today</button>
-              <button data-range="tomorrow" aria-pressed="false">Tomorrow</button>
-              <button data-range="week" aria-pressed="false">Week</button>
-            </div>
-            <div class="card-d" id="schedLabel" style="margin:0"></div>
-          </div>
-          <div id="schedBox"><div class="loading"><span class="spin"></span> Loading…</div></div>
-        </div>
-      </div>
-
       <div class="subpage" id="tab-cust-import">
         <div class="card" id="connCard" style="display:none">
           <div class="card-h"><div><div class="card-t">Connect your booking system</div><div class="card-d">Connect once and your appointments stay up to date on their own.</div></div></div>
@@ -378,6 +482,7 @@ textarea.reply:focus{border-color:var(--purple)}
             <button class="choice" data-mode="customers" aria-pressed="false"><div class="choice-t">Customers</div><div class="choice-d">Names and phone numbers</div></button>
             <button class="choice" data-mode="appointments" aria-pressed="false"><div class="choice-t">Appointments</div><div class="choice-d">Dates and times for customers</div></button>
             <button class="choice" data-mode="both" aria-pressed="false"><div class="choice-t">Both</div><div class="choice-d">Customers and their appointments</div></button>
+            <button class="choice" data-mode="services" aria-pressed="false"><div class="choice-t">Services and prices</div><div class="choice-d">Your service list</div></button>
           </div>
 
           <div id="impUpload" style="display:none;margin-top:22px">
@@ -401,6 +506,9 @@ textarea.reply:focus{border-color:var(--purple)}
               <div class="f" data-for="time"><label for="mapTime">Appointment time</label><select id="mapTime"></select><div class="hint">Leave as "Included in the date" if your date column also has the time.</div></div>
               <div class="f" data-for="service"><label for="mapService">Service</label><select id="mapService"></select></div>
               <div class="f" data-for="value"><label for="mapValue">Appointment value</label><select id="mapValue"></select></div>
+              <div class="f" data-for="price"><label for="mapPrice">Price</label><select id="mapPrice"></select><div class="hint">"From $45" becomes a starting price, "$25/hr" hourly, and "quote" a custom quote.</div></div>
+              <div class="f" data-for="duration"><label for="mapDuration">Length in minutes</label><select id="mapDuration"></select></div>
+              <div class="f" data-for="category"><label for="mapCategory">Category</label><select id="mapCategory"></select></div>
             </div>
             <div class="preview" id="preview"></div>
             <div class="step-label" style="margin-top:20px">Step 4</div>
@@ -511,13 +619,59 @@ textarea.reply:focus{border-color:var(--purple)}
       </div>
     </section>
 
+    <!-- ===== OPPORTUNITIES ===== -->
+    <section class="page" id="page-opportunities">
+      <div class="head">
+        <h1 class="h1">Opportunities</h1>
+        <p class="sub">Ideas found in your own appointments, each with the numbers behind it. Dozfi never changes a price or sends a text on its own. You decide.</p>
+      </div>
+      <div id="oppLocked"></div>
+      <div class="subtab-row" data-group="opps">
+        <button class="subtab" data-tab="opp-pricing" aria-selected="true">Pricing <span class="cnt muted" id="oc-pricing"></span></button>
+        <button class="subtab" data-tab="opp-demand" aria-selected="false">Demand &amp; Scheduling <span class="cnt muted" id="oc-demand"></span></button>
+        <button class="subtab" data-tab="opp-retention" aria-selected="false">Retention <span class="cnt muted" id="oc-retention"></span></button>
+        <button class="subtab" data-tab="opp-costs" aria-selected="false">Costs <span class="cnt muted" id="oc-costs"></span></button>
+      </div>
+      <div class="subpage on" id="tab-opp-pricing">
+        <div id="oppPricing"></div>
+        <div class="card" style="margin-top:16px">
+          <div class="card-h"><div><div class="card-t">Price tests</div><div class="card-d">Try a new price for a set time, then compare bookings before and during the test.</div></div>
+            <button class="btn btn-ghost btn-sm" onclick="openExperiment()">Start a price test</button></div>
+          <div id="expBox"><div class="loading"><span class="spin"></span> Loading…</div></div>
+        </div>
+      </div>
+      <div class="subpage" id="tab-opp-demand"><div id="oppDemand"></div></div>
+      <div class="subpage" id="tab-opp-retention"><div id="oppRetention"></div></div>
+      <div class="subpage" id="tab-opp-costs"><div id="oppCosts"></div></div>
+    </section>
+
     <!-- ===== RESULTS ===== -->
     <section class="page" id="page-results">
       <div class="head">
         <h1 class="h1">Results</h1>
-        <p class="sub" id="resultsSub">This month. Every number is counted from real replies. Nothing is estimated.</p>
+        <p class="sub" id="resultsSub">Every number is counted from your real appointments and replies. Nothing is estimated.</p>
       </div>
+      <div class="sec-h" style="margin-top:0">Reminders this month</div>
       <div id="resultsBody"><div class="loading"><span class="spin"></span> Loading…</div></div>
+      <div class="cal-bar" style="margin:28px 0 12px">
+        <div class="sec-h" style="margin:0">Business performance</div>
+        <div class="segctl" id="perfSwitch">
+          <button data-range="month" aria-pressed="true">This month</button>
+          <button data-range="30" aria-pressed="false">Last 30 days</button>
+          <button data-range="90" aria-pressed="false">Last 90 days</button>
+        </div>
+      </div>
+      <div id="perfBody"><div class="loading"><span class="spin"></span> Loading…</div></div>
+      <div class="card" style="margin-top:16px">
+        <div class="card-h"><div><div class="card-t">What a service leaves you</div><div class="card-d">Price minus materials and labor. This is not net profit: rent, fees and other costs still come out of it.</div></div></div>
+        <div class="f" style="max-width:320px"><label for="ccService">Start from a service, optional</label><select id="ccService"></select></div>
+        <div class="three">
+          <div class="f"><label for="ccPrice">Price</label><input id="ccPrice" type="number" min="0" placeholder="$85"/></div>
+          <div class="f"><label for="ccMat">Materials</label><input id="ccMat" type="number" min="0" placeholder="$10"/></div>
+          <div class="f"><label for="ccLabor">Labor</label><input id="ccLabor" type="number" min="0" placeholder="$30"/></div>
+        </div>
+        <div id="ccOut"></div>
+      </div>
     </section>
 
     <!-- ===== SETTINGS ===== -->
@@ -527,8 +681,11 @@ textarea.reply:focus{border-color:var(--purple)}
       </div>
       <div class="subtab-row" data-group="settings">
         <button class="subtab" data-tab="set-business" aria-selected="true">Business</button>
+        <button class="subtab" data-tab="set-services" aria-selected="false">Services &amp; pricing</button>
+        <button class="subtab" data-tab="set-hours" aria-selected="false">Availability</button>
         <button class="subtab" data-tab="set-reminders" aria-selected="false">Reminders</button>
         <button class="subtab" data-tab="set-booking" aria-selected="false">Booking link</button>
+        <button class="subtab" data-tab="set-costs" aria-selected="false">Costs &amp; tax</button>
         <button class="subtab" data-tab="set-billing" aria-selected="false">Billing</button>
         <button class="subtab" data-tab="set-support" aria-selected="false">Support</button>
       </div>
@@ -542,12 +699,60 @@ textarea.reply:focus{border-color:var(--purple)}
             <div class="f"><label for="stValue">Default appointment value, optional</label><input id="stValue" type="number" min="0" placeholder="60"/><div class="hint">Used when an appointment has no value of its own.</div></div>
           </div>
           <div class="f"><label for="stAddress">Business address, optional</label><input id="stAddress" placeholder="123 Main St, Ballwin, MO 63011"/></div>
+          <div class="f"><label for="stType">Type of business</label><input id="stType" list="bizTypes" placeholder="Type anything, like Mobile dog grooming" maxlength="120"/>
+            <datalist id="bizTypes"><option>Hair salon</option><option>Barbershop</option><option>Nail salon</option><option>Spa</option><option>Massage</option><option>Dental office</option><option>Medical clinic</option><option>Chiropractor</option><option>Physical therapy</option><option>Personal trainer</option><option>Tutoring</option><option>Pet grooming</option><option>Auto repair</option><option>Cleaning service</option><option>Photography</option><option>Tattoo studio</option><option>Consulting</option></datalist></div>
+          <div class="f"><label>How do you charge customers?</label>
+            <div class="checks" id="stCharge">
+              <label><input type="checkbox" value="fixed"/> Fixed prices</label>
+              <label><input type="checkbox" value="hourly"/> By the hour</label>
+              <label><input type="checkbox" value="quote"/> Quotes or prices that vary</label>
+              <label><input type="checkbox" value="recurring"/> Memberships or recurring plans</label>
+            </div><div class="hint">Pick all that apply.</div></div>
           <button class="btn" id="stSaveBtn">Save changes</button>
           <div class="notice" id="stMsg"></div>
         </div>
         <div class="card">
           <div class="kv"><span>Login email</span><span id="stEmail">—</span></div>
           <div class="kv"><span>Password</span><span><button class="link-btn" onclick="signOut(true)">Reset it from the sign-in screen</button></span></div>
+        </div>
+      </div>
+
+      <div class="subpage" id="tab-set-services">
+        <div class="card">
+          <div class="card-h">
+            <div><div class="card-t">Services &amp; pricing</div><div class="card-d">Pick a service when booking and its price and length fill in. Changing a price here never changes appointments already booked.</div></div>
+            <div class="act-row">
+              <button class="btn btn-sm" onclick="openService()">Add service</button>
+              <button class="btn btn-ghost btn-sm" onclick="startServiceImport()">Import from a file</button>
+            </div>
+          </div>
+          <div id="svcBox"><div class="loading"><span class="spin"></span> Loading…</div></div>
+          <div style="margin-top:12px"><label style="font-size:.8rem;color:var(--body);display:inline-flex;gap:7px;align-items:center;cursor:pointer"><input type="checkbox" id="svcShowArchived" style="accent-color:var(--purple)"/> Show archived services</label></div>
+        </div>
+      </div>
+
+      <div class="subpage" id="tab-set-hours">
+        <div class="card">
+          <div class="card-h"><div><div class="card-t">Business hours</div><div class="card-d">Dozfi checks new appointments against these, and uses them to measure how full your schedule is.</div></div></div>
+          <div class="hours-row hours-head"><div>Day</div><div>Opens</div><div>Closes</div><div>Break starts</div><div>Break ends</div></div>
+          <div id="hoursBox"></div>
+        </div>
+        <div class="card">
+          <div class="card-t" style="margin-bottom:4px">Closed dates</div>
+          <div class="card-d" style="margin-bottom:12px">Holidays, vacations, or any day you're not taking appointments.</div>
+          <div class="act-row" style="margin-bottom:12px"><input id="closeDate" type="date" style="padding:8px 11px;border:1.5px solid var(--line);border-radius:9px;font-size:.85rem"/><button class="btn btn-ghost btn-sm" id="closeAddBtn">Add closed date</button></div>
+          <div id="closeList"></div>
+        </div>
+        <div class="card">
+          <div class="two">
+            <div class="f"><label for="stBuffer">Time between appointments</label>
+              <select id="stBuffer"><option value="0">None</option><option value="5">5 minutes</option><option value="10">10 minutes</option><option value="15">15 minutes</option><option value="20">20 minutes</option><option value="30">30 minutes</option><option value="45">45 minutes</option><option value="60">1 hour</option></select>
+              <div class="hint">For cleanup or travel. Dozfi keeps this gap free.</div></div>
+            <div class="f"><label for="stCapacity">How many people take appointments at the same time?</label><input id="stCapacity" type="number" min="1" max="50" placeholder="1"/>
+              <div class="hint">For example, 3 if you have three chairs or three staff working.</div></div>
+          </div>
+          <button class="btn" id="hoursSaveBtn">Save availability</button>
+          <div class="notice" id="hoursMsg"></div>
         </div>
       </div>
 
@@ -570,6 +775,19 @@ textarea.reply:focus{border-color:var(--purple)}
           <p class="card-d" style="margin:0 0 16px">When a customer texts that they want to book or reschedule, Dozfi texts them this link and marks the message Needs review.</p>
           <button class="btn" id="bookSaveBtn">Save changes</button>
           <div class="notice" id="bookMsg"></div>
+        </div>
+      </div>
+
+      <div class="subpage" id="tab-set-costs">
+        <div class="card">
+          <div class="card-h"><div><div class="card-t">Costs &amp; tax</div><div class="card-d">Used only in Results → What a service leaves you. Optional.</div></div></div>
+          <div class="two">
+            <div class="f"><label for="stExpenses">Monthly expenses</label><input id="stExpenses" type="number" min="0" placeholder="$2,400"/><div class="hint">Rent, software, insurance and other costs you pay every month.</div></div>
+            <div class="f"><label for="stTaxMode">Sales tax</label><select id="stTaxMode"><option value="exclusive">Tax is added on top of my prices</option><option value="inclusive">My prices already include tax</option></select></div>
+            <div class="f"><label for="stTaxRate">Tax rate, %</label><input id="stTaxRate" type="number" min="0" max="50" step="0.01" placeholder="8.25"/><div class="hint">Leave empty if you don't charge sales tax.</div></div>
+          </div>
+          <button class="btn" id="costSaveBtn">Save changes</button>
+          <div class="notice" id="costMsg"></div>
         </div>
       </div>
 
@@ -666,8 +884,9 @@ textarea.reply:focus{border-color:var(--purple)}
     <div class="two">
       <div class="f"><label for="apDate">Date</label><input id="apDate" type="date"/></div>
       <div class="f"><label for="apTime">Time</label><input id="apTime" type="time" step="300"/></div>
-      <div class="f"><label for="apService">Service, optional</label><input id="apService" placeholder="Haircut"/></div>
-      <div class="f"><label for="apValue">Value, optional</label><input id="apValue" type="number" min="0" placeholder="$60"/></div>
+      <div class="f" id="apServiceSelWrap" style="display:none"><label for="apServiceSel">Service</label><select id="apServiceSel"></select></div>
+      <div class="f" id="apServiceWrap"><label for="apService">Service, optional</label><input id="apService" placeholder="Haircut"/></div>
+      <div class="f"><label for="apValue">Price, optional</label><input id="apValue" type="number" min="0" placeholder="$60"/><div class="hint" id="apPriceHint"></div></div>
       <div class="f"><label for="apDuration">Duration, optional</label><input id="apDuration" type="number" min="5" max="720" placeholder="Minutes"/></div>
       <div class="f"><label for="apTiming">Reminder timing</label>
         <select id="apTiming">
@@ -680,9 +899,88 @@ textarea.reply:focus{border-color:var(--purple)}
       </div>
     </div>
     <div class="f" id="apCustomWrap" style="display:none"><label for="apCustomHours">Send reminder this many hours before</label><input id="apCustomHours" type="number" min="1" max="336" placeholder="6"/></div>
+    <div id="apRepeatWrap">
+      <div class="two">
+        <div class="f"><label for="apRepeat">Repeats</label>
+          <select id="apRepeat"><option value="none">Doesn't repeat</option><option value="weekly">Every week</option><option value="biweekly">Every 2 weeks</option><option value="monthly">Every month</option><option value="custom">Custom</option></select></div>
+        <div class="f" id="apCountWrap" style="display:none"><label for="apCount">How many appointments</label><input id="apCount" type="number" min="2" max="52" value="8"/></div>
+        <div class="f" id="apEveryWrap" style="display:none"><label for="apEvery">Every how many days</label><input id="apEvery" type="number" min="1" max="365" placeholder="10"/></div>
+      </div>
+    </div>
+    <div class="f" id="apScopeWrap" style="display:none"><label>This appointment repeats. Change:</label>
+      <div class="pill-row" id="apScope">
+        <button class="pill" data-scope="one" aria-pressed="true">Only this one</button>
+        <button class="pill" data-scope="series" aria-pressed="false">This and later ones</button>
+      </div></div>
     <div class="f"><label for="apNotes">Notes, optional</label><textarea id="apNotes" style="min-height:52px" placeholder="Only you see these."></textarea></div>
     <button class="btn btn-full" id="apSaveBtn">Save appointment</button>
     <div class="notice" id="apMsg"></div>
+    <div id="apConflict"></div>
+  </div>
+</div>
+
+<!-- Appointment side panel -->
+<div class="panel-bg" id="panelBg" onclick="closePanel()"></div>
+<aside class="panel" id="apptPanel" aria-label="Appointment">
+  <div class="sheet-top"><div class="sheet-h" id="apPanelTitle">Appointment</div><button class="link-btn quiet" onclick="closePanel()">Close</button></div>
+  <div id="apPanelBody"></div>
+</aside>
+
+<!-- One or the whole series -->
+<div class="sheet" id="scopeSheet" onclick="if(event.target===this)closeSheet('scopeSheet')">
+  <div class="sheet-box">
+    <div class="sheet-h" id="scTitle">Cancel a repeating appointment</div>
+    <p class="sheet-p" id="scBody">This appointment is part of a series.</p>
+    <div class="act-row">
+      <button class="btn" id="scOne">Only this one</button>
+      <button class="btn btn-ghost" id="scAll">This and later ones</button>
+      <button class="btn btn-ghost" onclick="closeSheet('scopeSheet')">Keep it</button>
+    </div>
+    <div class="notice" id="scMsg"></div>
+  </div>
+</div>
+
+<!-- Service -->
+<div class="sheet" id="serviceSheet" onclick="if(event.target===this)closeSheet('serviceSheet')">
+  <div class="sheet-box">
+    <div class="sheet-top"><div class="sheet-h" id="svTitle">Add service</div><button class="link-btn quiet" onclick="closeSheet('serviceSheet')">Close</button></div>
+    <div class="two" style="margin-top:14px">
+      <div class="f"><label for="svName">Name</label><input id="svName" placeholder="Haircut" maxlength="120"/></div>
+      <div class="f"><label for="svCategory">Category, optional</label><input id="svCategory" placeholder="Hair" maxlength="80"/></div>
+      <div class="f"><label for="svMethod">How it's priced</label>
+        <select id="svMethod"><option value="fixed">Fixed price</option><option value="starting_at">Starting at</option><option value="hourly">By the hour</option><option value="quote">Custom quote</option></select></div>
+      <div class="f" id="svPriceWrap"><label for="svPrice" id="svPriceLabel">Price</label><input id="svPrice" type="number" min="0" placeholder="$60"/></div>
+      <div class="f"><label for="svDuration">Length in minutes, optional</label><input id="svDuration" type="number" min="5" max="720" placeholder="60"/></div>
+    </div>
+    <details style="margin-bottom:14px"><summary style="font-size:.84rem;font-weight:700;cursor:pointer;color:var(--purple)">More details, optional</summary>
+      <div class="two" style="margin-top:12px">
+        <div class="f"><label for="svMat">Materials cost</label><input id="svMat" type="number" min="0" placeholder="$10"/></div>
+        <div class="f"><label for="svLabor">Labor cost</label><input id="svLabor" type="number" min="0" placeholder="$30"/></div>
+        <div class="f"><label for="svPrep">Prep time, minutes</label><input id="svPrep" type="number" min="0" max="600" placeholder="10"/></div>
+        <div class="f"><label style="display:flex;gap:8px;align-items:center;margin-top:28px;cursor:pointer"><input type="checkbox" id="svTaxable" checked style="width:auto;accent-color:var(--purple)"/> Sales tax applies</label></div>
+      </div>
+      <div class="hint">Used to show what this service leaves you after direct costs.</div>
+    </details>
+    <button class="btn btn-full" id="svSaveBtn">Save service</button>
+    <div class="notice" id="svMsg"></div>
+    <div style="margin-top:16px;text-align:right"><button class="link-btn quiet" id="svArchiveBtn" style="display:none">Archive service</button></div>
+  </div>
+</div>
+
+<!-- Price test -->
+<div class="sheet" id="expSheet" onclick="if(event.target===this)closeSheet('expSheet')">
+  <div class="sheet-box">
+    <div class="sheet-top"><div class="sheet-h">Start a price test</div><button class="link-btn quiet" onclick="closeSheet('expSheet')">Close</button></div>
+    <p class="sheet-p" style="margin:4px 0 16px">New bookings of this service on the chosen days get the test price. Appointments already booked keep their price. You can end the test anytime.</p>
+    <div class="f"><label for="exService">Service</label><select id="exService"></select></div>
+    <div class="two">
+      <div class="f"><label for="exPrice">Test price</label><input id="exPrice" type="number" min="1" placeholder="$90"/><div class="hint" id="exNow"></div></div>
+      <div class="f"><label>Days</label><div class="pill-row" id="exDays"></div><div class="hint">None picked = every day.</div></div>
+      <div class="f"><label for="exStart">Starts</label><input id="exStart" type="date"/></div>
+      <div class="f"><label for="exEnd">Ends</label><input id="exEnd" type="date"/></div>
+    </div>
+    <button class="btn btn-full" id="exSaveBtn">Start price test</button>
+    <div class="notice" id="exMsg"></div>
   </div>
 </div>
 
@@ -716,7 +1014,7 @@ const DEFAULT_REMINDER = "Hi {first_name}, this is {business}. Reminder for your
 const OPEN = ['scheduled', 'confirmed', 'needs_review'];
 
 let biz = null;
-const S = { clients: [], appts: [], messages: [], review: [], rule: null, results: null, segments: {}, loaded: false };
+const S = { clients: [], appts: [], messages: [], review: [], rule: null, results: null, segments: {}, services: [], opps: null, exps: [], perf: null, perfRange: 'month', loaded: false };
 
 /* ---------- small helpers ---------- */
 const $ = id => document.getElementById(id);
@@ -747,7 +1045,9 @@ async function api(path, opts, fallback) {
   let data = null;
   try { data = await res.json(); } catch (e) { data = null; }
   if (!res.ok || (data && data.success === false)) {
-    throw new Error((data && data.error) || fallback || 'Something went wrong. Please try again.');
+    const err = new Error((data && data.error) || fallback || 'Something went wrong. Please try again.');
+    err.data = data;
+    throw err;
   }
   return data || {};
 }
@@ -813,7 +1113,7 @@ function shownAppt(clientId) {
 }
 const STATUS = {
   scheduled: ['Scheduled', 'wait'], confirmed: ['Confirmed', 'ok'], cancelled: ['Cancelled', 'no'],
-  completed: ['Completed', 'none'], needs_review: ['Needs review', 'rev']
+  completed: ['Completed', 'none'], needs_review: ['Needs review', 'rev'], no_show: ['No-show', 'no']
 };
 function apptTag(a) { const [t, cls] = STATUS[a.status] || ['Scheduled', 'wait']; return `<span class="tag ${cls}">${t}</span>`; }
 function customerTag(c) {
@@ -824,7 +1124,7 @@ function customerTag(c) {
 function reminderHours(a) { return Number(a.reminder_hours) > 0 ? Number(a.reminder_hours) : (Number(S.rule && S.rule.trigger_offset_hours) || 24); }
 function remindersOn() { return !!(S.rule && S.rule.is_active) && biz.send_mode !== 'manual'; }
 function reminderLine(a) {
-  if (a.status === 'cancelled' || a.status === 'completed') return '';
+  if (!OPEN.includes(a.status)) return '';
   if (a.reminder_status === 'sent') return `<div class="rem-line">Reminder sent ${esc(ago(a.reminder_sent_at))}</div>`;
   if (a.reminder_status === 'failed') return `<div class="rem-line bad">Reminder failed: ${esc(a.reminder_error || "the text couldn't be sent.")}</div>`;
   if (a.reminder_status === 'sending') return '<div class="rem-line">Reminder sending now</div>';
@@ -918,7 +1218,11 @@ async function refreshAll(first) {
     messages: api('/messages/' + id).then(d => { S.messages = d.messages || []; }),
     review: api('/review/' + id).then(d => { S.review = d.items || []; }),
     results: api('/results/' + id).then(d => { S.results = d.results; }),
-    segments: api('/segments/' + id).then(d => { S.segments = d.segments || {}; })
+    segments: api('/segments/' + id).then(d => { S.segments = d.segments || {}; }),
+    services: api('/services/' + id).then(d => { S.services = d.services || []; }),
+    opps: api('/opportunities/' + id).then(d => { S.opps = d; }),
+    exps: api('/experiments/' + id).then(d => { S.exps = d.experiments || []; }),
+    perf: loadPerf()
   };
   const out = await Promise.allSettled(Object.values(tasks));
   const failed = Object.keys(tasks).filter((k, i) => out[i].status === 'rejected');
@@ -945,8 +1249,10 @@ async function loadRule() {
 }
 
 function renderAll() {
-  renderHome(); renderClients(); renderSchedule(); renderHistory();
-  renderComposeList(); renderSegments(); renderResults();
+  renderHome(); renderClients(); renderCalendar(); renderSchedAlerts(); renderHistory();
+  renderComposeList(); renderSegments(); renderResults(); renderPerf();
+  renderOpps(); renderExperiments(); renderServices(); fillCalcServices();
+  if (S.panelId && $('apptPanel').classList.contains('on')) renderPanel();
   const n = S.review.length;
   $('reviewBadge').textContent = n; $('reviewBadge').style.display = n ? 'inline-block' : 'none';
   if (S.profileId && $('profileSheet').classList.contains('on')) renderProfile();
@@ -955,6 +1261,36 @@ function renderAll() {
 // Pick up new replies while the page is open.
 setInterval(() => { if (biz && document.visibilityState === 'visible' && !anySheetOpen()) refreshAll(); }, 60000);
 function anySheetOpen() { return !!document.querySelector('.sheet.on:not(#profileSheet)'); }
+
+/* ---------- services + time helpers ---------- */
+const activeServices = () => S.services.filter(s => !s.archived).sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+const serviceById = id => S.services.find(s => s.id === id);
+const METHOD_LABEL = { fixed: 'Fixed', starting_at: 'Starting at', hourly: 'Per hour', quote: 'Custom quote' };
+function priceText(s) {
+  if (s.pricing_method === 'quote' || s.price == null) return 'Custom quote';
+  if (s.pricing_method === 'starting_at') return 'From ' + money(s.price);
+  if (s.pricing_method === 'hourly') return money(s.price) + '/hr';
+  return money(s.price);
+}
+function apptMins(a) {
+  if (Number(a.duration_minutes) > 0) return Number(a.duration_minutes);
+  const s = a.service_id && serviceById(a.service_id);
+  return s && Number(s.duration_minutes) > 0 ? Number(s.duration_minutes) : 60;
+}
+const apptEnd = a => new Date(new Date(a.starts_at).getTime() + apptMins(a) * 60000);
+const ymd = d => { d = new Date(d); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`; };
+const hhmm = d => { d = new Date(d); return `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`; };
+const toMins = t => { const m = /^(\d{1,2}):(\d{2})/.exec(t || ''); return m ? (+m[1]) * 60 + (+m[2]) : null; };
+const fmtMins = m => { const d = new Date(2000, 0, 1, Math.floor(m / 60), m % 60); return d.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }); };
+function hoursSet() { return !!(biz.hours && Object.keys(biz.hours).length); }
+// Hours for a local date, or null if hours aren't set up. { closed } or { open, close, breaks }.
+function hoursOn(date) {
+  if (!hoursSet()) return null;
+  if ((biz.closures || []).includes(ymd(date))) return { closed: true, closure: true };
+  const h = biz.hours[String(new Date(date).getDay())];
+  if (!h || h.closed) return { closed: true };
+  return { open: toMins(h.open), close: toMins(h.close), breaks: (h.breaks || []).map(b => ({ start: toMins(b.start), end: toMins(b.end) })).filter(b => b.start != null && b.end > b.start) };
+}
 
 function ensureTimezone() {
   try {
@@ -971,6 +1307,7 @@ document.querySelectorAll('.nav-i[data-page]').forEach(btn => {
     btn.setAttribute('aria-current', 'page');
     document.querySelectorAll('.page').forEach(p => p.classList.remove('on'));
     $('page-' + btn.dataset.page).classList.add('on');
+    closePanelIfOpen();
     window.scrollTo(0, 0);
   };
 });
@@ -980,6 +1317,7 @@ function switchSubtab(group, tab) {
   row.parentElement.querySelectorAll(':scope > .subpage').forEach(p => p.classList.toggle('on', p.id === 'tab-' + tab));
   if (tab === 'cust-import') loadIntegrations();
 }
+function closePanelIfOpen() { if ($('apptPanel').classList.contains('on')) closePanel(); }
 document.querySelectorAll('.subtab-row').forEach(row => row.querySelectorAll('.subtab').forEach(btn => {
   btn.onclick = () => switchSubtab(row.dataset.group, btn.dataset.tab);
 }));
@@ -1034,7 +1372,7 @@ function renderHome() {
   const block = (title, n, inner) => `<div class="card"><div class="card-h"><div class="card-t">${title} <span class="count">(${n})</span></div></div>${n ? inner : '<div class="none-line">None right now.</div>'}</div>`;
   const apptRow = (a, extra) => {
     const c = clientById(a.client_id);
-    return `<div class="line click" onclick="openProfile('${a.client_id}')">
+    return `<div class="line click" onclick="openPanel('${a.id}')">
       <div><span class="time">${esc(extra === 'day' ? fmtDay(a.starts_at) + ', ' + fmtTime(a.starts_at) : fmtTime(a.starts_at))}</span>
       <button class="cust-name">${esc(c ? c.name : 'Customer')}</button>
       ${apptMeta(a) ? `<span class="muted"> · ${apptMeta(a)}</span>` : ''}</div>
@@ -1043,6 +1381,13 @@ function renderHome() {
 
   let html = '';
   html += block("Today's appointments", todays.length, todays.map(a => apptRow(a)).join(''));
+  const alerts = scheduleAlerts();
+  if (alerts.length) html += `<div class="card" style="border-color:#F3DDB0;background:var(--amber-soft)"><div class="card-h"><div class="card-t">Schedule alerts <span class="count">(${alerts.length})</span></div>
+    <button class="btn btn-ghost btn-sm" onclick="goToPage('schedule')">Open schedule</button></div>
+    ${alerts.slice(0, 4).map(x => `<div class="alert-row"><span>${esc(x.text)}</span><button class="link-btn" onclick="openPanel('${x.id}')">Open</button></div>`).join('')}</div>`;
+  const top = S.opps && S.opps.top ? S.opps.top : [];
+  if (top.length) html += `<div class="card"><div class="card-h"><div class="card-t">Opportunities</div><button class="btn btn-ghost btn-sm" onclick="goToPage('opportunities')">See all</button></div>
+    ${top.map(o => `<div class="line click" onclick="goToOpp('${esc(o.id)}')"><div><div style="font-weight:700">${esc(o.title)}</div><div class="muted small">${esc(o.suggestion)}</div></div><span class="link-btn">Details</span></div>`).join('')}</div>`;
   html += block('Needs review', S.review.length, S.review.slice(0, 10).map(i => `<div class="rev-item">
       <div style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap"><strong style="font-size:.86rem">${esc(i.clients ? i.clients.name : fmtPhone(i.to_phone))}</strong><span class="muted small">${esc(ago(i.created_at))}</span></div>
       <div class="rev-msg">“${esc(i.message)}”</div>
@@ -1141,8 +1486,10 @@ $('ncBtn').onclick = async () => {
 $('ncPhone').onkeydown = e => { if (e.key === 'Enter') $('ncBtn').click(); };
 
 /* ---------- appointment form ---------- */
-let editingAppt = null;
-function openAppt(clientId, apptId) {
+let editingAppt = null, apScope = 'one', lastBody = null;
+function openAppt(clientId, apptId, opts) {
+  opts = opts || {};
+  closePanelIfOpen();
   editingAppt = apptId ? S.appts.find(a => a.id === apptId) : null;
   const sel = $('apCustomer');
   const list = S.clients.filter(c => c.status !== 'opted_out').sort((a, b) => (a.name || '').localeCompare(b.name || ''));
@@ -1150,33 +1497,75 @@ function openAppt(clientId, apptId) {
     list.map(c => `<option value="${c.id}">${esc(c.name)} · ${esc(fmtPhone(c.phone))}</option>`).join('') +
     `<option value="__new">+ Add a new customer</option>`;
   sel.value = clientId || (list.length ? '' : '__new');
-  ['apNewName', 'apNewPhone', 'apDate', 'apTime', 'apService', 'apValue', 'apDuration', 'apCustomHours', 'apNotes'].forEach(id => $(id).value = '');
+  ['apNewName', 'apNewPhone', 'apDate', 'apTime', 'apService', 'apValue', 'apDuration', 'apCustomHours', 'apNotes', 'apEvery'].forEach(id => $(id).value = '');
+  $('apCount').value = 8; $('apRepeat').value = 'none';
   $('apTiming').value = 'default';
-  $('apTitle').textContent = editingAppt ? 'Change appointment' : 'Add appointment';
+  $('apTitle').textContent = editingAppt ? (opts.reschedule ? 'Reschedule appointment' : 'Change appointment') : 'Add appointment';
   $('apCustomerWrap').style.display = editingAppt ? 'none' : 'block';
+  // Services list (if the business has any).
+  const svcs = activeServices();
+  $('apServiceSel').innerHTML = `<option value="">Choose a service…</option>` +
+    svcs.map(s => `<option value="${s.id}">${esc(s.name)} · ${esc(priceText(s))}${s.duration_minutes ? ' · ' + s.duration_minutes + ' min' : ''}</option>`).join('') +
+    `<option value="__other">Something else</option>`;
+  $('apServiceSel').value = '';
   const a = editingAppt;
   if (a) {
     const d = new Date(a.starts_at);
-    $('apDate').value = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
-    $('apTime').value = `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
+    $('apDate').value = ymd(d); $('apTime').value = hhmm(d);
     $('apService').value = a.service || '';
+    if (a.service_id && serviceById(a.service_id)) $('apServiceSel').value = a.service_id;
+    else if (a.service) $('apServiceSel').value = '__other';
     $('apValue').value = a.value != null ? a.value : '';
     $('apDuration').value = a.duration_minutes || '';
     $('apNotes').value = a.notes || '';
     const h = Number(a.reminder_hours);
     if (h > 0) { if ([2, 24, 48].includes(h)) $('apTiming').value = String(h); else { $('apTiming').value = 'custom'; $('apCustomHours').value = h; } }
+  } else if (opts.date) {
+    $('apDate').value = ymd(opts.date);
   }
+  setScope('one');
+  $('apPriceHint').textContent = '';
   syncApptForm();
-  clearNote('apMsg');
+  clearNote('apMsg'); $('apConflict').innerHTML = '';
   openSheet('apptSheet');
-  setTimeout(() => (sel.value === '__new' ? $('apNewName') : (sel.value ? $('apDate') : sel)).focus(), 120);
+  setTimeout(() => (opts.reschedule ? $('apDate') : sel.value === '__new' ? $('apNewName') : (sel.value || editingAppt ? $('apDate') : sel)).focus(), 120);
 }
+function setScope(v) { apScope = v; document.querySelectorAll('#apScope .pill').forEach(p => p.setAttribute('aria-pressed', String(p.dataset.scope === v))); }
+document.querySelectorAll('#apScope .pill').forEach(p => p.onclick = () => setScope(p.dataset.scope));
 function syncApptForm() {
   $('apNewWrap').style.display = !editingAppt && $('apCustomer').value === '__new' ? 'block' : 'none';
   $('apCustomWrap').style.display = $('apTiming').value === 'custom' ? 'block' : 'none';
+  const hasSvcs = activeServices().length > 0;
+  $('apServiceSelWrap').style.display = hasSvcs ? '' : 'none';
+  $('apServiceWrap').style.display = !hasSvcs || $('apServiceSel').value === '__other' ? '' : 'none';
+  $('apRepeatWrap').style.display = editingAppt ? 'none' : '';
+  const r = $('apRepeat').value;
+  $('apCountWrap').style.display = r === 'none' ? 'none' : '';
+  $('apEveryWrap').style.display = r === 'custom' ? '' : 'none';
+  $('apScopeWrap').style.display = editingAppt && editingAppt.series_id ? '' : 'none';
 }
 $('apCustomer').addEventListener('change', syncApptForm);
 $('apTiming').addEventListener('change', syncApptForm);
+$('apRepeat').addEventListener('change', () => {
+  const r = $('apRepeat').value;
+  $('apCount').value = r === 'monthly' ? 6 : r === 'biweekly' ? 6 : 8;
+  syncApptForm();
+});
+// Picking a service fills its price and length. The owner can still change both.
+$('apServiceSel').addEventListener('change', () => {
+  const s = serviceById($('apServiceSel').value);
+  if (s) {
+    if (s.pricing_method !== 'quote' && s.price != null) $('apValue').value = s.price;
+    else $('apValue').value = '';
+    if (s.duration_minutes) $('apDuration').value = s.duration_minutes;
+    $('apPriceHint').textContent = s.pricing_method === 'quote' ? 'Custom quote: enter the price for this one.'
+      : s.pricing_method === 'starting_at' ? `Starts at ${money(s.price)}. Change it for this appointment if needed.`
+      : s.pricing_method === 'hourly' ? `${money(s.price)} an hour. Enter the total for this appointment.` : 'You can change the price for this appointment.';
+    const exp = S.exps.find(e => e.status === 'running' && e.service_id === s.id);
+    if (exp) $('apPriceHint').textContent += ` A price test is running: ${money(exp.test_price)} on test days.`;
+  } else $('apPriceHint').textContent = '';
+  syncApptForm();
+});
 
 function reminderSentence(rem, verb) {
   if (!rem || !rem.on) return `${verb}. Reminders are off, so no text will go out. Turn them on in Messages → Automatic reminders.`;
@@ -1184,79 +1573,286 @@ function reminderSentence(rem, verb) {
   return `${verb}. Reminder scheduled for ${fmtDay(rem.at)} at ${fmtTime(rem.at)}.`;
 }
 
-$('apSaveBtn').onclick = async () => {
-  clearNote('apMsg');
+function apptBody() {
   const who = $('apCustomer').value;
-  if (!editingAppt && !who) return note('apMsg', 'Choose a customer, or pick “Add a new customer”.');
-  if (!$('apDate').value || !$('apTime').value) return note('apMsg', 'Pick a date and a time.');
+  if (!editingAppt && !who) throw new Error('Choose a customer, or pick “Add a new customer”.');
+  if (!$('apDate').value || !$('apTime').value) throw new Error('Pick a date and a time.');
   const when = new Date(`${$('apDate').value}T${$('apTime').value}`);
-  if (isNaN(when)) return note('apMsg', 'Pick a date and a time.');
-  if (when <= new Date()) return note('apMsg', 'That time has already passed. Pick a future date and time.');
+  if (isNaN(when)) throw new Error('Pick a date and a time.');
+  if (when <= new Date()) throw new Error('That time has already passed. Pick a future date and time.');
   let hours = null;
   if ($('apTiming').value === 'custom') {
     hours = Number($('apCustomHours').value);
-    if (!(hours >= 1 && hours <= 336)) return note('apMsg', 'Enter how many hours before, from 1 to 336.');
+    if (!(hours >= 1 && hours <= 336)) throw new Error('Enter how many hours before, from 1 to 336.');
   } else if ($('apTiming').value !== 'default') hours = Number($('apTiming').value);
+  const svcSel = $('apServiceSel').value;
+  const svc = activeServices().length && svcSel && svcSel !== '__other' ? serviceById(svcSel) : null;
   const body = {
-    startsAt: when.toISOString(), service: $('apService').value.trim(),
+    startsAt: when.toISOString(),
+    service: svc ? svc.name : $('apService').value.trim(),
+    serviceId: svc ? svc.id : null,
     value: $('apValue').value === '' ? null : $('apValue').value,
     durationMinutes: $('apDuration').value === '' ? null : $('apDuration').value,
     reminderHours: hours, notes: $('apNotes').value.trim()
   };
+  if (!editingAppt && $('apRepeat').value !== 'none') {
+    const count = parseInt($('apCount').value, 10);
+    if (!(count >= 2 && count <= 52)) throw new Error('Choose between 2 and 52 appointments.');
+    body.recurrence = { freq: $('apRepeat').value, count };
+    if (body.recurrence.freq === 'custom') {
+      const every = parseInt($('apEvery').value, 10);
+      if (!(every >= 1)) throw new Error('Enter every how many days it repeats.');
+      body.recurrence.everyDays = every;
+    }
+  }
+  if (editingAppt && editingAppt.series_id && apScope === 'series') body.scope = 'series';
   if (!editingAppt && who === '__new') {
     const name = $('apNewName').value.trim(), phone = $('apNewPhone').value.trim();
-    if (!name || !phone) return note('apMsg', "Add the new customer's name and phone number.");
+    if (!name || !phone) throw new Error("Add the new customer's name and phone number.");
     body.newCustomer = { name, phone };
   } else if (!editingAppt) body.clientId = who;
+  return body;
+}
+
+function showConflict(err) {
+  const c = err.data;
+  const list = (c.conflicts || []).slice(0, 6).map(x => `<li>${c.conflicts.length > 1 ? `<strong>${esc(fmtWhen(x.startsAt))}:</strong> ` : ''}${esc(x.problems.join(' '))}</li>`).join('');
+  $('apConflict').innerHTML = `<div class="conflict"><strong>That time doesn't work.</strong><ul>${list}</ul>
+    ${c.conflicts.length > 6 ? `<div class="small" style="margin:-6px 0 8px">And ${c.conflicts.length - 6} more dates.</div>` : ''}
+    <div class="act-row">
+      ${c.suggestion ? `<button class="btn btn-sm" id="apUseSuggest">Use ${esc(fmtWhen(c.suggestion))}</button>` : ''}
+      <button class="btn btn-ghost btn-sm" id="apAnyway">Save anyway</button>
+    </div></div>`;
+  if (c.suggestion) $('apUseSuggest').onclick = () => {
+    $('apDate').value = ymd(c.suggestion); $('apTime').value = hhmm(c.suggestion);
+    $('apConflict').innerHTML = ''; $('apSaveBtn').click();
+  };
+  $('apAnyway').onclick = () => { $('apConflict').innerHTML = ''; saveAppt(true); };
+  setTimeout(() => $('apConflict').scrollIntoView({ block: 'nearest', behavior: 'smooth' }), 50);
+}
+
+async function saveAppt(override) {
+  clearNote('apMsg'); $('apConflict').innerHTML = '';
+  let body;
+  try { body = apptBody(); } catch (e) { return note('apMsg', e.message); }
+  if (override) body.override = true;
   try {
-    const d = await busy($('apSaveBtn'), () => editingAppt
-      ? api('/appointments/' + editingAppt.id, { method: 'PATCH', json: body }, "We couldn't save that appointment. Please try again.")
-      : api('/appointments', { json: Object.assign({ businessId: biz.id }, body) }, "We couldn't save that appointment. Please try again."));
-    const msg = reminderSentence(d.reminder, editingAppt ? 'Appointment changed' : 'Appointment added');
+    const d = await busy($('apSaveBtn'), () => apptRequest(body));
+    const n = d.appointments ? d.appointments.length : 1;
+    const verb = editingAppt ? (n > 1 ? `${n} appointments changed` : 'Appointment changed') : (n > 1 ? `${n} repeating appointments added` : 'Appointment added');
+    const msg = reminderSentence(d.reminder, verb);
     setTimeout(() => { closeSheet('apptSheet'); toast(msg); }, 700);
     if (d.client && !clientById(d.client.id)) S.clients.push(d.client);
-    const i = S.appts.findIndex(a => a.id === d.appointment.id);
-    if (i >= 0) S.appts[i] = d.appointment; else S.appts.push(d.appointment);
+    (d.appointments || [d.appointment]).forEach(ap => {
+      const i = S.appts.findIndex(a => a.id === ap.id);
+      if (i >= 0) S.appts[i] = ap; else S.appts.push(ap);
+    });
     renderAll();
     refreshAll();
-  } catch (e) { note('apMsg', e.message); }
-};
+  } catch (e) {
+    if (e.data && e.data.conflict) showConflict(e);
+    else note('apMsg', e.message);
+  }
+}
+function apptRequest(body) {
+  const fb = "We couldn't save that appointment. Please try again.";
+  return editingAppt
+    ? api('/appointments/' + editingAppt.id, { method: 'PATCH', json: body }, fb)
+    : api('/appointments', { json: Object.assign({ businessId: biz.id }, body) }, fb);
+}
+$('apSaveBtn').onclick = () => saveAppt(false);
 
-/* ---------- SCHEDULE ---------- */
-let schedRange = 'today';
-document.querySelectorAll('#schedSwitch button').forEach(b => b.onclick = () => {
-  schedRange = b.dataset.range;
-  document.querySelectorAll('#schedSwitch button').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
-  renderSchedule();
-});
-function renderSchedule() {
+/* ---------- SCHEDULE (calendar) ---------- */
+let calView = 'day', calDate = startOfDay(0);
+document.querySelectorAll('#calSwitch button').forEach(b => b.onclick = () => setCalView(b.dataset.view));
+function setCalView(v, date) {
+  calView = v; if (date) calDate = new Date(date);
+  document.querySelectorAll('#calSwitch button').forEach(x => x.setAttribute('aria-pressed', String(x.dataset.view === v)));
+  $('calSwitch').querySelector('[data-view="day"]').textContent = v === 'day' && dayKey(calDate) !== dayKey(new Date()) ? 'Day' : 'Today';
+  renderCalendar();
+}
+$('calPrev').onclick = () => moveCal(-1);
+$('calNext').onclick = () => moveCal(1);
+$('calToday').onclick = () => setCalView(calView, startOfDay(0));
+function moveCal(dir) {
+  const d = new Date(calDate);
+  if (calView === 'day') d.setDate(d.getDate() + dir);
+  else if (calView === 'week') d.setDate(d.getDate() + 7 * dir);
+  else { d.setDate(1); d.setMonth(d.getMonth() + dir); }
+  setCalView(calView, d);
+}
+const weekStart = d => { const x = new Date(d); x.setHours(0, 0, 0, 0); x.setDate(x.getDate() - x.getDay()); return x; };
+function apptsOn(date) {
+  const k = dayKey(date);
+  return S.appts.filter(a => dayKey(a.starts_at) === k).sort((a, b) => new Date(a.starts_at) - new Date(b.starts_at));
+}
+const CHIP = { scheduled: 'wait', confirmed: 'ok', cancelled: 'no', completed: 'none', needs_review: 'rev', no_show: 'ns' };
+function chip(a) {
+  const c = clientById(a.client_id);
+  return `<button class="chip ${CHIP[a.status] || ''}" onclick="event.stopPropagation();openPanel('${a.id}')" title="${esc((c ? c.name : 'Customer') + (a.service ? ' · ' + a.service : ''))}">
+    <span class="t">${esc(fmtTime(a.starts_at))}</span><span class="n">${esc(c ? c.name : 'Customer')}</span></button>`;
+}
+function hoursLine(date) {
+  const h = hoursOn(date);
+  if (!h) return '';
+  if (h.closed) return h.closure ? 'Closed (closed date)' : 'Closed';
+  return `Open ${fmtMins(h.open)} – ${fmtMins(h.close)}${h.breaks.length ? ` · break ${fmtMins(h.breaks[0].start)} – ${fmtMins(h.breaks[0].end)}` : ''}`;
+}
+function renderCalendar() {
   if (!S.loaded) return;
-  const box = $('schedBox');
-  if (S.failed.has('appts')) { box.innerHTML = `<div class="empty"><div class="empty-h">We couldn't load your schedule.</div><div class="empty-p">Please refresh the page.</div></div>`; return; }
-  const from = schedRange === 'tomorrow' ? startOfDay(1) : startOfDay(0);
-  const to = schedRange === 'today' ? startOfDay(1) : schedRange === 'tomorrow' ? startOfDay(2) : startOfDay(7);
-  $('schedLabel').textContent = schedRange === 'week'
-    ? `${fmtDay(from)} – ${fmtDay(new Date(to.getTime() - 1))}` : from.toLocaleDateString([], { weekday: 'long', month: 'long', day: 'numeric' });
-  const list = S.appts.filter(a => new Date(a.starts_at) >= from && new Date(a.starts_at) < to)
+  const box = $('calBox');
+  if (S.failed.has('appts')) { box.innerHTML = `<div class="card"><div class="empty"><div class="empty-h">We couldn't load your schedule.</div><div class="empty-p">Please refresh the page.</div><button class="btn btn-ghost btn-sm" onclick="refreshAll()">Try again</button></div></div>`; return; }
+  const todayK = dayKey(new Date());
+  if (calView === 'day') {
+    $('calLabel').textContent = calDate.toLocaleDateString([], { weekday: 'long', month: 'long', day: 'numeric' });
+    const list = apptsOn(calDate);
+    const hl = hoursLine(calDate);
+    const live = list.filter(a => a.status !== 'cancelled');
+    const summary = `${plural(live.length, 'appointment')}${live.length ? ' · ' + money(live.reduce((t, a) => t + apptValue(a), 0)) + ' booked' : ''}${hl ? ' · ' + hl : ''}`;
+    box.innerHTML = `<div class="card"><div class="card-d" style="margin:0 0 6px">${esc(summary)}</div>${list.length ? list.map(a => {
+      const c = clientById(a.client_id);
+      return `<div class="day-line ${a.status === 'cancelled' ? 'cx' : ''}" onclick="openPanel('${a.id}')">
+        <div class="tm">${esc(fmtTime(a.starts_at))}<span>to ${esc(fmtTime(apptEnd(a)))}</span></div>
+        <div style="flex:1;min-width:0"><button class="cust-name">${esc(c ? c.name : 'Customer')}</button>
+          <div class="muted small">${[a.service ? esc(a.service) : '', apptMins(a) + ' min', a.value != null ? money(a.value) : ''].filter(Boolean).join(' · ')}${a.series_id ? ' · repeats' : ''}</div></div>
+        <div>${apptTag(a)}</div></div>`;
+    }).join('') : `<div class="empty"><div class="empty-h">Nothing booked${dayKey(calDate) === todayK ? ' today' : ' this day'}.</div><button class="btn btn-sm" onclick="openAppt(null,null,{date:calDate})">Add appointment</button></div>`}</div>`;
+    return;
+  }
+  if (calView === 'week') {
+    const ws = weekStart(calDate);
+    const we = new Date(ws); we.setDate(we.getDate() + 6);
+    $('calLabel').textContent = `${fmtDay(ws)} – ${fmtDay(we)}`;
+    let html = '<div class="wk">';
+    for (let i = 0; i < 7; i++) {
+      const d = new Date(ws); d.setDate(d.getDate() + i);
+      const list = apptsOn(d), h = hoursOn(d);
+      const live = list.filter(a => a.status !== 'cancelled').length;
+      html += `<div class="wk-day ${dayKey(d) === todayK ? 'today' : ''} ${h && h.closed ? 'closed' : ''}">
+        <div class="wk-h" onclick="setCalView('day', new Date(${d.getTime()}))"><span><b>${esc(d.toLocaleDateString([], { weekday: 'short' }))}</b> ${d.getDate()}</span><span>${live || ''}</span></div>
+        ${list.map(chip).join('') || `<div class="muted small">${h && h.closed ? 'Closed' : ''}</div>`}</div>`;
+    }
+    box.innerHTML = html + '</div>';
+    return;
+  }
+  // month
+  const first = new Date(calDate.getFullYear(), calDate.getMonth(), 1);
+  $('calLabel').textContent = first.toLocaleDateString([], { month: 'long', year: 'numeric' });
+  const start = weekStart(first);
+  let html = '<div class="mo">' + ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(d => `<div class="mo-h">${d}</div>`).join('');
+  const d = new Date(start);
+  for (let i = 0; i < 42; i++) {
+    if (i === 35 && d.getMonth() !== first.getMonth()) break;
+    const list = apptsOn(d).filter(a => a.status !== 'cancelled');
+    html += `<div class="mo-c ${d.getMonth() !== first.getMonth() ? 'out' : ''} ${dayKey(d) === todayK ? 'today' : ''}" onclick="setCalView('day', new Date(${d.getTime()}))">
+      <span class="mo-d">${d.getDate()}</span>${list.slice(0, 3).map(chip).join('')}${list.length > 3 ? `<div class="mo-more">+${list.length - 3} more</div>` : ''}</div>`;
+    d.setDate(d.getDate() + 1);
+  }
+  box.innerHTML = html + '</div>';
+}
+
+// Problems in the next 14 days: double-bookings, and bookings when you're closed.
+function scheduleAlerts() {
+  const now = Date.now(), until = now + 14 * 86400000;
+  const cap = Math.max(1, parseInt(biz.capacity, 10) || 1);
+  const up = S.appts.filter(a => OPEN.includes(a.status) && new Date(a.starts_at) > now && new Date(a.starts_at) < until)
     .sort((a, b) => new Date(a.starts_at) - new Date(b.starts_at));
-  if (!S.appts.length) {
-    box.innerHTML = `<div class="empty"><div class="empty-h">No appointments yet.</div><div class="empty-p">Add an appointment and it shows up here, with its reminder.</div><button class="btn btn-sm" onclick="openAppt()">Add appointment</button></div>`;
-    return;
-  }
-  if (!list.length) {
-    box.innerHTML = `<div class="empty"><div class="empty-h">${schedRange === 'today' ? 'Nothing booked today.' : schedRange === 'tomorrow' ? 'Nothing booked tomorrow.' : 'Nothing booked this week.'}</div><button class="btn btn-sm" onclick="openAppt()">Add appointment</button></div>`;
-    return;
-  }
-  let html = '', last = '';
-  list.forEach(a => {
-    const k = dayKey(a.starts_at);
-    if (schedRange === 'week' && k !== last) { html += `<div class="day-h">${esc(dayLabel(a.starts_at))}</div>`; last = k; }
-    const c = clientById(a.client_id);
-    html += `<div class="line click" onclick="openProfile('${a.client_id}')" ${a.status === 'cancelled' ? 'style="opacity:.75"' : ''}>
-      <div><span class="time">${esc(fmtTime(a.starts_at))}</span><button class="cust-name">${esc(c ? c.name : 'Customer')}</button>
-      ${apptMeta(a) ? `<span class="muted"> · ${apptMeta(a)}</span>` : ''}</div><div>${apptTag(a)}</div></div>`;
+  const out = [];
+  const seen = new Set();
+  up.forEach(a => {
+    const s = new Date(a.starts_at).getTime(), e = apptEnd(a).getTime();
+    const over = up.filter(o => o.id !== a.id && new Date(o.starts_at).getTime() < e && apptEnd(o).getTime() > s);
+    if (over.length >= cap && !seen.has(a.id)) {
+      [a, ...over].forEach(x => seen.add(x.id));
+      const names = [a, ...over].slice(0, 3).map(x => (clientById(x.client_id) || {}).name || 'Customer');
+      out.push({ id: a.id, text: `${fmtWhen(a.starts_at)}: ${names.join(', ')} overlap.` });
+    }
+    const h = hoursOn(a.starts_at);
+    if (h && h.closed) out.push({ id: a.id, text: `${fmtWhen(a.starts_at)}: ${(clientById(a.client_id) || {}).name || 'A customer'} is booked on a day you're closed.` });
+    if (a.reminder_status === 'failed') out.push({ id: a.id, text: `${(clientById(a.client_id) || {}).name || 'A customer'}'s reminder for ${fmtWhen(a.starts_at)} didn't send.` });
   });
-  box.innerHTML = html;
+  return out;
+}
+function renderSchedAlerts() {
+  if (!S.loaded || S.failed.has('appts')) { $('schedAlerts').innerHTML = ''; return; }
+  const al = scheduleAlerts();
+  $('schedAlerts').innerHTML = al.length ? `<div class="card" style="margin-bottom:16px;border-color:#F3DDB0;background:var(--amber-soft)"><div class="card-t" style="margin-bottom:4px">Schedule alerts</div>
+    ${al.slice(0, 6).map(x => `<div class="alert-row"><span>${esc(x.text)}</span><button class="link-btn" onclick="openPanel('${x.id}')">Open</button></div>`).join('')}</div>` : '';
+}
+
+/* ---------- APPOINTMENT PANEL ---------- */
+function openPanel(id) {
+  S.panelId = id;
+  renderPanel();
+  $('panelBg').classList.add('on'); $('apptPanel').classList.add('on');
+}
+function closePanel() { S.panelId = null; $('panelBg').classList.remove('on'); $('apptPanel').classList.remove('on'); }
+function renderPanel() {
+  const a = S.appts.find(x => x.id === S.panelId);
+  if (!a) { $('apPanelBody').innerHTML = '<div class="none-line">This appointment was removed.</div>'; return; }
+  const c = clientById(a.client_id);
+  const started = new Date(a.starts_at) <= new Date();
+  const open = OPEN.includes(a.status);
+  const kv = (k, v) => `<div class="kv"><span>${k}</span><span>${v}</span></div>`;
+  let acts = '';
+  if (open && !started) {
+    acts = `<button class="btn" onclick="openAppt(null,'${a.id}')">Edit</button>
+      <button class="btn btn-ghost" onclick="openAppt(null,'${a.id}',{reschedule:true})">Reschedule</button>
+      <button class="btn btn-danger" onclick="panelCancel('${a.id}')">Cancel appointment</button>`;
+  } else if (started && (open || a.status === 'completed' || a.status === 'no_show')) {
+    acts = `${a.status !== 'completed' ? `<div id="doneBox"><button class="btn" style="width:100%" onclick="showDone('${a.id}')">Mark completed</button></div>` : ''}
+      ${a.status !== 'no_show' ? `<button class="btn btn-ghost" onclick="panelAction('${a.id}','no_show',this)">Mark no-show</button>` : ''}`;
+  } else if (a.status === 'cancelled') {
+    acts = c && c.status !== 'opted_out' ? `<button class="btn btn-ghost" onclick="openAppt('${a.client_id}')">Book again</button>` : '';
+  }
+  if (c) acts += `<button class="btn btn-ghost" onclick="closePanel();openProfile('${c.id}')">Open ${esc(firstName(c.name))}'s profile</button>`;
+  $('apPanelTitle').textContent = a.service || 'Appointment';
+  $('apPanelBody').innerHTML = `<div style="margin:6px 0 14px">${apptTag(a)}${a.series_id ? ' <span class="tag none">Repeats</span>' : ''}${a.experiment_id ? ' <span class="tag rev">Price test</span>' : ''}</div>
+    ${kv('Customer', c ? `<button class="link-btn" onclick="closePanel();openProfile('${c.id}')">${esc(c.name)}</button>` : 'Customer')}
+    ${c ? kv('Phone', esc(fmtPhone(c.phone))) : ''}
+    ${kv('Service', esc(a.service || '—'))}
+    ${kv('Date', esc(new Date(a.starts_at).toLocaleDateString([], { weekday: 'long', month: 'long', day: 'numeric' })))}
+    ${kv('Time', `${esc(fmtTime(a.starts_at))} – ${esc(fmtTime(apptEnd(a)))}`)}
+    ${kv('Length', apptMins(a) + ' min' + (a.duration_minutes ? '' : ' (estimated)'))}
+    ${a.actual_minutes ? kv('Actually took', a.actual_minutes + ' min') : ''}
+    ${kv('Price', a.value != null ? money(a.value) : '—')}
+    ${a.notes ? kv('Notes', esc(a.notes)) : ''}
+    ${reminderLine(a)}
+    ${a.reminder_status === 'failed' && open && !started ? `<button class="btn btn-ghost btn-sm" style="margin-top:8px" onclick="retryReminder('${a.id}', this)">Send reminder again</button>` : ''}
+    <div class="panel-acts">${acts}</div><div class="notice" id="panelMsg"></div>`;
+}
+function showDone(id) {
+  const a = S.appts.find(x => x.id === id);
+  $('doneBox').innerHTML = `<div class="f" style="margin:0 0 8px"><label for="doneMins">How long did it take? Optional, in minutes</label><input id="doneMins" type="number" min="1" max="720" value="${apptMins(a)}"/>
+    <div class="hint">Helps Dozfi spot services that run longer than planned.</div></div>
+    <button class="btn" style="width:100%" id="doneGo">Save as completed</button>`;
+  $('doneGo').onclick = () => panelAction(id, 'complete', $('doneGo'), { actualMinutes: $('doneMins').value });
+}
+async function panelAction(id, action, btn, extra) {
+  clearNote('panelMsg');
+  try {
+    const d = await busy(btn, () => api('/appointments/' + id, { method: 'PATCH', json: Object.assign({ action }, extra || {}) }, "We couldn't save that. Please try again."));
+    (d.appointments || [d.appointment]).forEach(ap => { const i = S.appts.findIndex(x => x.id === ap.id); if (i >= 0) S.appts[i] = ap; });
+    setTimeout(() => { renderAll(); refreshAll(); }, 500);
+  } catch (e) { note('panelMsg', e.message); }
+}
+function panelCancel(id) {
+  const a = S.appts.find(x => x.id === id), c = clientById(a.client_id);
+  if (!a.series_id) return cancelAppointment(a, c || { name: 'this customer' });
+  const later = S.appts.filter(x => x.series_id === a.series_id && OPEN.includes(x.status) && new Date(x.starts_at) >= new Date(a.starts_at)).length;
+  $('scTitle').textContent = `Cancel ${firstName(c ? c.name : '')}'s repeating appointment?`.replace('  ', ' ');
+  $('scBody').textContent = `This one is on ${fmtWhen(a.starts_at)}. ${later > 1 ? `There are ${later - 1} more after it in the series.` : ''} They won't get reminders for cancelled appointments.`;
+  clearNote('scMsg');
+  const go = async (scope, btn) => {
+    try {
+      const d = await busy(btn, () => api('/appointments/' + id, { method: 'PATCH', json: { action: 'cancel', scope } }, "We couldn't cancel that. Please try again."), { doing: 'Cancelling…', done: '✓ Cancelled' });
+      (d.appointments || []).forEach(ap => { const i = S.appts.findIndex(x => x.id === ap.id); if (i >= 0) S.appts[i] = ap; });
+      setTimeout(() => { closeSheet('scopeSheet'); toast(`${plural(d.updated || 1, 'appointment')} cancelled.`); renderAll(); refreshAll(); }, 600);
+    } catch (e) { note('scMsg', e.message); }
+  };
+  $('scOne').onclick = () => go('one', $('scOne'));
+  $('scAll').onclick = () => go('series', $('scAll'));
+  openSheet('scopeSheet');
 }
 
 /* ---------- CUSTOMER PROFILE ---------- */
@@ -1314,7 +1910,7 @@ function renderProfile() {
     $('pfChangeBtn').style.display = a ? '' : 'none';
     $('pfCancelBtn').style.display = a ? '' : 'none';
     $('pfChangeBtn').onclick = () => { closeSheet('profileSheet'); openAppt(c.id, a.id); };
-    $('pfCancelBtn').onclick = () => cancelAppointment(a, c);
+    $('pfCancelBtn').onclick = () => panelCancel(a.id);
   }
   $('pfRemoveBtn').onclick = () => removeClient(c);
   if (S.profileMsgs && S.profileMsgsFor === c.id) renderConvo();
@@ -1561,8 +2157,7 @@ function renderResults() {
   const box = $('resultsBody');
   const r = S.results;
   if (!r) { box.innerHTML = `<div class="card"><div class="empty"><div class="empty-h">We couldn't load your results.</div><div class="empty-p">Please refresh the page.</div></div></div>`; return; }
-  const month = new Date().toLocaleDateString([], { month: 'long' });
-  $('resultsSub').textContent = `${month} so far. Every number is counted from real reminders and replies. Nothing is estimated.`;
+  $('resultsSub').textContent = 'Every number is counted from your real appointments, reminders and replies. Nothing is estimated.';
   if (!r.remindersSent && !r.confirmed && !r.cancelled) {
     box.innerHTML = `<div class="card"><div class="empty"><div class="empty-h">No reminder data yet.</div><div class="empty-p">Results appear after reminders are sent and customers reply.</div></div></div>`;
     return;
@@ -1577,6 +2172,348 @@ function renderResults() {
     ${card('Appointment value cancelled', money(r.valueCancelled), 'v-red', r.missingValues ? 'Add values to see dollars.' : 'Total value of cancelled appointments.')}
   </div>`;
 }
+
+/* ---------- OPPORTUNITIES ---------- */
+const OPP_BOX = { pricing: 'oppPricing', demand: 'oppDemand', retention: 'oppRetention', costs: 'oppCosts' };
+S.oppById = {};
+const domId = id => 'opp-' + String(id).replace(/[^a-zA-Z0-9-]/g, '_');
+function oppActionLabel(a) {
+  if (!a) return '';
+  return { experiment: 'Start a price test', offer: 'Write an offer', rebook: 'Send a rebooking text', services: 'Open Services & pricing',
+    service: 'Open this service', reminders: 'Change reminder timing', availability: 'Review your hours' }[a.kind] || '';
+}
+function oppCard(o) {
+  S.oppById[o.id] = o;
+  const label = oppActionLabel(o.action);
+  return `<div class="opp" id="${domId(o.id)}"><div class="opp-type">${esc(o.type)}</div>
+    <div class="opp-t">${esc(o.title)}</div>${o.subtitle ? `<div class="card-d" style="margin:0">${esc(o.subtitle)}</div>` : ''}
+    <div class="ev">${(o.evidence || []).map(e => `<div><b>${esc(e.value)}</b>${esc(e.label)}</div>`).join('')}</div>
+    <div class="opp-s">${esc(o.suggestion)}</div>
+    <details><summary>Why Dozfi is showing this</summary><div class="opp-why" style="margin-top:6px">${esc(o.why)}</div></details>
+    ${label ? `<div class="act-row" style="margin-top:14px"><button class="btn btn-sm" onclick="runOpp('${esc(o.id)}')">${esc(label)}</button></div>`
+      : (o.action === null && o.type === 'Busy-day pricing' ? '<div class="card-d" style="margin-top:12px">A price test is already running for this service.</div>' : '')}</div>`;
+}
+function renderOpps() {
+  if (!S.loaded) return;
+  const o = S.opps;
+  if (!o) {
+    $('oppLocked').innerHTML = '';
+    Object.values(OPP_BOX).forEach(id => $(id).innerHTML = `<div class="card"><div class="empty"><div class="empty-h">We couldn't load your opportunities.</div><div class="empty-p">Please refresh the page.</div><button class="btn btn-ghost btn-sm" onclick="refreshAll()">Try again</button></div></div>`);
+    return;
+  }
+  const lockBtn = { hours: `<button class="btn btn-sm" onclick="goToPage('settings','settings','set-hours')">Set your hours</button>`,
+    services: `<button class="btn btn-sm" onclick="goToPage('settings','settings','set-services')">Add services</button>`, history: '' };
+  $('oppLocked').innerHTML = o.locked && o.locked.length ? `<div class="banner"><div class="banner-t">More ideas unlock as Dozfi learns your business</div>
+    ${o.locked.map(l => `<div class="alert-row" style="border-color:#D9D4FC"><span class="banner-p">${esc(l.text)}</span>${lockBtn[l.kind] || ''}</div>`).join('')}</div>` : '';
+  for (const [k, box] of Object.entries(OPP_BOX)) {
+    const list = k === 'retention' ? o.retention : o[k];
+    $('oc-' + k).textContent = o.counts[k] ? `(${o.counts[k]})` : '';
+    const more = k === 'retention' && o.counts.retention > list.length ? `<div class="card-d" style="margin-top:10px">Showing the ${list.length} most overdue of ${o.counts.retention}.</div>` : '';
+    $(box).innerHTML = list.length ? list.map(oppCard).join('') + more
+      : `<div class="card"><div class="empty"><div class="empty-h">Nothing to suggest here right now.</div><div class="empty-p">${{
+        pricing: 'Dozfi looks for consistently busy days, services booked together, and seasonal patterns.',
+        demand: 'Dozfi looks for slow times, short gaps, days with more cancellations, and services that run long.',
+        retention: 'Dozfi looks for regular customers who are past their usual time to book. Customers who opted out are never included.',
+        costs: 'Add materials and labor costs to your services to see which ones leave little after direct costs.' }[k]}</div></div></div>`;
+  }
+}
+function goToOpp(id) {
+  const o = S.oppById[id] || (S.opps && S.opps.top || []).find(x => x.id === id);
+  if (!o) return goToPage('opportunities');
+  const cat = ['pricing', 'demand', 'costs'].find(k => (S.opps[k] || []).some(x => x.id === id)) || 'retention';
+  goToPage('opportunities', 'opps', 'opp-' + cat);
+  setTimeout(() => { const el = $(domId(id)); if (el) { el.scrollIntoView({ block: 'center' }); const d = el.querySelector('details'); if (d) d.open = true; } }, 120);
+}
+function runOpp(id) {
+  const o = S.oppById[id]; if (!o || !o.action) return;
+  const a = o.action;
+  if (a.kind === 'experiment') return openExperiment({ serviceId: a.serviceId, testPrice: a.testPrice, weekdays: a.weekdays });
+  if (a.kind === 'offer') { goToPage('messages', 'messages', 'msg-send'); $('composeText').value = a.text; toast('Edit the offer if you like, pick who gets it, then press Send.'); return; }
+  if (a.kind === 'rebook') {
+    openProfile(a.clientId, true);
+    setTimeout(() => { if ($('pfReply')) $('pfReply').value = a.text; }, 60);
+    return;
+  }
+  if (a.kind === 'services') return goToPage('settings', 'settings', 'set-services');
+  if (a.kind === 'service') { goToPage('settings', 'settings', 'set-services'); return openService(a.serviceId); }
+  if (a.kind === 'reminders') return goToPage('messages', 'messages', 'msg-auto');
+  if (a.kind === 'availability') return goToPage('settings', 'settings', 'set-hours');
+}
+
+/* ---------- PRICE TESTS ---------- */
+const DAY_SHORT = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+const fmtDate = k => new Date(k + 'T12:00:00').toLocaleDateString([], { month: 'short', day: 'numeric' });
+function renderExperiments() {
+  if (!S.loaded) return;
+  const box = $('expBox');
+  if (S.failed.has('exps')) { box.innerHTML = `<div class="none-line">We couldn't load your price tests. Please refresh.</div>`; return; }
+  if (!S.exps.length) { box.innerHTML = '<div class="none-line">No price tests yet.</div>'; return; }
+  box.innerHTML = S.exps.map(e => {
+    const r = e.results || {}, dur = r.during || {}, bef = r.before || {};
+    const days = Array.isArray(e.weekdays) && e.weekdays.length ? e.weekdays.map(d => DAY_SHORT[d] + 's').join(', ') : 'Every day';
+    return `<div class="appt-box" style="margin-bottom:10px"><div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:flex-start">
+      <div><div class="appt-when">${esc(e.service_name || 'Service')}: ${money(e.original_price)} → ${money(e.test_price)}</div>
+      <div class="appt-meta">${esc(days)} · ${esc(fmtDate(e.starts_on))} – ${esc(fmtDate(e.ends_on))}</div></div>
+      <span class="tag ${e.status === 'running' ? 'ok' : 'none'}">${e.status === 'running' ? 'Running' : 'Ended'}</span></div>
+      ${r.during ? `<table class="tbl" style="margin-top:10px"><thead><tr><th></th><th>Bookings</th><th>Booked value</th><th>Cancelled</th></tr></thead><tbody>
+        <tr><td class="muted">${r.days} days before</td><td>${bef.bookings}</td><td>${money(bef.bookedValue)}</td><td>${bef.cancellations}</td></tr>
+        <tr><td class="muted">During the test</td><td>${dur.bookings}</td><td>${money(dur.bookedValue)}</td><td>${dur.cancellations}</td></tr></tbody></table>
+        <div style="font-size:.85rem;margin-top:8px">${esc(r.summary)}</div><div class="card-d">${esc(r.note)}</div>` : ''}
+      ${e.status === 'running' ? `<button class="btn btn-ghost btn-sm" style="margin-top:10px" onclick="endExperiment('${e.id}', this)">End test</button>` : ''}</div>`;
+  }).join('');
+}
+let exDays = new Set();
+function openExperiment(pre) {
+  pre = pre || {};
+  const svcs = activeServices().filter(s => s.price > 0 && s.pricing_method !== 'quote');
+  if (!svcs.length) { goToPage('settings', 'settings', 'set-services'); return toast('Add a service with a price first. Then you can test a new price.'); }
+  $('exService').innerHTML = svcs.map(s => `<option value="${s.id}">${esc(s.name)} · ${esc(priceText(s))}</option>`).join('');
+  $('exService').value = pre.serviceId && svcs.some(s => s.id === pre.serviceId) ? pre.serviceId : svcs[0].id;
+  $('exPrice').value = pre.testPrice || '';
+  exDays = new Set(pre.weekdays || []);
+  $('exDays').innerHTML = DAY_SHORT.map((d, i) => `<button class="pill" style="padding:7px 10px" data-d="${i}" aria-pressed="${exDays.has(i)}">${d}</button>`).join('');
+  $('exDays').querySelectorAll('.pill').forEach(p => p.onclick = () => { const d = +p.dataset.d; exDays.has(d) ? exDays.delete(d) : exDays.add(d); p.setAttribute('aria-pressed', String(exDays.has(d))); });
+  const end = new Date(); end.setDate(end.getDate() + 27);
+  $('exStart').value = ymd(new Date()); $('exEnd').value = ymd(end);
+  syncExNow(); clearNote('exMsg');
+  openSheet('expSheet');
+}
+function syncExNow() { const s = serviceById($('exService').value); $('exNow').textContent = s ? `Now ${priceText(s)}.` : ''; }
+$('exService').addEventListener('change', syncExNow);
+$('exSaveBtn').onclick = async () => {
+  clearNote('exMsg');
+  const price = Number($('exPrice').value);
+  if (!(price > 0)) return note('exMsg', 'Enter the test price in dollars.');
+  if (!$('exStart').value || !$('exEnd').value || $('exEnd').value < $('exStart').value) return note('exMsg', 'Choose a start date and an end date after it.');
+  try {
+    await busy($('exSaveBtn'), () => api('/experiments', { json: { businessId: biz.id, serviceId: $('exService').value, testPrice: price, weekdays: [...exDays], startsOn: $('exStart').value, endsOn: $('exEnd').value } }, "We couldn't start that price test. Please try again."), { doing: 'Starting…', done: '✓ Started' });
+    setTimeout(() => { closeSheet('expSheet'); goToPage('opportunities', 'opps', 'opp-pricing'); toast('Price test started. New bookings on test days get the test price.'); }, 700);
+    refreshAll();
+  } catch (e) { note('exMsg', e.message); }
+};
+function endExperiment(id, btn) {
+  askConfirm('End this price test?', 'New bookings go back to the regular price. Appointments already booked keep their price.', 'Yes, end it', async b => {
+    await busy(b, () => api('/experiments/' + id, { method: 'PATCH', json: {} }, "We couldn't end that price test. Please try again."), { doing: 'Ending…', done: '✓ Ended' });
+    setTimeout(() => { closeSheet('confirmSheet'); refreshAll(); }, 600);
+  });
+}
+
+/* ---------- RESULTS: business performance ---------- */
+function loadPerf() { return api('/performance/' + biz.id + '?range=' + S.perfRange).then(d => { S.perf = d; }); }
+document.querySelectorAll('#perfSwitch button').forEach(b => b.onclick = async () => {
+  S.perfRange = b.dataset.range;
+  document.querySelectorAll('#perfSwitch button').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+  $('perfBody').innerHTML = '<div class="loading"><span class="spin"></span> Loading…</div>';
+  try { await loadPerf(); S.failed.delete('perf'); } catch (e) { S.failed.add('perf'); }
+  renderPerf();
+});
+function renderPerf() {
+  if (!S.loaded) return;
+  const box = $('perfBody');
+  if (S.failed.has('perf') || !S.perf) { box.innerHTML = `<div class="card"><div class="empty"><div class="empty-h">We couldn't load these numbers.</div><div class="empty-p">Please refresh the page.</div></div></div>`; return; }
+  const p = S.perf.performance;
+  const span = `${fmtDate(S.perf.from)} – ${fmtDate(S.perf.to)}`;
+  if (!p.bookings && !p.cancellations && !p.noShows) {
+    box.innerHTML = `<div class="card"><div class="empty"><div class="empty-h">No appointments ${esc(span)}.</div><div class="empty-p">These numbers fill in as appointments happen.</div></div></div>`;
+    return;
+  }
+  const card = (label, value, cls, noteText) => `<div class="metric"><div class="metric-l">${label}</div><div class="metric-v ${cls}">${value}</div><div class="metric-n">${noteText}</div></div>`;
+  const maxW = Math.max(1, ...p.byWeekday.map(w => w.count));
+  const order = [1, 2, 3, 4, 5, 6, 0];
+  box.innerHTML = `<div class="card-d" style="margin:0 0 10px">${esc(span)}</div><div class="metrics">
+    ${card('Booked value', money(p.bookedValue), 'v-purple', `${plural(p.bookings, 'appointment')} that weren't cancelled. This is what was booked, not profit.`)}
+    ${card('Completed', money(p.completedValue), 'v-green', `${plural(p.completedCount, 'appointment')} marked completed.`)}
+    ${card('Confirmation rate', p.confirmationRate == null ? '—' : p.confirmationRate + '%', 'v-green', p.confirmationRate == null ? 'Shows once reminders go out.' : 'Of reminded appointments, the share confirmed by reply.')}
+    ${card('Cancellations', p.cancellations, 'v-red', 'Cancelled by you or the customer.')}
+    ${card('No-shows', p.noShows, 'v-red', 'Appointments you marked as no-show.')}
+    ${card('Schedule filled', p.utilization == null ? '—' : p.utilization + '%', 'v-amber', p.hoursSet ? 'Booked appointment time out of the time you were open.' : `<button class="link-btn" onclick="goToPage('settings','settings','set-hours')">Set your hours</button> to see this.`)}
+  </div>
+  <div class="two" style="margin-top:16px;gap:16px">
+    <div class="card" style="margin:0"><div class="card-t" style="margin-bottom:12px">Appointments by day</div><div class="bars">
+      ${order.map(i => { const w = p.byWeekday[i]; return `<div class="bar-r"><span class="muted">${w.day}</span><div class="bar-t"><div class="bar-f" style="width:${Math.round(w.count / maxW * 100)}%"></div></div><span style="text-align:right;font-weight:700">${w.count}</span></div>`; }).join('')}</div></div>
+    <div class="card" style="margin:0"><div class="card-t" style="margin-bottom:8px">By service</div>
+      ${p.byService.length ? `<table class="tbl"><thead><tr><th>Service</th><th>Booked</th><th>Value</th><th>Cancelled</th></tr></thead><tbody>
+        ${p.byService.slice(0, 12).map(r => `<tr><td>${esc(r.name)}</td><td>${r.count}</td><td>${money(r.value)}</td><td>${r.cancelled}</td></tr>`).join('')}</tbody></table>` : '<div class="none-line">No services yet.</div>'}</div>
+  </div>`;
+}
+
+/* ---------- RESULTS: what a service leaves you ---------- */
+function fillCalcServices() {
+  const cur = $('ccService').value;
+  const svcs = activeServices().filter(s => s.price > 0);
+  $('ccService').innerHTML = '<option value="">Type your own numbers</option>' + svcs.map(s => `<option value="${s.id}">${esc(s.name)}</option>`).join('');
+  if (svcs.some(s => s.id === cur)) $('ccService').value = cur;
+  renderCalc();
+}
+$('ccService').addEventListener('change', () => {
+  const s = serviceById($('ccService').value);
+  if (s) { $('ccPrice').value = s.price || ''; $('ccMat').value = s.material_cost || ''; $('ccLabor').value = s.labor_cost || ''; }
+  renderCalc();
+});
+['ccPrice', 'ccMat', 'ccLabor'].forEach(id => $(id).addEventListener('input', renderCalc));
+function renderCalc() {
+  const price = Number($('ccPrice').value), mat = Number($('ccMat').value) || 0, labor = Number($('ccLabor').value) || 0;
+  if (!(price > 0)) { $('ccOut').innerHTML = '<div class="card-d" style="margin:0">Enter a price to see what it leaves after direct costs.</div>'; return; }
+  const rate = Number(biz.tax_rate) || 0;
+  const inclusive = biz.tax_mode === 'inclusive' && rate > 0;
+  const base = inclusive ? price / (1 + rate / 100) : price;
+  const left = base - mat - labor;
+  const pctLeft = Math.round(left / base * 100);
+  const exp = Number(biz.monthly_expenses) || 0;
+  $('ccOut').innerHTML = `<div class="calc-out" style="${left < 0 ? 'background:var(--red-soft)' : ''}">
+    <div class="small muted">Left after materials and labor, per appointment</div>
+    <div class="calc-big" style="${left < 0 ? 'color:var(--red)' : ''}">${left < 0 ? '−' : ''}${money(Math.abs(left))} <span style="font-size:.9rem;font-weight:700">(${pctLeft}% of the price${inclusive ? ' before tax' : ''})</span></div>
+    ${inclusive ? `<div class="small" style="margin-top:4px">Your prices include ${rate}% tax, so ${money(price)} is ${money(base)} before tax.</div>` : ''}
+    ${exp && left > 0 ? `<div class="small" style="margin-top:4px">About ${Math.ceil(exp / left)} appointments like this would cover your ${money(exp)} of monthly expenses.</div>` : ''}
+    <div class="small" style="margin-top:6px;font-weight:700">This is not net profit. Rent, card fees and your other costs still come out of it.</div></div>`;
+}
+
+/* ---------- SETTINGS: services ---------- */
+function renderServices() {
+  if (!S.loaded) return;
+  const box = $('svcBox');
+  if (S.failed.has('services')) { box.innerHTML = `<div class="none-line">We couldn't load your services. Please refresh the page.</div>`; return; }
+  const showArch = $('svcShowArchived').checked;
+  const list = S.services.filter(s => showArch || !s.archived).sort((a, b) => (a.category || '').localeCompare(b.category || '') || (a.name || '').localeCompare(b.name || ''));
+  if (!list.length) {
+    box.innerHTML = `<div class="empty"><div class="empty-h">No services yet.</div><div class="empty-p">Add what you offer and what it costs. Then booking an appointment fills in the price and length for you.</div>
+      <div class="act-row" style="justify-content:center"><button class="btn btn-sm" onclick="openService()">Add service</button><button class="btn btn-ghost btn-sm" onclick="startServiceImport()">Import from a file</button></div></div>`;
+    return;
+  }
+  box.innerHTML = `<table class="tbl stack"><thead><tr><th>Service</th><th>Price</th><th>Length</th><th></th></tr></thead><tbody>
+    ${list.map(s => `<tr style="${s.archived ? 'opacity:.55' : ''}">
+      <td><button class="cust-name" onclick="openService('${s.id}')">${esc(s.name)}</button>${s.category ? `<div class="cust-phone">${esc(s.category)}</div>` : ''}${s.archived ? ' <span class="tag none">Archived</span>' : ''}</td>
+      <td>${esc(priceText(s))}</td><td>${s.duration_minutes ? s.duration_minutes + ' min' : '<span class="muted">—</span>'}</td>
+      <td><div class="row-acts"><button class="link-btn" onclick="openService('${s.id}')">Edit</button>
+        <button class="link-btn quiet" onclick="archiveService('${s.id}', ${!s.archived})">${s.archived ? 'Restore' : 'Archive'}</button></div></td></tr>`).join('')}</tbody></table>`;
+}
+$('svcShowArchived').addEventListener('change', renderServices);
+let editingSvc = null;
+function openService(id) {
+  editingSvc = id ? serviceById(id) : null;
+  const s = editingSvc || {};
+  $('svTitle').textContent = editingSvc ? 'Edit service' : 'Add service';
+  $('svName').value = s.name || ''; $('svCategory').value = s.category || '';
+  $('svMethod').value = s.pricing_method || 'fixed';
+  $('svPrice').value = s.price != null ? s.price : ''; $('svDuration').value = s.duration_minutes || '';
+  $('svMat').value = s.material_cost != null ? s.material_cost : ''; $('svLabor').value = s.labor_cost != null ? s.labor_cost : '';
+  $('svPrep').value = s.prep_minutes != null ? s.prep_minutes : ''; $('svTaxable').checked = s.taxable !== false;
+  $('svArchiveBtn').style.display = editingSvc ? '' : 'none';
+  $('svArchiveBtn').textContent = s.archived ? 'Restore service' : 'Archive service';
+  syncSvcForm(); clearNote('svMsg');
+  openSheet('serviceSheet');
+  setTimeout(() => $('svName').focus(), 120);
+}
+function syncSvcForm() {
+  const m = $('svMethod').value;
+  $('svPriceWrap').style.display = m === 'quote' ? 'none' : '';
+  $('svPriceLabel').textContent = m === 'starting_at' ? 'Starting price' : m === 'hourly' ? 'Price per hour' : 'Price';
+}
+$('svMethod').addEventListener('change', syncSvcForm);
+$('svSaveBtn').onclick = async () => {
+  clearNote('svMsg');
+  const name = $('svName').value.trim();
+  if (!name) return note('svMsg', 'Give the service a name.');
+  const m = $('svMethod').value;
+  if (m !== 'quote' && $('svPrice').value === '') return note('svMsg', 'Add a price, or choose "Custom quote".');
+  const body = { name, category: $('svCategory').value.trim(), pricingMethod: m, price: m === 'quote' ? null : $('svPrice').value,
+    durationMinutes: $('svDuration').value, materialCost: $('svMat').value, laborCost: $('svLabor').value, prepMinutes: $('svPrep').value, taxable: $('svTaxable').checked };
+  try {
+    const d = await busy($('svSaveBtn'), () => editingSvc
+      ? api('/services/' + editingSvc.id, { method: 'PATCH', json: body }, "We couldn't save that service. Please try again.")
+      : api('/services', { json: Object.assign({ businessId: biz.id }, body) }, "We couldn't save that service. Please try again."));
+    const i = S.services.findIndex(s => s.id === d.service.id);
+    if (i >= 0) S.services[i] = d.service; else S.services.push(d.service);
+    renderAll();
+    setTimeout(() => closeSheet('serviceSheet'), 700);
+  } catch (e) { note('svMsg', e.message); }
+};
+$('svArchiveBtn').onclick = () => editingSvc && archiveService(editingSvc.id, !editingSvc.archived, true);
+async function archiveService(id, archived, fromSheet) {
+  try {
+    const d = await api('/services/' + id, { method: 'PATCH', json: { archived } }, "We couldn't update that service. Please try again.");
+    const i = S.services.findIndex(s => s.id === id); if (i >= 0) S.services[i] = d.service;
+    if (fromSheet) closeSheet('serviceSheet');
+    toast(archived ? `${d.service.name} archived. It won't show when booking. Past appointments keep it.` : `${d.service.name} restored.`);
+    renderAll();
+  } catch (e) { fromSheet ? note('svMsg', e.message) : toast(e.message); }
+}
+function startServiceImport() {
+  goToPage('customers', 'customers', 'cust-import');
+  document.querySelector('#impChoice .choice[data-mode="services"]').click();
+}
+
+/* ---------- SETTINGS: availability ---------- */
+const DAY_LONG = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+function renderHoursForm() {
+  const saved = hoursSet() ? biz.hours : null;
+  const order = [1, 2, 3, 4, 5, 6, 0];
+  $('hoursBox').innerHTML = order.map(d => {
+    const h = saved ? saved[d] || saved[String(d)] : (d >= 1 && d <= 5 ? { open: '09:00', close: '17:00' } : { closed: true });
+    const open = h && !h.closed;
+    const b = (h && h.breaks && h.breaks[0]) || {};
+    return `<div class="hours-row" data-day="${d}">
+      <label class="hr-day" style="display:flex;gap:8px;align-items:center;font-weight:700;cursor:pointer"><input type="checkbox" class="hr-open" ${open ? 'checked' : ''} style="accent-color:var(--purple)"/> ${DAY_LONG[d]}</label>
+      <div class="hr-lbl">Open – close</div>
+      <input type="time" class="hr-o" value="${open ? esc(h.open) : '09:00'}" aria-label="${DAY_LONG[d]} opens" ${open ? '' : 'disabled'}/>
+      <input type="time" class="hr-c" value="${open ? esc(h.close) : '17:00'}" aria-label="${DAY_LONG[d]} closes" ${open ? '' : 'disabled'}/>
+      <div class="hr-lbl">Break, optional</div>
+      <input type="time" class="hr-bs" value="${esc(b.start || '')}" aria-label="${DAY_LONG[d]} break starts" ${open ? '' : 'disabled'}/>
+      <input type="time" class="hr-be" value="${esc(b.end || '')}" aria-label="${DAY_LONG[d]} break ends" ${open ? '' : 'disabled'}/></div>`;
+  }).join('') + (saved ? '' : '<div class="card-d" style="margin-top:10px">Not saved yet. Check the days and times, then press Save availability.</div>');
+  $('hoursBox').querySelectorAll('.hr-open').forEach(cb => cb.onchange = () => {
+    cb.closest('.hours-row').querySelectorAll('input[type=time]').forEach(i => i.disabled = !cb.checked);
+  });
+  $('stBuffer').value = String(biz.buffer_minutes || 0);
+  if (!$('stBuffer').value) $('stBuffer').value = '0';
+  $('stCapacity').value = biz.capacity || 1;
+  renderClosures();
+}
+function renderClosures() {
+  const list = (biz.closures || []).filter(d => d >= ymd(new Date())).sort();
+  $('closeList').innerHTML = list.length ? list.map(d => `<span class="dchip">${esc(new Date(d + 'T12:00:00').toLocaleDateString([], { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' }))}<button aria-label="Remove" onclick="removeClosure('${d}')">×</button></span>`).join('')
+    : '<div class="none-line">No closed dates coming up.</div>';
+}
+async function saveClosures(list, msg) {
+  try {
+    const d = await api('/business/' + biz.id, { method: 'PATCH', json: { closures: list } }, "We couldn't save that date. Please try again.");
+    biz = d.business; saveBiz(); renderClosures(); renderAll(); toast(msg);
+  } catch (e) { note('hoursMsg', e.message); }
+}
+$('closeAddBtn').onclick = () => {
+  const v = $('closeDate').value;
+  if (!v) return note('hoursMsg', 'Pick a date to close.');
+  if (v < ymd(new Date())) return note('hoursMsg', 'That date has already passed.');
+  clearNote('hoursMsg');
+  $('closeDate').value = '';
+  const booked = S.appts.filter(a => OPEN.includes(a.status) && ymd(a.starts_at) === v).length;
+  saveClosures([...new Set([...(biz.closures || []), v])], `Closed on ${fmtDate(v)}.${booked ? ` You still have ${plural(booked, 'appointment')} that day. Check your Schedule.` : ''}`);
+};
+function removeClosure(d) { saveClosures((biz.closures || []).filter(x => x !== d), `Open again on ${fmtDate(d)}.`); }
+$('hoursSaveBtn').onclick = () => {
+  clearNote('hoursMsg');
+  const hours = {};
+  let problem = '';
+  $('hoursBox').querySelectorAll('.hours-row[data-day]').forEach(r => {
+    const d = r.dataset.day;
+    if (!r.querySelector('.hr-open').checked) { hours[d] = { closed: true }; return; }
+    const o = r.querySelector('.hr-o').value, c = r.querySelector('.hr-c').value, bs = r.querySelector('.hr-bs').value, be = r.querySelector('.hr-be').value;
+    if (!o || !c || c <= o) problem = problem || `${DAY_LONG[d]}: the closing time must be after the opening time.`;
+    if ((bs && !be) || (!bs && be)) problem = problem || `${DAY_LONG[d]}: enter both the start and the end of the break, or neither.`;
+    hours[d] = { open: o, close: c, breaks: bs && be ? [{ start: bs, end: be }] : [] };
+  });
+  if (problem) return note('hoursMsg', problem);
+  const cap = parseInt($('stCapacity').value, 10);
+  if (!(cap >= 1 && cap <= 50)) return note('hoursMsg', 'Enter how many people take appointments at once, from 1 to 50.');
+  saveBusiness($('hoursSaveBtn'), { hours, buffer_minutes: Number($('stBuffer').value), capacity: cap }, 'hoursMsg').then(() => { renderHoursForm(); renderAll(); });
+};
+
+/* ---------- SETTINGS: costs & tax ---------- */
+$('costSaveBtn').onclick = () => {
+  const rate = $('stTaxRate').value;
+  if (rate !== '' && !(Number(rate) >= 0 && Number(rate) <= 50)) return note('costMsg', 'Enter a tax rate between 0 and 50.');
+  saveBusiness($('costSaveBtn'), { monthly_expenses: $('stExpenses').value === '' ? null : $('stExpenses').value, tax_mode: $('stTaxMode').value, tax_rate: rate === '' ? null : rate }, 'costMsg').then(renderCalc);
+};
 
 /* ---------- IMPORT ---------- */
 let importMode = null, parsed = null;
@@ -1614,7 +2551,7 @@ function guess(cols, words, not) {
   const norm = c => c.toLowerCase().replace(/[^a-z]/g, '');
   return cols.find(c => words.some(w => norm(c).includes(w)) && !(not || []).some(w => norm(c).includes(w))) || '';
 }
-const MAP_IDS = { name: 'mapName', phone: 'mapPhone', date: 'mapDate', time: 'mapTime', service: 'mapService', value: 'mapValue' };
+const MAP_IDS = { name: 'mapName', phone: 'mapPhone', date: 'mapDate', time: 'mapTime', service: 'mapService', value: 'mapValue', price: 'mapPrice', duration: 'mapDuration', category: 'mapCategory' };
 function buildMapping() {
   if (!parsed || !importMode) return;
   const cols = parsed.cols;
@@ -1625,13 +2562,22 @@ function buildMapping() {
   $('mapTime').innerHTML = opts('Included in the date');
   $('mapService').innerHTML = opts('Not in my file');
   $('mapValue').innerHTML = opts('Not in my file');
-  $('mapName').value = guess(cols, ['name', 'client', 'customer', 'first']) || (importMode === 'appointments' ? '' : cols[0]);
+  $('mapPrice').innerHTML = opts('Not in my file');
+  $('mapDuration').innerHTML = opts('Not in my file');
+  $('mapCategory').innerHTML = opts('Not in my file');
+  document.querySelector('label[for="mapName"]').textContent = importMode === 'services' ? 'Service name' : 'Name';
+  $('mapName').value = importMode === 'services'
+    ? (guess(cols, ['service', 'name', 'item', 'treatment']) || cols[0])
+    : guess(cols, ['name', 'client', 'customer', 'first']) || (importMode === 'appointments' ? '' : cols[0]);
+  $('mapPrice').value = guess(cols, ['price', 'cost', 'rate', 'amount', 'fee']);
+  $('mapDuration').value = guess(cols, ['duration', 'length', 'minutes', 'mins', 'time']);
+  $('mapCategory').value = guess(cols, ['category', 'type', 'group', 'department']);
   $('mapPhone').value = guess(cols, ['phone', 'mobile', 'cell', 'number', 'tel']) || cols[1] || cols[0];
   $('mapDate').value = guess(cols, ['date', 'appointment', 'appt', 'booking', 'when', 'start'], ['time']) || guess(cols, ['date', 'start']);
   $('mapTime').value = guess(cols, ['time'], ['date']);
   $('mapService').value = guess(cols, ['service', 'treatment', 'type']);
   $('mapValue').value = guess(cols, ['value', 'price', 'amount', 'cost', 'total']);
-  const show = importMode === 'customers' ? ['name', 'phone'] : ['name', 'phone', 'date', 'time', 'service', 'value'];
+  const show = importMode === 'customers' ? ['name', 'phone'] : importMode === 'services' ? ['name', 'price', 'duration', 'category'] : ['name', 'phone', 'date', 'time', 'service', 'value'];
   document.querySelectorAll('#mapBox [data-for]').forEach(el => el.style.display = show.includes(el.dataset.for) ? '' : 'none');
   $('mapBox').style.display = 'block';
   Object.values(MAP_IDS).forEach(id => $(id).onchange = renderPreview);
@@ -1664,6 +2610,10 @@ function rowStart(r) {
 function buildRows() {
   const v = k => $(MAP_IDS[k]).value;
   let noTime = 0;
+  if (importMode === 'services') {
+    return { rows: parsed.rows.map(r => ({ name: String(r[v('name')] || '').trim(), price: v('price') ? String(r[v('price')] ?? '').trim() : '',
+      duration: v('duration') ? String(r[v('duration')] ?? '').replace(/[^0-9.]/g, '') : '', category: v('category') ? String(r[v('category')] || '').trim() : '' })), noTime: 0 };
+  }
   const rows = parsed.rows.map(r => {
     const row = { name: v('name') ? String(r[v('name')] || '').trim() : '', phone: String(r[v('phone')] || '').trim() };
     if (importMode !== 'customers') {
@@ -1678,6 +2628,10 @@ function buildRows() {
 }
 function renderPreview() {
   const { rows } = buildRows();
+  if (importMode === 'services') {
+    $('preview').innerHTML = `<table><thead><tr><th>Service</th><th>Price</th><th>Length</th><th>Category</th></tr></thead><tbody>${rows.slice(0, 8).map(r => `<tr><td>${esc(r.name) || '<span class="muted">—</span>'}</td><td>${esc(r.price) || '<span class="muted">Custom quote</span>'}</td><td>${r.duration ? esc(r.duration) + ' min' : ''}</td><td>${esc(r.category)}</td></tr>`).join('')}</tbody></table>`;
+    return;
+  }
   const appt = importMode !== 'customers';
   $('preview').innerHTML = `<table><thead><tr><th>Name</th><th>Phone</th>${appt ? '<th>Appointment</th><th>Service</th><th>Value</th>' : ''}</tr></thead>
     <tbody>${rows.slice(0, 8).map(r => `<tr><td>${esc(r.name) || '<span class="muted">—</span>'}</td><td>${esc(r.phone)}</td>
@@ -1692,6 +2646,19 @@ $('importBtn').onclick = async () => {
   if (!parsed || !importMode) return;
   clearNote('importMsg');
   const { rows, noTime } = buildRows();
+  if (importMode === 'services') {
+    try {
+      const d = await busy($('importBtn'), () => api('/services/import', { json: { businessId: biz.id, rows } }, "The import didn't finish. Please try again, or email team@dozfi.com."), { doing: 'Importing…', done: '✓ Imported' });
+      const why = [];
+      if (d.skips.duplicate) why.push(`${d.skips.duplicate} already in your services`);
+      if (d.skips.missingName) why.push(`${d.skips.missingName} missing a name`);
+      if (d.skips.missingPrice) why.push(`${d.skips.missingPrice} with a price Dozfi couldn't read`);
+      const msg = `Imported ${plural(d.added, 'service')}.${d.skipped ? ` Skipped ${plural(d.skipped, 'row')}: ${why.join(', ')}.` : ''} See them in Settings → Services & pricing.`;
+      setTimeout(() => { resetImport(); note('importMsg', msg, true); }, 800);
+      refreshAll();
+    } catch (e) { note('importMsg', e.message); }
+    return;
+  }
   try {
     const d = await busy($('importBtn'), () => api('/import', { json: { businessId: biz.id, mode: importMode, rows } }, "The import didn't finish. Please try again, or email team@dozfi.com."), { doing: 'Importing…', done: '✓ Imported' });
     const parts = [];
@@ -1777,6 +2744,13 @@ function fillSettings() {
   $('stCancelTpl').value = biz.cancel_reply_template || TPL_DEFAULTS.cancel;
   $('stAlertTpl').value = biz.cancellation_alert_template || TPL_DEFAULTS.alert;
   $('stFallbackTpl').value = biz.fallback_reply_template || TPL_DEFAULTS.fallback;
+  $('stType').value = biz.business_type || '';
+  const charge = String(biz.pricing_methods || '').split(',');
+  document.querySelectorAll('#stCharge input').forEach(cb => cb.checked = charge.includes(cb.value));
+  $('stExpenses').value = biz.monthly_expenses != null ? biz.monthly_expenses : '';
+  $('stTaxMode').value = biz.tax_mode === 'inclusive' ? 'inclusive' : 'exclusive';
+  $('stTaxRate').value = biz.tax_rate != null ? biz.tax_rate : '';
+  renderHoursForm();
 }
 async function saveBusiness(btn, fields, msgId) {
   clearNote(msgId);
@@ -1792,7 +2766,8 @@ $('stSaveBtn').onclick = () => {
   saveBusiness($('stSaveBtn'), {
     business_name: $('stBizName').value.trim(), owner_name: $('stOwner').value.trim(),
     owner_phone: $('stPhone').value.trim(), default_appointment_value: parseFloat($('stValue').value) || 0,
-    address: $('stAddress').value.trim()
+    address: $('stAddress').value.trim(), business_type: $('stType').value.trim(),
+    pricing_methods: [...document.querySelectorAll('#stCharge input:checked')].map(cb => cb.value)
   }, 'stMsg');
 };
 $('tplSaveBtn').onclick = () => {
@@ -1875,7 +2850,7 @@ function askConfirm(title, body, yesLabel, fn) {
   $('cfGo').onclick = async () => { try { await fn($('cfGo')); } catch (e) { note('cfMsg', e.message); } };
   openSheet('confirmSheet');
 }
-document.addEventListener('keydown', e => { if (e.key === 'Escape') ['confirmSheet', 'nextSheet', 'apptSheet', 'helpSheet', 'profileSheet'].some(id => $(id).classList.contains('on') && (closeSheet(id), true)); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') ['confirmSheet', 'scopeSheet', 'nextSheet', 'apptSheet', 'serviceSheet', 'expSheet', 'helpSheet', 'profileSheet'].some(id => $(id).classList.contains('on') && (closeSheet(id), true)) || closePanelIfOpen(); });
 
 /* ---------- start ---------- */
 (function start() {
