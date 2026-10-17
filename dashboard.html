@@ -24,7 +24,8 @@ a{color:var(--purple)}
 /* ===== AUTH ===== */
 .auth{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
 .auth-card{background:var(--card);border-radius:18px;padding:40px;width:100%;max-width:410px;box-shadow:0 2px 20px rgba(18,17,28,.07)}
-.auth-mark{font-size:1.35rem;font-weight:800;letter-spacing:-.03em;color:var(--purple);margin-bottom:22px}
+.auth-mark{display:flex;align-items:center;gap:10px;font-size:1.35rem;font-weight:800;letter-spacing:-.03em;color:var(--ink);margin-bottom:22px}
+.dmark{width:30px;height:30px;flex-shrink:0;display:block}
 .auth-h{font-size:1.35rem;font-weight:800;letter-spacing:-.03em;margin-bottom:6px}
 .auth-p{font-size:.87rem;color:var(--body);margin-bottom:26px}
 .auth-alt{text-align:center;margin-top:18px;font-size:.82rem;color:var(--faint)}
@@ -56,15 +57,15 @@ a{color:var(--purple)}
 /* ===== SHELL ===== */
 .app{display:none;min-height:100vh}
 .side{position:fixed;inset:0 auto 0 0;width:232px;background:var(--ink);padding:26px 16px;display:flex;flex-direction:column}
-.side-mark{font-size:1.2rem;font-weight:800;letter-spacing:-.02em;color:#fff;padding:0 10px;margin-bottom:8px}
+.side-mark{display:flex;align-items:center;gap:10px;font-size:1.2rem;font-weight:800;letter-spacing:-.02em;color:#fff;padding:0 10px;margin-bottom:8px}
 .side-biz{font-size:.75rem;color:rgba(255,255,255,.42);padding:0 10px;margin-bottom:26px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .side-nav{display:flex;flex-direction:column;gap:2px;flex:1}
-.nav-i{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:8px;cursor:pointer;font-size:.87rem;font-weight:500;color:rgba(255,255,255,.62);border:none;background:none;text-align:left;width:100%}
+.nav-i{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:8px;cursor:pointer;font-size:.87rem;font-weight:500;color:rgba(255,255,255,.62);border:none;background:none;text-align:left;width:100%}
 .nav-i:hover{background:rgba(255,255,255,.07);color:#fff}
-.nav-i[aria-current="page"]{background:var(--purple);color:#fff;font-weight:600}
+.nav-i[aria-current="page"]{background:var(--purple-soft);color:var(--purple-dark);font-weight:700}
 .nav-i .ic{width:17px;flex-shrink:0}
 .nav-badge{margin-left:auto;background:var(--purple);color:#fff;font-size:.68rem;font-weight:700;padding:1px 7px;border-radius:99px}
-.nav-i[aria-current="page"] .nav-badge{background:rgba(255,255,255,.25)}
+.nav-i[aria-current="page"] .nav-badge{background:var(--purple);color:#fff}
 .side-foot{border-top:1px solid rgba(255,255,255,.1);padding-top:12px;display:flex;flex-direction:column;gap:2px}
 .main{margin-left:232px;padding:32px 34px 80px;max-width:1180px}
 .head{margin-bottom:24px}
@@ -308,7 +309,7 @@ textarea.reply:focus{border-color:var(--purple)}
 
 @media(max-width:960px){
   .side{position:static;width:100%;flex-direction:row;align-items:center;padding:12px;overflow-x:auto}
-  .side-mark{margin:0 14px 0 6px} .side-biz{display:none}
+  .side-mark{margin:0 10px 0 4px;padding:0} .side-mark span{display:none} .side-biz{display:none}
   .side-nav{flex-direction:row;gap:4px} .nav-i{white-space:nowrap;padding:8px 11px}
   .side-foot{border:none;padding:0;margin-left:auto;flex-direction:row}
   .main{margin-left:0;padding:20px 16px 90px}
@@ -337,7 +338,7 @@ textarea.reply:focus{border-color:var(--purple)}
 <!-- ============ SIGN IN ============ -->
 <div class="auth" id="authView" style="display:none">
   <div class="auth-card">
-    <div class="auth-mark">Dozfi</div>
+    <div class="auth-mark"><svg class="dmark" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="#5B4EF5"/><path fill="#fff" fill-rule="evenodd" d="M10.5 7.5h6a8.5 8.5 0 0 1 0 17h-6zM14.6 11.4v9.2h1.9a4.6 4.6 0 0 0 0-9.2z"/></svg><span>Dozfi</span></div>
 
     <div id="paneLogin">
       <div class="auth-h">Sign in</div>
@@ -375,21 +376,22 @@ textarea.reply:focus{border-color:var(--purple)}
 <div class="app" id="appView">
   <nav class="side">
     <div>
-      <div class="side-mark">Dozfi</div>
+      <div class="side-mark"><svg class="dmark" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="#5B4EF5"/><path fill="#fff" fill-rule="evenodd" d="M10.5 7.5h6a8.5 8.5 0 0 1 0 17h-6zM14.6 11.4v9.2h1.9a4.6 4.6 0 0 0 0-9.2z"/></svg><span>Dozfi</span></div>
       <div class="side-biz" id="sideBiz"></div>
     </div>
     <div class="side-nav">
-      <button class="nav-i" data-page="home" aria-current="page"><span class="ic">◈</span> Home <span class="nav-badge" id="reviewBadge" style="display:none">0</span></button>
-      <button class="nav-i" data-page="schedule"><span class="ic">▦</span> Schedule</button>
-      <button class="nav-i" data-page="customers"><span class="ic">◍</span> Customers</button>
-      <button class="nav-i" data-page="messages"><span class="ic">◌</span> Messages</button>
-      <button class="nav-i" data-page="opportunities"><span class="ic">✦</span> Opportunities</button>
-      <button class="nav-i" data-page="results"><span class="ic">◱</span> Results</button>
-      <button class="nav-i" data-page="settings"><span class="ic">⚙</span> Settings</button>
+      <button class="nav-i" data-page="home" aria-current="page">Home <span class="nav-badge" id="reviewBadge" style="display:none">0</span></button>
+      <button class="nav-i" data-page="schedule">Schedule</button>
+      <button class="nav-i" data-page="customers">Customers</button>
+      <button class="nav-i" data-page="services">Services &amp; Pricing</button>
+      <button class="nav-i" data-page="messages">Messages</button>
+      <button class="nav-i" data-page="opportunities">Opportunities</button>
+      <button class="nav-i" data-page="results">Results</button>
+      <button class="nav-i" data-page="settings">Settings</button>
     </div>
     <div class="side-foot">
-      <button class="nav-i" onclick="openHelp()"><span class="ic">?</span> Get help</button>
-      <button class="nav-i" onclick="signOut()"><span class="ic">⏻</span> Sign out</button>
+      <button class="nav-i" onclick="openHelp()">Get help</button>
+      <button class="nav-i" onclick="signOut()">Sign out</button>
     </div>
   </nav>
 
@@ -412,6 +414,12 @@ textarea.reply:focus{border-color:var(--purple)}
         <p class="sub">Every appointment, by day, week or month. Click one to see it or change it.</p></div>
         <div class="act-row"><button class="btn btn-sm" onclick="openAppt()">Add appointment</button></div>
       </div>
+      <div class="subtab-row" data-group="schedule">
+        <button class="subtab" data-tab="sched-cal" aria-selected="true">Calendar</button>
+        <button class="subtab" data-tab="sched-hours" aria-selected="false">Availability</button>
+        <button class="subtab" data-tab="sched-staff" aria-selected="false" id="staffTabBtn" style="display:none">Staff</button>
+      </div>
+      <div class="subpage on" id="tab-sched-cal">
       <div id="schedAlerts"></div>
       <div class="cal-bar">
         <div class="segctl" id="calSwitch">
@@ -427,6 +435,41 @@ textarea.reply:focus{border-color:var(--purple)}
         </div>
       </div>
       <div id="calBox"><div class="loading"><span class="spin"></span> Loading…</div></div>
+      </div>
+      <div class="subpage" id="tab-sched-staff">
+        <div class="card">
+          <div class="card-t" style="margin-bottom:4px">Staff</div>
+          <div class="card-d" style="margin-bottom:14px">Dozfi lets this many appointments overlap before it warns you about a double-booking.</div>
+          <div class="f" style="max-width:340px"><label for="stStaff">How many people take appointments at the same time?</label><input id="stStaff" type="number" min="1" max="50"/></div>
+          <p class="card-d" style="margin:0 0 14px">Separate hours for each staff member are coming later.</p>
+          <button class="btn" id="staffSaveBtn">Save</button>
+          <div class="notice" id="staffMsg"></div>
+        </div>
+      </div>
+      <div class="subpage" id="tab-sched-hours">
+        <div class="card">
+          <div class="card-h"><div><div class="card-t">Business hours</div><div class="card-d">Dozfi checks new appointments against these, and uses them to measure how full your schedule is.</div></div></div>
+          <div class="hours-row hours-head"><div>Day</div><div>Opens</div><div>Closes</div><div>Break starts</div><div>Break ends</div></div>
+          <div id="hoursBox"></div>
+        </div>
+        <div class="card">
+          <div class="card-t" style="margin-bottom:4px">Closed dates</div>
+          <div class="card-d" style="margin-bottom:12px">Holidays, vacations, or any day you're not taking appointments.</div>
+          <div class="act-row" style="margin-bottom:12px"><input id="closeDate" type="date" style="padding:8px 11px;border:1.5px solid var(--line);border-radius:9px;font-size:.85rem"/><button class="btn btn-ghost btn-sm" id="closeAddBtn">Add closed date</button></div>
+          <div id="closeList"></div>
+        </div>
+        <div class="card">
+          <div class="two">
+            <div class="f"><label for="stBuffer">Time between appointments</label>
+              <select id="stBuffer"><option value="0">None</option><option value="5">5 minutes</option><option value="10">10 minutes</option><option value="15">15 minutes</option><option value="20">20 minutes</option><option value="30">30 minutes</option><option value="45">45 minutes</option><option value="60">1 hour</option></select>
+              <div class="hint">For cleanup or travel. Dozfi keeps this gap free.</div></div>
+            <div class="f"><label for="stCapacity">How many people take appointments at the same time?</label><input id="stCapacity" type="number" min="1" max="50" placeholder="1"/>
+              <div class="hint">Just you? Leave it at 1. More than 1 adds a Staff tab here.</div></div>
+          </div>
+          <button class="btn" id="hoursSaveBtn">Save availability</button>
+          <div class="notice" id="hoursMsg"></div>
+        </div>
+      </div>
     </section>
 
     <!-- ===== CUSTOMERS ===== -->
@@ -522,41 +565,40 @@ textarea.reply:focus{border-color:var(--purple)}
       </div>
     </section>
 
+    <!-- ===== SERVICES ===== -->
+    <section class="page" id="page-services">
+      <div class="head head-row">
+        <div><h1 class="h1">Services &amp; Pricing</h1>
+        <p class="sub">What you offer, what it costs and how long it takes. Pick a service when booking and its price and length fill in.</p></div>
+        <div class="act-row"><button class="btn" onclick="openService()">+ Add Service</button>
+          <button class="btn btn-ghost" onclick="startServiceImport()">Import</button></div>
+      </div>
+
+        <div class="card">
+          <div class="card-h">
+            <div><div class="card-t">Your services</div><div class="card-d">Changing a price here never changes appointments already booked.</div></div>
+          </div>
+          <div id="svcBox"><div class="loading"><span class="spin"></span> Loading…</div></div>
+          <div style="margin-top:12px"><label style="font-size:.8rem;color:var(--body);display:inline-flex;gap:7px;align-items:center;cursor:pointer"><input type="checkbox" id="svcShowArchived" style="accent-color:var(--purple)"/> Show archived services</label></div>
+        </div>
+          </section>
+
     <!-- ===== MESSAGES ===== -->
     <section class="page" id="page-messages">
       <div class="head">
         <h1 class="h1">Messages</h1>
-        <p class="sub">Every text Dozfi sent and received, and your reminder settings.</p>
+        <p class="sub">Your customer conversations, your reminders, and the texts Dozfi sends back.</p>
       </div>
 
       <div class="subtab-row" data-group="messages">
-        <button class="subtab" data-tab="msg-history" aria-selected="true">History</button>
-        <button class="subtab" data-tab="msg-send" aria-selected="false">Send</button>
-        <button class="subtab" data-tab="msg-auto" aria-selected="false">Automatic reminders</button>
+        <button class="subtab" data-tab="msg-history" aria-selected="true">Inbox</button>
+        <button class="subtab" data-tab="msg-auto" aria-selected="false">Reminders</button>
+        <button class="subtab" data-tab="msg-templates" aria-selected="false">Templates</button>
       </div>
 
       <div class="subpage on" id="tab-msg-history">
-        <div class="card">
-          <div class="card-h">
-            <div class="card-t">Every text, across every customer</div>
-            <div class="act-row">
-              <div class="search" style="max-width:220px">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--faint)" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-                <input id="msgSearchBox" placeholder="Search messages"/>
-              </div>
-              <input id="msgDateFilter" type="date" aria-label="Filter by date" style="padding:8px 11px;border:1.5px solid var(--line);border-radius:9px;font-size:.85rem"/>
-              <select id="msgSortOrder" aria-label="Sort" style="padding:8px 11px;border:1.5px solid var(--line);border-radius:9px;font-size:.85rem;background:#fff">
-                <option value="new">Newest first</option><option value="old">Oldest first</option>
-              </select>
-            </div>
-          </div>
-          <div id="msgBox"><div class="loading"><span class="spin"></span> Loading…</div></div>
-        </div>
-      </div>
-
-      <div class="subpage" id="tab-msg-send">
-        <div class="card">
-          <div class="card-h"><div><div class="card-t">Send a message</div><div class="card-d">Write it once, send it to as many customers as you pick. Use <code>{first_name}</code> to add each customer's name.</div></div></div>
+        <div class="card" id="composeCard" style="display:none;margin-bottom:16px">
+          <div class="card-h"><div><div class="card-t">New message</div><div class="card-d">Write it once, send it to as many customers as you pick. Use <code>{first_name}</code> to add each customer's name.</div></div><button class="link-btn quiet" onclick="toggleCompose(false)">Close</button></div>
           <div class="f"><label for="composeText">Message</label><textarea id="composeText" placeholder="Hi {first_name}, we have an opening tomorrow at 3 if you'd like it." style="min-height:80px"></textarea></div>
           <div style="font-size:.82rem;font-weight:600;margin-bottom:8px">Send to a group</div>
           <div class="seg-row" id="segRow">
@@ -584,6 +626,23 @@ textarea.reply:focus{border-color:var(--purple)}
             <span class="card-d" id="composeCount" style="margin:0">0 customers selected</span>
           </div>
           <div class="notice" id="composeMsg"></div>
+        </div>
+              <div class="card">
+          <div class="card-h">
+            <div class="card-t">Every text, across every customer</div>
+            <button class="btn btn-sm" id="newMsgBtn" onclick="toggleCompose(true)">New message</button>
+            <div class="act-row">
+              <div class="search" style="max-width:220px">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--faint)" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+                <input id="msgSearchBox" placeholder="Search messages"/>
+              </div>
+              <input id="msgDateFilter" type="date" aria-label="Filter by date" style="padding:8px 11px;border:1.5px solid var(--line);border-radius:9px;font-size:.85rem"/>
+              <select id="msgSortOrder" aria-label="Sort" style="padding:8px 11px;border:1.5px solid var(--line);border-radius:9px;font-size:.85rem;background:#fff">
+                <option value="new">Newest first</option><option value="old">Oldest first</option>
+              </select>
+            </div>
+          </div>
+          <div id="msgBox"><div class="loading"><span class="spin"></span> Loading…</div></div>
         </div>
       </div>
 
@@ -616,7 +675,28 @@ textarea.reply:focus{border-color:var(--purple)}
           </div>
           <div class="notice" id="reminderMsg"></div>
         </div>
-      </div>
+        
+            </div>
+      <div class="subpage" id="tab-msg-templates">
+        <div class="card">
+          <div class="card-h"><div><div class="card-t">Automatic replies</div><div class="card-d">What Dozfi texts back when a customer answers a reminder.</div></div></div>
+          <div class="f"><label for="stConfirmTpl">Reply when a customer confirms (YES)</label><textarea id="stConfirmTpl" style="min-height:58px"></textarea></div>
+          <div class="f"><label for="stCancelTpl">Reply when a customer cancels (NO)</label><textarea id="stCancelTpl" style="min-height:58px"></textarea></div>
+          <div class="f"><label for="stAlertTpl">Alert sent to you when someone cancels</label><textarea id="stAlertTpl" style="min-height:58px"></textarea><div class="hint">Only goes to your own phone. Use <code>{client}</code> for their name and <code>{when}</code> for the appointment.</div></div>
+          <div class="f"><label for="stFallbackTpl">Reply when a customer texts something else</label><textarea id="stFallbackTpl" style="min-height:70px"></textarea><div class="hint">The message also goes to Needs review on your Home page.</div></div>
+          <p class="card-d" style="margin:0 0 14px">Use <code>{name}</code> for the customer's first name and <code>{business}</code> for your business name.</p>
+          <button class="btn" id="tplSaveBtn">Save changes</button>
+          <div class="notice" id="tplMsg"></div>
+        </div>
+
+        <div class="card">
+          <div class="card-t" style="margin-bottom:12px">Booking link</div>
+          <div class="f"><label for="stBooking">Your booking page, optional</label><input id="stBooking" placeholder="https://your-booking-page.com"/><div class="hint">The link customers use to book or reschedule.</div></div>
+          <p class="card-d" style="margin:0 0 16px">When a customer texts that they want to book or reschedule, Dozfi texts them this link and marks the message Needs review.</p>
+          <button class="btn" id="bookSaveBtn">Save changes</button>
+          <div class="notice" id="bookMsg"></div>
+        </div>
+            </div>
     </section>
 
     <!-- ===== OPPORTUNITIES ===== -->
@@ -681,13 +761,9 @@ textarea.reply:focus{border-color:var(--purple)}
       </div>
       <div class="subtab-row" data-group="settings">
         <button class="subtab" data-tab="set-business" aria-selected="true">Business</button>
-        <button class="subtab" data-tab="set-services" aria-selected="false">Services &amp; pricing</button>
-        <button class="subtab" data-tab="set-hours" aria-selected="false">Availability</button>
-        <button class="subtab" data-tab="set-reminders" aria-selected="false">Reminders</button>
-        <button class="subtab" data-tab="set-booking" aria-selected="false">Booking link</button>
-        <button class="subtab" data-tab="set-costs" aria-selected="false">Costs &amp; tax</button>
         <button class="subtab" data-tab="set-billing" aria-selected="false">Billing</button>
-        <button class="subtab" data-tab="set-support" aria-selected="false">Support</button>
+        <button class="subtab" data-tab="set-costs" aria-selected="false">Costs &amp; tax</button>
+        <button class="subtab" data-tab="set-support" aria-selected="false">Help &amp; support</button>
       </div>
 
       <div class="subpage on" id="tab-set-business">
@@ -714,67 +790,6 @@ textarea.reply:focus{border-color:var(--purple)}
         <div class="card">
           <div class="kv"><span>Login email</span><span id="stEmail">—</span></div>
           <div class="kv"><span>Password</span><span><button class="link-btn" onclick="signOut(true)">Reset it from the sign-in screen</button></span></div>
-        </div>
-      </div>
-
-      <div class="subpage" id="tab-set-services">
-        <div class="card">
-          <div class="card-h">
-            <div><div class="card-t">Services &amp; pricing</div><div class="card-d">Pick a service when booking and its price and length fill in. Changing a price here never changes appointments already booked.</div></div>
-            <div class="act-row">
-              <button class="btn btn-sm" onclick="openService()">Add service</button>
-              <button class="btn btn-ghost btn-sm" onclick="startServiceImport()">Import from a file</button>
-            </div>
-          </div>
-          <div id="svcBox"><div class="loading"><span class="spin"></span> Loading…</div></div>
-          <div style="margin-top:12px"><label style="font-size:.8rem;color:var(--body);display:inline-flex;gap:7px;align-items:center;cursor:pointer"><input type="checkbox" id="svcShowArchived" style="accent-color:var(--purple)"/> Show archived services</label></div>
-        </div>
-      </div>
-
-      <div class="subpage" id="tab-set-hours">
-        <div class="card">
-          <div class="card-h"><div><div class="card-t">Business hours</div><div class="card-d">Dozfi checks new appointments against these, and uses them to measure how full your schedule is.</div></div></div>
-          <div class="hours-row hours-head"><div>Day</div><div>Opens</div><div>Closes</div><div>Break starts</div><div>Break ends</div></div>
-          <div id="hoursBox"></div>
-        </div>
-        <div class="card">
-          <div class="card-t" style="margin-bottom:4px">Closed dates</div>
-          <div class="card-d" style="margin-bottom:12px">Holidays, vacations, or any day you're not taking appointments.</div>
-          <div class="act-row" style="margin-bottom:12px"><input id="closeDate" type="date" style="padding:8px 11px;border:1.5px solid var(--line);border-radius:9px;font-size:.85rem"/><button class="btn btn-ghost btn-sm" id="closeAddBtn">Add closed date</button></div>
-          <div id="closeList"></div>
-        </div>
-        <div class="card">
-          <div class="two">
-            <div class="f"><label for="stBuffer">Time between appointments</label>
-              <select id="stBuffer"><option value="0">None</option><option value="5">5 minutes</option><option value="10">10 minutes</option><option value="15">15 minutes</option><option value="20">20 minutes</option><option value="30">30 minutes</option><option value="45">45 minutes</option><option value="60">1 hour</option></select>
-              <div class="hint">For cleanup or travel. Dozfi keeps this gap free.</div></div>
-            <div class="f"><label for="stCapacity">How many people take appointments at the same time?</label><input id="stCapacity" type="number" min="1" max="50" placeholder="1"/>
-              <div class="hint">For example, 3 if you have three chairs or three staff working.</div></div>
-          </div>
-          <button class="btn" id="hoursSaveBtn">Save availability</button>
-          <div class="notice" id="hoursMsg"></div>
-        </div>
-      </div>
-
-      <div class="subpage" id="tab-set-reminders">
-        <div class="card">
-          <p class="card-d" style="margin:0 0 16px">Reminder timing and message: <button class="link-btn" onclick="goToPage('messages','messages','msg-auto')">Messages → Automatic reminders</button></p>
-          <div class="f"><label for="stConfirmTpl">Reply when a customer confirms (YES)</label><textarea id="stConfirmTpl" style="min-height:58px"></textarea></div>
-          <div class="f"><label for="stCancelTpl">Reply when a customer cancels (NO)</label><textarea id="stCancelTpl" style="min-height:58px"></textarea></div>
-          <div class="f"><label for="stAlertTpl">Alert sent to you when someone cancels</label><textarea id="stAlertTpl" style="min-height:58px"></textarea><div class="hint">Only goes to your own phone. Use <code>{client}</code> for their name and <code>{when}</code> for the appointment.</div></div>
-          <div class="f"><label for="stFallbackTpl">Reply when a customer texts something else</label><textarea id="stFallbackTpl" style="min-height:70px"></textarea><div class="hint">The message also goes to Needs review on your Home page.</div></div>
-          <p class="card-d" style="margin:0 0 14px">Use <code>{name}</code> for the customer's first name and <code>{business}</code> for your business name.</p>
-          <button class="btn" id="tplSaveBtn">Save changes</button>
-          <div class="notice" id="tplMsg"></div>
-        </div>
-      </div>
-
-      <div class="subpage" id="tab-set-booking">
-        <div class="card">
-          <div class="f"><label for="stBooking">Booking link, optional</label><input id="stBooking" placeholder="https://your-booking-page.com"/><div class="hint">The link customers use to book or reschedule.</div></div>
-          <p class="card-d" style="margin:0 0 16px">When a customer texts that they want to book or reschedule, Dozfi texts them this link and marks the message Needs review.</p>
-          <button class="btn" id="bookSaveBtn">Save changes</button>
-          <div class="notice" id="bookMsg"></div>
         </div>
       </div>
 
@@ -832,7 +847,7 @@ textarea.reply:focus{border-color:var(--purple)}
     <p class="sheet-p">Email <a href="mailto:team@dozfi.com">team@dozfi.com</a> and a person replies the same day.</p>
     <div style="font-size:.84rem;color:var(--body);line-height:1.7;margin-bottom:18px">
       <div><strong>When do reminders go out?</strong> Dozfi checks every 10 minutes and texts each appointment once its reminder time arrives (24 hours before, unless you change it).</div>
-      <div style="margin-top:9px"><strong>Nothing has sent yet.</strong> Check that Automatic reminders is on (Messages → Automatic reminders) and the customer has an upcoming appointment.</div>
+      <div style="margin-top:9px"><strong>Nothing has sent yet.</strong> Check that Automatic reminders is on (Messages → Reminders) and the customer has an upcoming appointment.</div>
       <div style="margin-top:9px"><strong>Can I cancel myself?</strong> Yes: Settings → Billing → Cancel subscription.</div>
     </div>
     <button class="btn btn-full btn-ghost" onclick="closeSheet('helpSheet')">Close</button>
@@ -1568,7 +1583,7 @@ $('apServiceSel').addEventListener('change', () => {
 });
 
 function reminderSentence(rem, verb) {
-  if (!rem || !rem.on) return `${verb}. Reminders are off, so no text will go out. Turn them on in Messages → Automatic reminders.`;
+  if (!rem || !rem.on) return `${verb}. Reminders are off, so no text will go out. Turn them on in Messages → Reminders.`;
   if (rem.soon) return `${verb}. The reminder will go out within the next 10 minutes.`;
   return `${verb}. Reminder scheduled for ${fmtDay(rem.at)} at ${fmtTime(rem.at)}.`;
 }
@@ -1667,6 +1682,7 @@ let calView = 'day', calDate = startOfDay(0);
 document.querySelectorAll('#calSwitch button').forEach(b => b.onclick = () => setCalView(b.dataset.view));
 function setCalView(v, date) {
   calView = v; if (date) calDate = new Date(date);
+  if (!$('tab-sched-cal').classList.contains('on')) switchSubtab('schedule', 'sched-cal');
   document.querySelectorAll('#calSwitch button').forEach(x => x.setAttribute('aria-pressed', String(x.dataset.view === v)));
   $('calSwitch').querySelector('[data-view="day"]').textContent = v === 'day' && dayKey(calDate) !== dayKey(new Date()) ? 'Day' : 'Today';
   renderCalendar();
@@ -1771,7 +1787,8 @@ function scheduleAlerts() {
     if (h && h.closed) out.push({ id: a.id, text: `${fmtWhen(a.starts_at)}: ${(clientById(a.client_id) || {}).name || 'A customer'} is booked on a day you're closed.` });
     if (a.reminder_status === 'failed') out.push({ id: a.id, text: `${(clientById(a.client_id) || {}).name || 'A customer'}'s reminder for ${fmtWhen(a.starts_at)} didn't send.` });
   });
-  return out;
+  const rank = x => /overlap/.test(x.text) ? 0 : /didn't send/.test(x.text) ? 1 : 2;
+  return out.sort((a, b) => rank(a) - rank(b));
 }
 function renderSchedAlerts() {
   if (!S.loaded || S.failed.has('appts')) { $('schedAlerts').innerHTML = ''; return; }
@@ -2017,6 +2034,11 @@ function renderHistory() {
 ['msgSearchBox', 'msgDateFilter', 'msgSortOrder'].forEach(id => $(id).addEventListener(id === 'msgSearchBox' ? 'input' : 'change', renderHistory));
 
 /* ---------- MESSAGES: send ---------- */
+function toggleCompose(on) {
+  $('composeCard').style.display = on ? 'block' : 'none';
+  $('newMsgBtn').style.display = on ? 'none' : '';
+  if (on) { clearNote('composeMsg'); renderComposeList(); setTimeout(() => $('composeText').focus(), 80); }
+}
 let composeSelected = new Set(), selectedSegment = null;
 function composeCount() {
   if (selectedSegment) {
@@ -2174,6 +2196,8 @@ function renderResults() {
 }
 
 /* ---------- OPPORTUNITIES ---------- */
+const LOCK_TEXT = { hours: 'Set your business hours (Schedule → Availability) so Dozfi can measure how full your schedule is.',
+  services: 'Add your services and prices on the Services & Pricing page.' };
 const OPP_BOX = { pricing: 'oppPricing', demand: 'oppDemand', retention: 'oppRetention', costs: 'oppCosts' };
 S.oppById = {};
 const domId = id => 'opp-' + String(id).replace(/[^a-zA-Z0-9-]/g, '_');
@@ -2201,10 +2225,10 @@ function renderOpps() {
     Object.values(OPP_BOX).forEach(id => $(id).innerHTML = `<div class="card"><div class="empty"><div class="empty-h">We couldn't load your opportunities.</div><div class="empty-p">Please refresh the page.</div><button class="btn btn-ghost btn-sm" onclick="refreshAll()">Try again</button></div></div>`);
     return;
   }
-  const lockBtn = { hours: `<button class="btn btn-sm" onclick="goToPage('settings','settings','set-hours')">Set your hours</button>`,
-    services: `<button class="btn btn-sm" onclick="goToPage('settings','settings','set-services')">Add services</button>`, history: '' };
+  const lockBtn = { hours: `<button class="btn btn-sm" onclick="goToPage('schedule','schedule','sched-hours')">Set your hours</button>`,
+    services: `<button class="btn btn-sm" onclick="goToPage('services')">Add services</button>`, history: '' };
   $('oppLocked').innerHTML = o.locked && o.locked.length ? `<div class="banner"><div class="banner-t">More ideas unlock as Dozfi learns your business</div>
-    ${o.locked.map(l => `<div class="alert-row" style="border-color:#D9D4FC"><span class="banner-p">${esc(l.text)}</span>${lockBtn[l.kind] || ''}</div>`).join('')}</div>` : '';
+    ${o.locked.map(l => `<div class="alert-row" style="border-color:#D9D4FC"><span class="banner-p">${esc(LOCK_TEXT[l.kind] || l.text)}</span>${lockBtn[l.kind] || ''}</div>`).join('')}</div>` : '';
   for (const [k, box] of Object.entries(OPP_BOX)) {
     const list = k === 'retention' ? o.retention : o[k];
     $('oc-' + k).textContent = o.counts[k] ? `(${o.counts[k]})` : '';
@@ -2228,16 +2252,16 @@ function runOpp(id) {
   const o = S.oppById[id]; if (!o || !o.action) return;
   const a = o.action;
   if (a.kind === 'experiment') return openExperiment({ serviceId: a.serviceId, testPrice: a.testPrice, weekdays: a.weekdays });
-  if (a.kind === 'offer') { goToPage('messages', 'messages', 'msg-send'); $('composeText').value = a.text; toast('Edit the offer if you like, pick who gets it, then press Send.'); return; }
+  if (a.kind === 'offer') { goToPage('messages', 'messages', 'msg-history'); toggleCompose(true); $('composeText').value = a.text; toast('Edit the offer if you like, pick who gets it, then press Send.'); return; }
   if (a.kind === 'rebook') {
     openProfile(a.clientId, true);
     setTimeout(() => { if ($('pfReply')) $('pfReply').value = a.text; }, 60);
     return;
   }
-  if (a.kind === 'services') return goToPage('settings', 'settings', 'set-services');
-  if (a.kind === 'service') { goToPage('settings', 'settings', 'set-services'); return openService(a.serviceId); }
+  if (a.kind === 'services') return goToPage('services');
+  if (a.kind === 'service') { goToPage('services'); return openService(a.serviceId); }
   if (a.kind === 'reminders') return goToPage('messages', 'messages', 'msg-auto');
-  if (a.kind === 'availability') return goToPage('settings', 'settings', 'set-hours');
+  if (a.kind === 'availability') return goToPage('schedule', 'schedule', 'sched-hours');
 }
 
 /* ---------- PRICE TESTS ---------- */
@@ -2266,7 +2290,7 @@ let exDays = new Set();
 function openExperiment(pre) {
   pre = pre || {};
   const svcs = activeServices().filter(s => s.price > 0 && s.pricing_method !== 'quote');
-  if (!svcs.length) { goToPage('settings', 'settings', 'set-services'); return toast('Add a service with a price first. Then you can test a new price.'); }
+  if (!svcs.length) { goToPage('services'); return toast('Add a service with a price first. Then you can test a new price.'); }
   $('exService').innerHTML = svcs.map(s => `<option value="${s.id}">${esc(s.name)} · ${esc(priceText(s))}</option>`).join('');
   $('exService').value = pre.serviceId && svcs.some(s => s.id === pre.serviceId) ? pre.serviceId : svcs[0].id;
   $('exPrice').value = pre.testPrice || '';
@@ -2326,7 +2350,7 @@ function renderPerf() {
     ${card('Confirmation rate', p.confirmationRate == null ? '—' : p.confirmationRate + '%', 'v-green', p.confirmationRate == null ? 'Shows once reminders go out.' : 'Of reminded appointments, the share confirmed by reply.')}
     ${card('Cancellations', p.cancellations, 'v-red', 'Cancelled by you or the customer.')}
     ${card('No-shows', p.noShows, 'v-red', 'Appointments you marked as no-show.')}
-    ${card('Schedule filled', p.utilization == null ? '—' : p.utilization + '%', 'v-amber', p.hoursSet ? 'Booked appointment time out of the time you were open.' : `<button class="link-btn" onclick="goToPage('settings','settings','set-hours')">Set your hours</button> to see this.`)}
+    ${card('Schedule filled', p.utilization == null ? '—' : p.utilization + '%', 'v-amber', p.hoursSet ? 'Booked appointment time out of the time you were open.' : `<button class="link-btn" onclick="goToPage('schedule','schedule','sched-hours')">Set your hours</button> to see this.`)}
   </div>
   <div class="two" style="margin-top:16px;gap:16px">
     <div class="card" style="margin:0"><div class="card-t" style="margin-bottom:12px">Appointments by day</div><div class="bars">
@@ -2467,6 +2491,8 @@ function renderHoursForm() {
   $('stBuffer').value = String(biz.buffer_minutes || 0);
   if (!$('stBuffer').value) $('stBuffer').value = '0';
   $('stCapacity').value = biz.capacity || 1;
+  $('stStaff').value = biz.capacity || 1;
+  $('staffTabBtn').style.display = (parseInt(biz.capacity, 10) || 1) > 1 ? '' : 'none';
   renderClosures();
 }
 function renderClosures() {
@@ -2506,6 +2532,12 @@ $('hoursSaveBtn').onclick = () => {
   const cap = parseInt($('stCapacity').value, 10);
   if (!(cap >= 1 && cap <= 50)) return note('hoursMsg', 'Enter how many people take appointments at once, from 1 to 50.');
   saveBusiness($('hoursSaveBtn'), { hours, buffer_minutes: Number($('stBuffer').value), capacity: cap }, 'hoursMsg').then(() => { renderHoursForm(); renderAll(); });
+};
+
+$('staffSaveBtn').onclick = () => {
+  const cap = parseInt($('stStaff').value, 10);
+  if (!(cap >= 1 && cap <= 50)) return note('staffMsg', 'Enter a number from 1 to 50.');
+  saveBusiness($('staffSaveBtn'), { capacity: cap }, 'staffMsg').then(() => { renderHoursForm(); renderAll(); });
 };
 
 /* ---------- SETTINGS: costs & tax ---------- */
@@ -2653,7 +2685,7 @@ $('importBtn').onclick = async () => {
       if (d.skips.duplicate) why.push(`${d.skips.duplicate} already in your services`);
       if (d.skips.missingName) why.push(`${d.skips.missingName} missing a name`);
       if (d.skips.missingPrice) why.push(`${d.skips.missingPrice} with a price Dozfi couldn't read`);
-      const msg = `Imported ${plural(d.added, 'service')}.${d.skipped ? ` Skipped ${plural(d.skipped, 'row')}: ${why.join(', ')}.` : ''} See them in Settings → Services & pricing.`;
+      const msg = `Imported ${plural(d.added, 'service')}.${d.skipped ? ` Skipped ${plural(d.skipped, 'row')}: ${why.join(', ')}.` : ''} See them on the Services & Pricing page.`;
       setTimeout(() => { resetImport(); note('importMsg', msg, true); }, 800);
       refreshAll();
     } catch (e) { note('importMsg', e.message); }
