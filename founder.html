@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Dozfi Founder</title>
+<meta name="robots" content="noindex,nofollow"/>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--purple:#5B4EF5;--purple-dark:#4A3EE0;--purple-soft:#F2F0FE;--green:#0F8A4C;--green-soft:#ECFAF1;--red:#C7342B;--red-soft:#FDF1F0;--amber:#B26A00;--amber-soft:#FFF6E5;--ink:#12111C;--body:#4E4D5E;--faint:#8E8DA0;--line:#E6E5EE;--shell:#F6F6F9}
+body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:var(--shell);color:var(--ink);-webkit-font-smoothing:antialiased;line-height:1.5}
+button,input,select,textarea{font-family:inherit;font-size:inherit}
+.wrap{max-width:1180px;margin:0 auto;padding:24px 16px 80px}
+.top{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:18px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:1.15rem}
+.dsq{width:30px;height:30px;border-radius:8px;background:var(--purple);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800}
+.tabs{display:flex;gap:4px;border-bottom:1px solid var(--line);margin-bottom:18px;overflow-x:auto}
+.tab{background:none;border:none;padding:10px 12px;font-weight:700;color:var(--faint);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap}
+.tab[aria-selected="true"]{color:var(--purple);border-bottom-color:var(--purple)}
+.page{display:none}.page.on{display:block}
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px;margin-bottom:14px}
+.card-h{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap}
+.card-t{font-weight:800}
+.card-d{font-size:.8rem;color:var(--faint)}
+.metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-bottom:14px}
+.metric{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px}
+.metric .l{font-size:.76rem;font-weight:700;color:var(--body)}
+.metric .v{font-size:1.5rem;font-weight:800;letter-spacing:-.03em;margin-top:6px}
+.metric .n{font-size:.72rem;color:var(--faint);margin-top:4px}
+.neg{color:var(--red)} .pos{color:var(--purple)}
+table{width:100%;border-collapse:collapse;font-size:.84rem}
+th{font-size:.72rem;color:var(--faint);text-align:left;padding:0 10px 8px 0;border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:10px 10px 10px 0;border-bottom:1px solid var(--line);vertical-align:top}
+tr:last-child td{border-bottom:none}
+.scroll{overflow-x:auto}
+.tag{display:inline-block;font-size:.7rem;font-weight:700;border-radius:99px;padding:2px 9px;white-space:nowrap}
+.tag.ok{background:var(--green-soft);color:var(--green)} .tag.no{background:var(--red-soft);color:var(--red)} .tag.wait{background:var(--amber-soft);color:var(--amber)} .tag.rev{background:var(--purple-soft);color:var(--purple)} .tag.none{background:var(--shell);color:var(--faint)}
+.btn{background:var(--purple);color:#fff;border:none;border-radius:10px;padding:10px 16px;font-weight:700;cursor:pointer}
+.btn:hover{background:var(--purple-dark)} .btn:disabled{opacity:.6}
+.btn-ghost{background:#fff;color:var(--ink);border:1.5px solid var(--line)} .btn-ghost:hover{background:var(--shell)}
+.btn-sm{padding:7px 12px;font-size:.82rem}
+.link{background:none;border:none;color:var(--purple);font-weight:700;cursor:pointer;font-size:.82rem}
+input,select,textarea{border:1.5px solid var(--line);border-radius:9px;padding:8px 10px;background:#fff;color:var(--ink);outline:none}
+input:focus,select:focus,textarea:focus{border-color:var(--purple)}
+.f{display:flex;flex-direction:column;gap:4px;margin-bottom:10px}
+.f label{font-size:.76rem;font-weight:700}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px 14px}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.notice{display:none;margin-top:10px;padding:10px 12px;border-radius:9px;font-size:.84rem}
+.notice.ok{display:block;background:var(--green-soft);color:var(--green)} .notice.err{display:block;background:var(--red-soft);color:var(--red)}
+.chart{position:relative;min-height:240px}
+.chart svg{display:block;width:100%;height:auto;overflow:visible}
+.tip{position:absolute;pointer-events:none;background:#fff;border:1px solid var(--line);border-radius:10px;padding:8px 11px;font-size:.76rem;box-shadow:0 6px 20px rgba(18,17,28,.12);min-width:170px;display:none}
+.tip div{display:flex;justify-content:space-between;gap:12px}
+.legend{display:flex;gap:14px;font-size:.74rem;color:var(--body);margin-top:8px;flex-wrap:wrap}
+.legend i{display:inline-block;width:12px;height:3px;border-radius:2px;margin-right:6px;vertical-align:middle}
+.funnel{display:flex;flex-direction:column;gap:6px}
+.fstep{display:grid;grid-template-columns:170px 1fr 70px;gap:10px;align-items:center;font-size:.84rem}
+.fbar{background:var(--shell);border-radius:99px;height:14px;overflow:hidden}
+.fbar div{background:var(--purple);height:100%;border-radius:99px}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.chip{border:1.5px solid var(--line);background:#fff;border-radius:99px;padding:5px 12px;font-size:.78rem;font-weight:700;cursor:pointer}
+.chip[aria-pressed="true"]{border-color:var(--purple);background:var(--purple-soft);color:var(--purple)}
+.chip span{color:var(--faint);font-weight:500;margin-left:4px}
+.login{max-width:380px;margin:12vh auto 0}
+.spin{display:inline-block;width:13px;height:13px;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;animation:sp .7s linear infinite;vertical-align:-2px}
+@keyframes sp{to{transform:rotate(360deg)}}
+.muted{color:var(--faint)}
+.small{font-size:.76rem}
+@media(max-width:700px){.fstep{grid-template-columns:110px 1fr 50px}}
+</style>
+</head>
+<body>
+<div id="loginView" class="wrap" style="display:none">
+  <div class="card login">
+    <div class="brand" style="margin-bottom:14px"><svg width="30" height="30" viewBox="0 0 32 32" aria-hidden="true" style="display:block"><rect width="32" height="32" rx="8" fill="#5B4EF5"/><g transform="translate(4.6 4.6) scale(0.95)"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z" fill="none" stroke="#fff" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></g></svg> Founder dashboard</div>
+    <div class="f"><label for="fpw">Password</label><input id="fpw" type="password" autocomplete="current-password"/></div>
+    <button class="btn" id="fgo" style="width:100%">Sign in</button>
+    <div class="notice" id="fmsg"></div>
+  </div>
+</div>
+<div id="appView" class="wrap" style="display:none">
+  <div class="top"><div class="brand"><svg width="30" height="30" viewBox="0 0 32 32" aria-hidden="true" style="display:block"><rect width="32" height="32" rx="8" fill="#5B4EF5"/><g transform="translate(4.6 4.6) scale(0.95)"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z" fill="none" stroke="#fff" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></g></svg> dozfi founder dashboard</div><div class="row"><button class="btn btn-ghost btn-sm" onclick="loadAll()">Refresh</button><button class="link" onclick="signOut()">Sign out</button></div></div>
+  <div class="tabs" id="tabs">
+    <button class="tab" data-p="overview" aria-selected="true">Overview</button>
+    <button class="tab" data-p="businesses" aria-selected="false">Businesses</button>
+    <button class="tab" data-p="leads" aria-selected="false">Leads</button>
+    <button class="tab" data-p="funnel" aria-selected="false">Conversion</button>
+    <button class="tab" data-p="expenses" aria-selected="false">Expenses</button>
+    <button class="tab" data-p="settings" aria-selected="false">Settings</button>
+    <button class="tab" data-p="alerts" aria-selected="false">Alerts <span id="alertCount" class="tag no" style="display:none"></span></button>
+  </div>
+
+  <section class="page on" id="p-overview">
+    <div class="metrics" id="ovMetrics"></div>
+    <div class="card"><div class="card-h"><div><div class="card-t">Revenue, expenses and estimated profit</div><div class="card-d">Revenue is subscription payments collected. Expenses are texting costs (Twilio's reported price when known, otherwise estimated from segments, plus your number and registration fees) and the expenses you add.</div></div>
+      <select id="ovMonths"><option value="6">6 months</option><option value="12" selected>12 months</option><option value="24">24 months</option></select></div>
+      <div class="chart" id="ovChart"></div>
+      <div class="legend"><span><i style="background:#1F1E2C"></i>Revenue</span><span><i style="background:#A3A2B3"></i>Expenses</span><span><i style="background:#5B4EF5"></i>Estimated profit</span></div></div>
+    <div class="card"><div class="card-t" style="margin-bottom:8px">By month</div><div class="scroll" id="ovTable"></div></div>
+  </section>
+
+  <section class="page" id="p-businesses">
+    <div class="card"><div class="card-h"><div class="card-t">Businesses <span class="muted small" id="bizCount"></span></div><input id="bizSearch" placeholder="Search name, email, type"/></div>
+      <div class="card-d" style="margin-bottom:10px">Texting status: set a business to <b>pending</b> while its carrier registration is being approved, <b>paused</b> to stop all its texts, <b>active</b> when it may text.</div>
+      <div class="scroll" id="bizBox"></div></div>
+  </section>
+
+  <section class="page" id="p-leads">
+    <div class="metrics" id="leadMetrics"></div>
+    <div class="card"><div class="card-h"><div class="card-t">Pipeline</div><div class="row"><input id="leadSearch" placeholder="Search leads"/><button class="btn btn-sm" onclick="toggleLeadForm()">Add lead</button><button class="btn btn-ghost btn-sm" onclick="$('leadFile').click()">Import CSV</button><input type="file" id="leadFile" accept=".csv,text/csv" style="display:none"/></div></div>
+      <div id="leadForm" style="display:none" class="card">
+        <div class="grid">
+          <div class="f"><label>Business name</label><input id="lfName"/></div><div class="f"><label>Industry</label><input id="lfIndustry" placeholder="Hair salon"/></div>
+          <div class="f"><label>Website</label><input id="lfWeb"/></div><div class="f"><label>Contact (phone or email)</label><input id="lfContact"/></div>
+          <div class="f"><label>Source</label><input id="lfSource" placeholder="Instagram, referral, walk-in…"/></div><div class="f"><label>Follow-up date</label><input id="lfFollow" type="date"/></div>
+        </div>
+        <div class="f"><label>Notes</label><textarea id="lfNotes" rows="2"></textarea></div>
+        <button class="btn btn-sm" id="lfSave">Save lead</button><div class="notice" id="lfMsg"></div>
+      </div>
+      <div class="card-d" style="margin-bottom:8px">CSV columns Dozfi understands: business name, industry, website, contact, source, stage, date contacted, follow-up date, notes.</div>
+      <div class="notice" id="leadMsg"></div>
+      <div class="chips" id="stageChips"></div>
+      <div class="scroll" id="leadBox"></div></div>
+    <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(320px,1fr))">
+      <div class="card"><div class="card-t" style="margin-bottom:8px">Leads by industry</div><div id="leadByInd"></div></div>
+      <div class="card"><div class="card-t" style="margin-bottom:8px">Leads by source</div><div id="leadBySrc"></div></div>
+    </div>
+  </section>
+
+  <section class="page" id="p-funnel">
+    <div class="card"><div class="card-h"><div class="card-t">Website to paying customer</div><select id="funDays"><option value="7">7 days</option><option value="30" selected>30 days</option><option value="90">90 days</option><option value="365">12 months</option></select></div>
+      <div class="funnel" id="funBox"></div>
+      <div class="card-d" style="margin-top:10px">Visitors and signup starts are counted from homepage visits (no cookies, no personal data). Activated = sent at least one real reminder.</div></div>
+    <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(320px,1fr))">
+      <div class="card"><div class="card-t" style="margin-bottom:8px">Signups by industry</div><div id="funInd"></div></div>
+      <div class="card"><div class="card-t" style="margin-bottom:8px">Signups by source</div><div id="funSrc"></div></div>
+    </div>
+  </section>
+
+  <section class="page" id="p-expenses">
+    <div class="card"><div class="card-t" style="margin-bottom:10px">Add a business expense</div>
+      <div class="grid"><div class="f"><label>Date</label><input id="exDate" type="date"/></div><div class="f"><label>Amount ($)</label><input id="exAmt" type="number" min="0" step="0.01"/></div>
+        <div class="f"><label>Category</label><select id="exCat"><option>Hosting</option><option>Software</option><option>Marketing</option><option>Texting</option><option>Payments</option><option>Contractors</option><option>Legal</option><option>Other</option></select></div>
+        <div class="f"><label>Description</label><input id="exDesc"/></div></div>
+      <button class="btn btn-sm" id="exSave">Add expense</button><div class="notice" id="exMsg"></div></div>
+    <div class="card"><div class="card-t" style="margin-bottom:8px">Expenses</div><div class="scroll" id="exBox"></div></div>
+  </section>
+
+  <section class="page" id="p-settings">
+    <div class="card"><div class="card-t" style="margin-bottom:4px">Plan and pricing</div>
+      <div class="card-d" style="margin-bottom:12px">A new price applies to new signups. Existing subscribers keep the price they signed up at unless you change their subscription in Stripe.</div>
+      <div class="grid">
+        <div class="f"><label>Monthly price ($)</label><input id="stPrice" type="number" min="1" step="1"/></div>
+        <div class="f"><label>Free trial (days)</label><input id="stTrial" type="number" min="0" max="365"/></div>
+        <div class="f"><label>Texts included per month (segments)</label><input id="stAllow" type="number" min="0"/></div>
+        <div class="f"><label>Grace period after a failed payment (days)</label><input id="stGrace" type="number" min="0" max="60"/></div>
+        <div class="f"><label>Intro coupon (Stripe coupon ID, optional)</label><input id="stCoupon"/></div>
+      </div>
+      <div class="card-t" style="margin:10px 0 8px;font-size:.9rem">Costs used for estimates</div>
+      <div class="grid">
+        <div class="f"><label>Twilio cost per segment ($)</label><input id="stSeg" type="number" min="0" step="0.0001"/></div>
+        <div class="f"><label>Carrier fee per segment ($)</label><input id="stCarrier" type="number" min="0" step="0.0001"/></div>
+        <div class="f"><label>Phone number cost per month ($)</label><input id="stNumber" type="number" min="0" step="0.01"/></div>
+        <div class="f"><label>Registration fees per month ($)</label><input id="stReg" type="number" min="0" step="0.01"/></div>
+      </div>
+      <button class="btn btn-sm" id="stSave">Save settings</button><div class="notice" id="stMsg"></div></div>
+  </section>
+
+  <section class="page" id="p-alerts">
+    <div class="card"><div class="card-t" style="margin-bottom:8px">Failed payments</div><div id="alPast"></div></div>
+    <div class="card"><div class="card-t" style="margin-bottom:4px">Things that went wrong</div><div class="card-d" style="margin-bottom:8px">Failed jobs, webhook errors, delivery problems and businesses over their text allowance. If FOUNDER_EMAIL is set, you also get one email a day when something is here.</div><div class="scroll" id="alBox"></div></div>
+  </section>
+</div>
+<script>
+const API = 'https://dozfi-backend.vercel.app';
+const $ = id => document.getElementById(id);
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const money = n => (Number(n) < 0 ? '−$' : '$') + Math.abs(Number(n) || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+const day = iso => iso ? new Date(String(iso).length === 10 ? iso + 'T12:00:00' : iso).toLocaleDateString([], { month: 'short', day: 'numeric', year: 'numeric' }) : '—';
+let TOKEN = null; try { TOKEN = sessionStorage.getItem('dozfi_founder'); } catch (e) {}
+const F = {};
+function note(id, t, ok) { const e = $(id); e.className = 'notice ' + (ok ? 'ok' : 'err'); e.textContent = t; }
+async function api(path, opts) {
+  opts = opts || {};
+  opts.headers = Object.assign({ 'Content-Type': 'application/json' }, opts.headers || {});
+  if (TOKEN) opts.headers.Authorization = 'Bearer ' + TOKEN;
+  if (opts.json !== undefined) { opts.method = opts.method || 'POST'; opts.body = JSON.stringify(opts.json); delete opts.json; }
+  let res, data = null;
+  try { res = await fetch(API + path, opts); } catch (e) { throw new Error("Couldn't reach the server. Check your connection."); }
+  try { data = await res.json(); } catch (e) {}
+  if (res.status === 401 && path !== '/founder/login') { signOut(); throw new Error('Please sign in again.'); }
+  if (!res.ok || (data && data.success === false)) throw new Error((data && data.error) || 'Something went wrong.');
+  return data;
+}
+function signOut() { TOKEN = null; try { sessionStorage.removeItem('dozfi_founder'); } catch (e) {} $('appView').style.display = 'none'; $('loginView').style.display = 'block'; }
+$('fgo').onclick = async () => {
+  try { const d = await api('/founder/login', { json: { password: $('fpw').value } }); TOKEN = d.token; try { sessionStorage.setItem('dozfi_founder', TOKEN); } catch (e) {} boot(); }
+  catch (e) { note('fmsg', e.message); }
+};
+$('fpw').onkeydown = e => { if (e.key === 'Enter') $('fgo').click(); };
+document.querySelectorAll('#tabs .tab').forEach(t => t.onclick = () => {
+  document.querySelectorAll('#tabs .tab').forEach(x => x.setAttribute('aria-selected', String(x === t)));
+  document.querySelectorAll('.page').forEach(p => p.classList.toggle('on', p.id === 'p-' + t.dataset.p));
+  if (t.dataset.p === 'overview' && F.overview) drawChart();
+});
+function boot() { $('loginView').style.display = 'none'; $('appView').style.display = 'block'; loadAll(); }
+function loadAll() { loadOverview(); loadBusinesses(); loadLeads(); loadFunnel(); loadExpenses(); loadAlerts(); }
+
+/* overview */
+async function loadOverview() {
+  try { F.overview = await api('/founder/overview?months=' + $('ovMonths').value); renderOverview(); fillSettings(F.overview.settings); }
+  catch (e) { $('ovMetrics').innerHTML = `<div class="card">${esc(e.message)}</div>`; }
+}
+$('ovMonths').onchange = loadOverview;
+function renderOverview() {
+  const m = F.overview.metrics;
+  const card = (l, v, n, cls) => `<div class="metric"><div class="l">${l}</div><div class="v ${cls || ''}">${v}</div>${n ? `<div class="n">${n}</div>` : ''}</div>`;
+  $('ovMetrics').innerHTML = card('Active paid subscribers', m.activePaid, m.pastDue ? `${m.pastDue} with a failed payment` : '') + card('Free trials', m.trials) + card('New this month', m.newThisMonth)
+    + card('Cancellations this month', m.cancellationsThisMonth, '', m.cancellationsThisMonth ? 'neg' : '') + card('Monthly recurring revenue', money(m.mrr), 'Active and past-due subscriptions')
+    + card('Collected this month', money(m.collectedThisMonth)) + card('Texting costs this month', money(m.messagingCostsThisMonth), 'Estimated')
+    + card('Other expenses this month', money(m.operatingExpensesThisMonth)) + card('Estimated profit this month', money(m.estimatedProfitThisMonth), 'Collected minus costs', m.estimatedProfitThisMonth < 0 ? 'neg' : 'pos');
+  drawChart();
+  const rows = F.overview.series.slice().reverse();
+  $('ovTable').innerHTML = `<table><thead><tr><th>Month</th><th>Revenue</th><th>Texting</th><th>Other expenses</th><th>Estimated profit</th></tr></thead><tbody>${rows.map(r => `<tr><td>${esc(new Date(r.label + '-15').toLocaleDateString([], { month: 'long', year: 'numeric' }))}</td><td>${money(r.revenue)}</td><td>${money(r.messaging)}</td><td>${money(r.otherExpenses)}</td><td class="${r.profit < 0 ? 'neg' : ''}">${money(r.profit)}</td></tr>`).join('')}</tbody></table>`;
+}
+const COLORS = { revenue: '#1F1E2C', expenses: '#A3A2B3', profit: '#5B4EF5' }, NAMES = { revenue: 'Revenue', expenses: 'Expenses', profit: 'Estimated profit' };
+function drawChart() {
+  const el = $('ovChart'), series = F.overview.series, lines = ['revenue', 'expenses', 'profit'];
+  if (!el.offsetParent) return;
+  const W = Math.max(300, el.clientWidth), H = 240, pad = { l: 60, r: 12, t: 12, b: 28 };
+  const vals = series.flatMap(p => lines.map(k => p[k]));
+  let lo = Math.min(...vals), hi = Math.max(...vals); if (lo === hi) { lo -= 10; hi += 10; }
+  const raw = (hi - lo) / 4, mag = Math.pow(10, Math.floor(Math.log10(raw))), st = [1, 2, 2.5, 5, 10].find(x => x * mag >= raw) * mag;
+  lo = Math.floor(lo / st) * st; hi = Math.ceil(hi / st) * st;
+  const iw = W - pad.l - pad.r, ih = H - pad.t - pad.b;
+  const x = i => pad.l + (series.length === 1 ? iw / 2 : i * iw / (series.length - 1)), y = v => pad.t + (hi - v) / (hi - lo) * ih;
+  let s = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Revenue, expenses and estimated profit by month">`;
+  for (let t = lo; t <= hi + st / 2; t += st) s += `<line x1="${pad.l}" x2="${W - pad.r}" y1="${y(t)}" y2="${y(t)}" stroke="${Math.abs(t) < 1e-9 ? '#C9C8D3' : '#EEEDF3'}"/><text x="${pad.l - 8}" y="${y(t) + 4}" text-anchor="end" font-size="11" fill="#8A8999">${t < 0 ? '−' : ''}$${Math.abs(Math.round(t)).toLocaleString()}</text>`;
+  const every = Math.max(1, Math.ceil(series.length / Math.floor(iw / 70)));
+  series.forEach((p, i) => { if (i % every === 0) s += `<text x="${x(i)}" y="${H - 8}" text-anchor="middle" font-size="11" fill="#8A8999">${new Date(p.label + '-15').toLocaleDateString([], { month: 'short' })}</text>`; });
+  lines.forEach(k => { s += `<polyline fill="none" stroke="${COLORS[k]}" stroke-width="${k === 'profit' ? 2.6 : 2}" stroke-linejoin="round" points="${series.map((p, i) => x(i) + ',' + y(p[k])).join(' ')}"/>`; series.forEach((p, i) => { s += `<circle cx="${x(i)}" cy="${y(p[k])}" r="3" fill="${COLORS[k]}"/>`; }); });
+  s += `<rect class="hit" x="${pad.l - 10}" y="0" width="${iw + 20}" height="${H}" fill="transparent"/></svg><div class="tip"></div>`;
+  el.innerHTML = s;
+  const svg = el.querySelector('svg'), tip = el.querySelector('.tip');
+  const show = ev => {
+    const r = svg.getBoundingClientRect(), px = ((ev.touches ? ev.touches[0].clientX : ev.clientX) - r.left) * W / r.width;
+    const i = Math.max(0, Math.min(series.length - 1, Math.round((px - pad.l) / iw * (series.length - 1)))), p = series[i];
+    tip.innerHTML = `<b>${esc(new Date(p.label + '-15').toLocaleDateString([], { month: 'long', year: 'numeric' }))}</b>` + lines.map(k => `<div><span>${NAMES[k]}</span><span class="${p[k] < 0 ? 'neg' : ''}">${money(p[k])}</span></div>`).join('');
+    tip.style.display = 'block'; const sc = r.width / W; const left = x(i) * sc + 12;
+    tip.style.left = (left + tip.offsetWidth > r.width ? x(i) * sc - tip.offsetWidth - 12 : left) + 'px'; tip.style.top = '8px';
+  };
+  const hit = el.querySelector('.hit'); hit.addEventListener('mousemove', show); hit.addEventListener('touchstart', show, { passive: true }); hit.addEventListener('mouseleave', () => tip.style.display = 'none');
+}
+window.addEventListener('resize', () => { if (F.overview) drawChart(); });
+
+/* businesses */
+const SUB_TAG = { trialing: ['Trial', 'rev'], active: ['Paying', 'ok'], past_due: ['Payment failed', 'no'], cancelled: ['Cancelled', 'none'] };
+async function loadBusinesses() {
+  try { F.biz = (await api('/founder/businesses')).businesses; renderBiz(); } catch (e) { $('bizBox').textContent = e.message; }
+}
+function renderBiz() {
+  const q = $('bizSearch').value.trim().toLowerCase();
+  const list = F.biz.filter(b => !q || [b.name, b.email, b.type, b.source].some(v => String(v || '').toLowerCase().includes(q)));
+  $('bizCount').textContent = `(${F.biz.length})`;
+  $('bizBox').innerHTML = list.length ? `<table><thead><tr><th>Business</th><th>Signed up</th><th>Subscription</th><th>Texting</th><th>Texts this month</th><th>Errors (7 days)</th><th>Last activity</th><th>Source</th></tr></thead><tbody>${list.map(b => {
+    const t = SUB_TAG[b.subscription] || [b.subscription || '—', 'none'];
+    return `<tr><td><strong>${esc(b.name)}</strong><div class="small muted">${esc(b.type || '')}${b.email ? ' · ' + esc(b.email) : ''}</div></td><td>${day(b.signup)}</td>
+      <td><span class="tag ${t[1]}">${esc(t[0])}</span>${b.subscription === 'trialing' && b.trialEndsAt ? `<div class="small muted">ends ${day(b.trialEndsAt)}</div>` : ''}</td>
+      <td><select onchange="setMessaging('${b.id}', this)">${['active', 'pending', 'paused'].map(s => `<option value="${s}" ${b.messaging === s ? 'selected' : ''}>${s[0].toUpperCase() + s.slice(1)}</option>`).join('')}</select></td>
+      <td>${esc(b.usage)}</td><td class="${b.errors7d ? 'neg' : ''}">${b.errors7d}</td><td>${b.lastActivity ? day(b.lastActivity) : '—'}</td><td>${esc(b.source || '—')}</td></tr>`;
+  }).join('')}</tbody></table>` : '<div class="muted">No businesses match.</div>';
+}
+$('bizSearch').oninput = renderBiz;
+async function setMessaging(id, sel) {
+  try { await api('/founder/businesses/' + id, { method: 'PATCH', json: { messaging_status: sel.value } }); const b = F.biz.find(x => x.id === id); if (b) b.messaging = sel.value; sel.style.borderColor = 'var(--green)'; setTimeout(() => sel.style.borderColor = '', 1200); }
+  catch (e) { alert(e.message); loadBusinesses(); }
+}
+
+/* leads */
+const STAGE_WORD = { new: 'New', contacted: 'Contacted', interested: 'Interested', demo: 'Demo', trial: 'Trial', paying: 'Paying', retained: 'Retained', canceled: 'Canceled' };
+F.stage = 'all';
+async function loadLeads() {
+  try { F.leads = await api('/founder/leads'); renderLeads(); } catch (e) { $('leadBox').textContent = e.message; }
+}
+function renderLeads() {
+  const L = F.leads, all = L.leads;
+  const trial = all.filter(l => ['trial', 'paying', 'retained'].includes(l.stage)).length, paying = all.filter(l => ['paying', 'retained'].includes(l.stage)).length;
+  const card = (l, v, n) => `<div class="metric"><div class="l">${l}</div><div class="v">${v}</div>${n ? `<div class="n">${n}</div>` : ''}</div>`;
+  $('leadMetrics').innerHTML = card('Leads', all.length) + card('Contacted this week', L.contactedThisWeek) + card('Follow-ups due', L.followUpsDue, 'Today or earlier')
+    + card('Lead → trial', all.length ? Math.round(trial / all.length * 100) + '%' : '—', `${trial} reached a trial`) + card('Lead → paying', all.length ? Math.round(paying / all.length * 100) + '%' : '—', `${paying} paying`);
+  $('stageChips').innerHTML = [['all', 'All', all.length]].concat(L.stages.map(s => [s, STAGE_WORD[s], L.byStage[s]])).map(([k, label, n]) => `<button class="chip" aria-pressed="${F.stage === k}" onclick="F.stage='${k}';renderLeads()">${label}<span>${n || 0}</span></button>`).join('');
+  const q = $('leadSearch').value.trim().toLowerCase();
+  const list = all.filter(l => (F.stage === 'all' || (l.stage || 'new') === F.stage) && (!q || [l.business_name, l.industry, l.contact, l.source, l.notes].some(v => String(v || '').toLowerCase().includes(q))));
+  const today = new Date().toISOString().slice(0, 10);
+  $('leadBox').innerHTML = list.length ? `<table><thead><tr><th>Business</th><th>Stage</th><th>Contacted</th><th>Follow up</th><th>Source</th><th>Notes</th><th>Do not contact</th></tr></thead><tbody>${list.slice(0, 500).map(l => `<tr>
+      <td><strong>${esc(l.business_name)}</strong><div class="small muted">${esc([l.industry, l.contact].filter(Boolean).join(' · '))}${l.website ? ` · <a href="${esc(/^https?:/.test(l.website) ? l.website : 'https://' + l.website)}" target="_blank" rel="noopener">site</a>` : ''}</div></td>
+      <td><select onchange="updLead('${l.id}', { stage: this.value })" ${l.do_not_contact ? 'disabled' : ''}>${L.stages.map(s => `<option value="${s}" ${(l.stage || 'new') === s ? 'selected' : ''}>${STAGE_WORD[s]}</option>`).join('')}</select></td>
+      <td><input type="date" value="${esc(l.date_contacted || '')}" onchange="updLead('${l.id}', { date_contacted: this.value })"/></td>
+      <td><input type="date" value="${esc(l.follow_up_date || '')}" style="${l.follow_up_date && l.follow_up_date <= today && !l.do_not_contact ? 'border-color:var(--amber)' : ''}" onchange="updLead('${l.id}', { follow_up_date: this.value })"/></td>
+      <td>${esc(l.source || '—')}</td>
+      <td><textarea rows="1" style="min-width:160px" onchange="updLead('${l.id}', { notes: this.value })">${esc(l.notes || '')}</textarea></td>
+      <td><input type="checkbox" ${l.do_not_contact ? 'checked' : ''} onchange="updLead('${l.id}', { do_not_contact: this.checked })" style="accent-color:var(--red)"/></td></tr>`).join('')}</tbody></table>${list.length > 500 ? '<div class="small muted">Showing 500.</div>' : ''}`
+    : '<div class="muted">No leads here yet.</div>';
+  const grp = rows => rows.length ? `<table><thead><tr><th></th><th>Leads</th><th>Reached trial</th><th>Paying</th></tr></thead><tbody>${rows.map(r => `<tr><td>${esc(r.key)}</td><td>${r.total}</td><td>${r.trial} <span class="muted small">(${Math.round(r.trial / r.total * 100)}%)</span></td><td>${r.paying} <span class="muted small">(${Math.round(r.paying / r.total * 100)}%)</span></td></tr>`).join('')}</tbody></table>` : '<div class="muted">No leads yet.</div>';
+  $('leadByInd').innerHTML = grp(L.byIndustry); $('leadBySrc').innerHTML = grp(L.bySource);
+}
+$('leadSearch').oninput = () => renderLeads();
+function toggleLeadForm() { const f = $('leadForm'); f.style.display = f.style.display === 'none' ? 'block' : 'none'; if (f.style.display === 'block') $('lfName').focus(); }
+$('lfSave').onclick = async () => {
+  try {
+    const d = await api('/founder/leads', { json: { business_name: $('lfName').value, industry: $('lfIndustry').value, website: $('lfWeb').value, contact: $('lfContact').value, source: $('lfSource').value, follow_up_date: $('lfFollow').value, notes: $('lfNotes').value } });
+    if (d.skipped.length) return note('lfMsg', d.skipped[0].reason);
+    ['lfName', 'lfIndustry', 'lfWeb', 'lfContact', 'lfSource', 'lfFollow', 'lfNotes'].forEach(id => $(id).value = '');
+    note('lfMsg', 'Lead added.', true); loadLeads();
+  } catch (e) { note('lfMsg', e.message); }
+};
+async function updLead(id, fields) {
+  try { const d = await api('/founder/leads/' + id, { method: 'PATCH', json: fields }); const i = F.leads.leads.findIndex(l => l.id === id); if (i >= 0) F.leads.leads[i] = d.lead; if (fields.stage || fields.do_not_contact !== undefined) loadLeads(); }
+  catch (e) { note('leadMsg', e.message); loadLeads(); }
+}
+function parseCsv(text) {
+  const rows = []; let row = [], cur = '', q = false;
+  for (let i = 0; i < text.length; i++) {
+    const c = text[i];
+    if (q) { if (c === '"' && text[i + 1] === '"') { cur += '"'; i++; } else if (c === '"') q = false; else cur += c; }
+    else if (c === '"') q = true; else if (c === ',') { row.push(cur); cur = ''; } else if (c === '\n' || c === '\r') { if (c === '\r' && text[i + 1] === '\n') i++; row.push(cur); rows.push(row); row = []; cur = ''; } else cur += c;
+  }
+  if (cur || row.length) { row.push(cur); rows.push(row); }
+  return rows.filter(r => r.some(v => v.trim()));
+}
+const LEAD_COLS = { business_name: ['business name', 'business', 'company', 'name'], industry: ['industry', 'type', 'category'], website: ['website', 'site', 'url'], contact: ['contact', 'phone', 'email'], source: ['source', 'channel'], stage: ['stage', 'status'], date_contacted: ['date contacted', 'contacted'], follow_up_date: ['follow-up date', 'follow up date', 'follow up', 'followup'], notes: ['notes', 'note'] };
+$('leadFile').onchange = async e => {
+  const f = e.target.files[0]; if (!f) return;
+  const rows = parseCsv(await f.text()); e.target.value = '';
+  if (rows.length < 2) return note('leadMsg', 'That file has no rows.');
+  const head = rows[0].map(h => h.trim().toLowerCase());
+  const idx = {}; Object.entries(LEAD_COLS).forEach(([k, names]) => { const i = head.findIndex(h => names.includes(h)); if (i >= 0) idx[k] = i; });
+  if (idx.business_name === undefined) return note('leadMsg', 'Add a "Business name" column to the file.');
+  const toDate = v => { if (!v) return ''; const d = new Date(v); return isNaN(d) ? '' : d.toISOString().slice(0, 10); };
+  const leads = rows.slice(1).map(r => { const o = {}; Object.entries(idx).forEach(([k, i]) => { o[k] = (r[i] || '').trim(); }); if (o.stage) o.stage = o.stage.toLowerCase(); if (o.stage && !STAGE_WORD[o.stage]) delete o.stage; ['date_contacted', 'follow_up_date'].forEach(k => { if (o[k] !== undefined) o[k] = toDate(o[k]); }); return o; });
+  try { const d = await api('/founder/leads', { json: { leads } }); note('leadMsg', `Added ${d.added} lead${d.added === 1 ? '' : 's'}.${d.skipped.length ? ` Skipped ${d.skipped.length} (${[...new Set(d.skipped.map(s => s.reason))].join('; ')}).` : ''}`, true); loadLeads(); }
+  catch (er) { note('leadMsg', er.message); }
+};
+
+/* funnel */
+async function loadFunnel() {
+  try { F.funnel = await api('/founder/funnel?days=' + $('funDays').value); renderFunnel(); } catch (e) { $('funBox').textContent = e.message; }
+}
+$('funDays').onchange = loadFunnel;
+function renderFunnel() {
+  const f = F.funnel.funnel;
+  const steps = [['Website visits', f.visitors], ['Started signup', f.signupStarted], ['Signed up', f.signups], ['Finished setup', f.onboardingCompleted], ['Sent a real reminder', f.activated], ['Still in trial', f.trials], ['First payment', f.firstPayments], ['Cancelled', f.cancelled]];
+  const max = Math.max(1, ...steps.map(s => s[1]));
+  $('funBox').innerHTML = steps.map(([l, n], i) => {
+    const prev = i > 0 && i < 7 ? steps[i - 1][1] : null;
+    return `<div class="fstep"><span>${l}</span><div class="fbar"><div style="width:${Math.max(n ? 2 : 0, Math.round(n / max * 100))}%;${l === 'Cancelled' ? 'background:var(--red)' : ''}"></div></div><span style="text-align:right;font-weight:700">${n}${prev ? ` <span class="muted small">${Math.round(n / prev * 100)}%</span>` : ''}</span></div>`;
+  }).join('');
+  const grp = rows => rows.length ? `<table><thead><tr><th></th><th>Signups</th><th>Activated</th><th>Paying</th><th>Cancelled</th></tr></thead><tbody>${rows.map(r => `<tr><td>${esc(r.key)}</td><td>${r.signups}</td><td>${r.activated}</td><td>${r.paying}</td><td>${r.cancelled}</td></tr>`).join('')}</tbody></table>` : '<div class="muted">No signups in these dates.</div>';
+  $('funInd').innerHTML = grp(F.funnel.byIndustry); $('funSrc').innerHTML = grp(F.funnel.bySource);
+}
+
+/* expenses */
+async function loadExpenses() {
+  try { F.exp = (await api('/founder/expenses')).expenses; $('exBox').innerHTML = F.exp.length ? `<table><thead><tr><th>Date</th><th>Category</th><th>Description</th><th style="text-align:right">Amount</th></tr></thead><tbody>${F.exp.map(x => `<tr><td>${day(x.date)}</td><td>${esc(x.category)}</td><td>${esc(x.description || '')}</td><td style="text-align:right">${money(x.amount)}</td></tr>`).join('')}</tbody></table>` : '<div class="muted">No expenses added yet.</div>'; }
+  catch (e) { $('exBox').textContent = e.message; }
+}
+$('exDate').value = new Date().toISOString().slice(0, 10);
+$('exSave').onclick = async () => {
+  try { await api('/founder/expenses', { json: { date: $('exDate').value, amount: $('exAmt').value, category: $('exCat').value, description: $('exDesc').value } }); $('exAmt').value = ''; $('exDesc').value = ''; note('exMsg', 'Expense added.', true); loadExpenses(); loadOverview(); }
+  catch (e) { note('exMsg', e.message); }
+};
+
+/* settings */
+function fillSettings(s) {
+  $('stPrice').value = Number(s.plan_price_cents) / 100; $('stTrial').value = s.trial_days; $('stAllow').value = s.sms_allowance; $('stGrace').value = s.grace_days; $('stCoupon').value = s.intro_coupon || '';
+  $('stSeg').value = s.sms_cost_per_segment; $('stCarrier').value = s.sms_carrier_fee_per_segment; $('stNumber').value = s.number_cost_monthly; $('stReg').value = s.registration_cost_monthly;
+}
+$('stSave').onclick = async () => {
+  const price = Number($('stPrice').value);
+  if (!(price >= 1)) return note('stMsg', 'Enter a monthly price of at least $1.');
+  try {
+    const d = await api('/founder/settings', { method: 'PUT', json: { plan_price_cents: Math.round(price * 100), trial_days: $('stTrial').value, sms_allowance: $('stAllow').value, grace_days: $('stGrace').value, intro_coupon: $('stCoupon').value.trim(),
+      sms_cost_per_segment: $('stSeg').value, sms_carrier_fee_per_segment: $('stCarrier').value, number_cost_monthly: $('stNumber').value, registration_cost_monthly: $('stReg').value } });
+    fillSettings(d.settings); note('stMsg', 'Saved. The homepage and new signups use these now.', true);
+  } catch (e) { note('stMsg', e.message); }
+};
+
+/* alerts */
+async function loadAlerts() {
+  try {
+    const d = await api('/founder/alerts');
+    $('alPast').innerHTML = d.pastDue.length ? d.pastDue.map(b => `<div style="padding:6px 0">${esc(b.business_name)} <span class="muted small">payment failed ${day(b.payment_failed_at)}</span></div>`).join('') : '<div class="muted">None.</div>';
+    const recent = d.problems.filter(p => Date.now() - new Date(p.created_at) < 7 * 86400000).length;
+    $('alertCount').style.display = recent ? 'inline-block' : 'none'; $('alertCount').textContent = recent;
+    $('alBox').innerHTML = d.problems.length ? `<table><thead><tr><th>When</th><th>Area</th><th>What happened</th></tr></thead><tbody>${d.problems.map(p => `<tr><td style="white-space:nowrap">${new Date(p.created_at).toLocaleString([], { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })}</td><td>${esc(p.area)}</td><td>${esc(p.message)}</td></tr>`).join('')}</tbody></table>` : '<div class="muted">Nothing has gone wrong.</div>';
+  } catch (e) { $('alBox').textContent = e.message; }
+}
+
+if (TOKEN) boot(); else signOut();
+</script>
+</body>
+</html>
