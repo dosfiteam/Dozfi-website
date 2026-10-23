@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Book an appointment</title>
+<meta name="robots" content="noindex"/>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg"/>
+<meta name="theme-color" content="#5B4EF5"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--purple:#5B4EF5;--purple-dark:#4A3EE0;--purple-soft:#F2F0FE;--green:#0F8A4C;--green-soft:#ECFAF1;--red:#C7342B;--red-soft:#FDF1F0;--ink:#12111C;--body:#4E4D5E;--faint:#8E8DA0;--line:#E6E5EE;--shell:#F6F6F9}
+body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:var(--shell);color:var(--ink);-webkit-font-smoothing:antialiased;line-height:1.5;min-height:100vh}
+button,input,textarea{font-family:inherit;font-size:inherit}
+.wrap{max-width:560px;margin:0 auto;padding:28px 16px 60px}
+.top{margin-bottom:20px}
+.biz{font-size:1.5rem;font-weight:800;letter-spacing:-.03em}
+.addr{font-size:.86rem;color:var(--body);margin-top:2px}
+.card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:20px;margin-bottom:14px}
+.step-h{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
+.step-t{font-size:1rem;font-weight:800}
+.step-n{font-size:.72rem;font-weight:800;color:var(--purple);text-transform:uppercase;letter-spacing:.06em}
+.change{background:none;border:none;color:var(--purple);font-weight:700;font-size:.84rem;cursor:pointer}
+.chosen{font-size:.9rem;color:var(--body)}
+.svc{width:100%;display:flex;justify-content:space-between;align-items:center;gap:12px;text-align:left;background:#fff;border:1.5px solid var(--line);border-radius:12px;padding:14px 16px;cursor:pointer;margin-bottom:8px}
+.svc:hover{border-color:var(--purple)}
+.svc-n{font-weight:700}
+.svc-d{font-size:.8rem;color:var(--faint)}
+.svc-p{font-weight:800;white-space:nowrap}
+.days{display:flex;gap:8px;overflow-x:auto;padding-bottom:6px;scrollbar-width:thin}
+.day{flex:0 0 auto;width:64px;border:1.5px solid var(--line);background:#fff;border-radius:12px;padding:9px 0;text-align:center;cursor:pointer}
+.day b{display:block;font-size:1.1rem}
+.day span{font-size:.7rem;color:var(--faint);font-weight:700;text-transform:uppercase}
+.day[aria-pressed="true"]{border-color:var(--purple);background:var(--purple-soft);color:var(--purple)}
+.day:disabled{opacity:.4;cursor:default}
+.times{display:grid;grid-template-columns:repeat(auto-fill,minmax(92px,1fr));gap:8px;margin-top:14px}
+.time{border:1.5px solid var(--line);background:#fff;border-radius:10px;padding:10px 0;font-weight:700;cursor:pointer}
+.time:hover{border-color:var(--purple);color:var(--purple)}
+.none{font-size:.86rem;color:var(--body);padding:14px 0 4px}
+.f{margin-bottom:12px}
+.f label{display:block;font-size:.8rem;font-weight:700;margin-bottom:5px}
+.f input,.f textarea{width:100%;border:1.5px solid var(--line);border-radius:10px;padding:11px 12px;background:#fff;color:var(--ink);outline:none}
+.f input:focus,.f textarea:focus{border-color:var(--purple)}
+.f textarea{min-height:64px;resize:vertical}
+.check{display:flex;gap:10px;align-items:flex-start;font-size:.86rem;margin-bottom:10px;cursor:pointer}
+.check input{margin-top:3px;width:17px;height:17px;accent-color:var(--purple);flex-shrink:0}
+.fine{font-size:.74rem;color:var(--faint);line-height:1.5;margin:4px 0 14px}
+.btn{width:100%;background:var(--purple);color:#fff;border:none;border-radius:12px;padding:14px;font-weight:800;font-size:1rem;cursor:pointer}
+.btn:hover{background:var(--purple-dark)}
+.btn:disabled{opacity:.6;cursor:default}
+.btn-ghost{background:#fff;color:var(--ink);border:1.5px solid var(--line)}
+.btn-ghost:hover{background:var(--shell)}
+.msg{display:none;border-radius:10px;padding:11px 13px;font-size:.86rem;margin-top:12px;background:var(--red-soft);color:var(--red)}
+.done-ic{width:52px;height:52px;border-radius:50%;background:var(--purple-soft);color:var(--purple);display:flex;align-items:center;justify-content:center;margin-bottom:12px}
+.kv{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid var(--line);font-size:.9rem}
+.kv:last-child{border-bottom:none}
+.kv span:first-child{color:var(--faint)}
+.kv span:last-child{font-weight:700;text-align:right}
+.tz{font-size:.76rem;color:var(--faint);margin-top:10px}
+.foot{text-align:center;font-size:.74rem;color:var(--faint);margin-top:22px}
+.foot a{color:var(--faint)}
+.spin{display:inline-block;width:14px;height:14px;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;animation:sp .7s linear infinite;vertical-align:-2px}
+@keyframes sp{to{transform:rotate(360deg)}}
+.loading{color:var(--faint);font-size:.9rem;padding:20px 0}
+.hidden{display:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top"><div class="biz" id="bizName">Book an appointment</div><div class="addr" id="bizAddr"></div></div>
+  <div id="app"><div class="card loading"><span class="spin"></span> Loading…</div></div>
+  <div class="foot">Online booking by <a href="https://dozfi.com" target="_blank" rel="noopener">Dozfi</a> · <a href="/privacy.html" target="_blank" rel="noopener">Privacy</a> · <a href="/terms.html" target="_blank" rel="noopener">Terms</a></div>
+</div>
+<script>
+const API = 'https://dozfi-backend.vercel.app';
+const $ = id => document.getElementById(id);
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const slug = (new URLSearchParams(location.search).get('b') || '').trim().toLowerCase();
+const B = { page: null, service: null, date: null, time: null, dayOffset: 0 };
+
+async function api(path, opts) {
+  let res, data = null;
+  try { res = await fetch(API + path, opts); } catch (e) { throw new Error("We couldn't connect. Check your internet connection and try again."); }
+  try { data = await res.json(); } catch (e) {}
+  if (!res.ok || (data && data.success === false)) { const err = new Error((data && data.error) || 'Something went wrong. Please try again.'); err.status = res.status; throw err; }
+  return data;
+}
+const tz = () => (B.page && B.page.business.timezone) || 'America/Chicago';
+const dateKey = d => new Intl.DateTimeFormat('en-CA', { timeZone: tz(), year: 'numeric', month: '2-digit', day: '2-digit' }).format(d);
+const addDays = (k, n) => { const d = new Date(k + 'T12:00:00Z'); d.setUTCDate(d.getUTCDate() + n); return d.toISOString().slice(0, 10); };
+const dayParts = k => { const d = new Date(k + 'T12:00:00Z'); return { wd: d.toLocaleDateString('en-US', { weekday: 'short', timeZone: 'UTC' }), day: d.getUTCDate(), mo: d.toLocaleDateString('en-US', { month: 'short', timeZone: 'UTC' }), long: d.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', timeZone: 'UTC' }) }; };
+const fmtTime = iso => new Date(iso).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', timeZone: tz() });
+const money = n => '$' + (Number(n) % 1 ? Number(n).toFixed(2) : Number(n));
+function priceText(s) { if (s.price == null) return 'Price on request'; return (s.pricing === 'starting_at' ? 'From ' : '') + money(s.price) + (s.pricing === 'hourly' ? '/hr' : ''); }
+function lengthText(m) { m = Number(m) || 0; return m >= 60 ? `${Math.floor(m / 60)} hr${m % 60 ? ' ' + (m % 60) + ' min' : ''}` : m + ' min'; }
+
+function unavailable(text) {
+  $('app').innerHTML = `<div class="card"><div class="step-t" style="margin-bottom:6px">This booking page isn't available</div><div class="chosen">${esc(text || 'Please contact the business directly to book.')}</div></div>`;
+}
+async function start() {
+  if (!slug) return unavailable();
+  try {
+    B.page = await api('/public/' + encodeURIComponent(slug));
+  } catch (e) { return unavailable(e.status === 404 ? 'Please contact the business directly to book.' : e.message); }
+  document.title = 'Book with ' + B.page.business.name;
+  $('bizName').textContent = B.page.business.name;
+  $('bizAddr').textContent = B.page.business.address || '';
+  if (!B.page.services.length || !B.page.hoursSet) return unavailable('Online booking isn\'t set up yet. Please contact the business directly to book.');
+  render();
+}
+function render() {
+  const p = B.page;
+  let html = '';
+  // Step 1: service
+  if (!B.service) {
+    html += `<div class="card"><div class="step-h"><div><div class="step-n">Step 1 of 3</div><div class="step-t">Choose a service</div></div></div>
+      ${p.services.map(s => `<button class="svc" onclick="pickService('${s.id}')"><span><span class="svc-n">${esc(s.name)}</span><br><span class="svc-d">${lengthText(s.minutes)}</span></span><span class="svc-p">${esc(priceText(s))}</span></button>`).join('')}</div>`;
+    $('app').innerHTML = html; return;
+  }
+  html += `<div class="card"><div class="step-h"><div><div class="step-n">Service</div><div class="chosen"><strong style="color:var(--ink)">${esc(B.service.name)}</strong> · ${lengthText(B.service.minutes)} · ${esc(priceText(B.service))}</div></div><button class="change" onclick="B.service=null;B.time=null;render()">Change</button></div></div>`;
+  // Step 2: day and time
+  if (!B.time) {
+    const today = dateKey(new Date());
+    const max = addDays(today, p.maxDaysAhead);
+    const first = addDays(today, B.dayOffset);
+    const days = []; for (let i = 0; i < 14; i++) { const k = addDays(first, i); if (k <= max) days.push(k); }
+    if (!B.date || B.date < first || B.date > days[days.length - 1]) B.date = days[0];
+    const sameTz = Intl.DateTimeFormat().resolvedOptions().timeZone === tz();
+    html += `<div class="card"><div class="step-h"><div><div class="step-n">Step 2 of 3</div><div class="step-t">Pick a day and time</div></div>
+        <div>${B.dayOffset > 0 ? '<button class="change" onclick="shiftDays(-14)">← Earlier</button>' : ''}${addDays(first, 14) <= max ? '<button class="change" onclick="shiftDays(14)">Later →</button>' : ''}</div></div>
+      <div class="days">${days.map(k => { const d = dayParts(k); return `<button class="day" aria-pressed="${k === B.date}" onclick="pickDay('${k}')" aria-label="${esc(d.long)}"><span>${d.wd}</span><b>${d.day}</b><span>${d.mo}</span></button>`; }).join('')}</div>
+      <div id="timesBox"><div class="loading"><span class="spin"></span> Finding open times…</div></div>
+      ${sameTz ? '' : `<div class="tz">Times are shown in the business's time zone (${esc(tz().replace(/_/g, ' '))}).</div>`}
+      <div class="msg" id="timeMsg"></div></div>`;
+    $('app').innerHTML = html;
+    if (B.notice) { $('timeMsg').textContent = B.notice; $('timeMsg').style.display = 'block'; B.notice = null; }
+    loadTimes();
+    return;
+  }
+  html += `<div class="card"><div class="step-h"><div><div class="step-n">When</div><div class="chosen"><strong style="color:var(--ink)">${esc(dayParts(B.date).long)}</strong> at ${esc(fmtTime(B.time))}</div></div><button class="change" onclick="B.time=null;render()">Change</button></div></div>`;
+  // Step 3: details
+  const v = B.form || {};
+  html += `<div class="card"><div class="step-n">Step 3 of 3</div><div class="step-t" style="margin-bottom:12px">Your details</div>
+    <div class="f"><label for="bkName">Your name</label><input id="bkName" autocomplete="name" value="${esc(v.name || '')}"/></div>
+    <div class="f"><label for="bkPhone">Mobile number</label><input id="bkPhone" type="tel" autocomplete="tel" placeholder="(314) 555-0101" value="${esc(v.phone || '')}"/></div>
+    <div class="f"><label for="bkEmail">Email, optional</label><input id="bkEmail" type="email" autocomplete="email" value="${esc(v.email || '')}"/></div>
+    <div class="f"><label for="bkNotes">Anything they should know? Optional</label><textarea id="bkNotes" maxlength="500">${esc(v.notes || '')}</textarea></div>
+    <label class="check"><input type="checkbox" id="bkConsent" ${v.consent ? 'checked' : ''}/><span>Text me appointment reminders and updates from ${esc(p.business.name)}.</span></label>
+    <label class="check"><input type="checkbox" id="bkMarketing" ${v.marketing ? 'checked' : ''}/><span>Also text me openings and offers. Optional.</span></label>
+    <div class="fine">Message frequency varies. Message and data rates may apply. Reply STOP to stop texts, HELP for help. Agreeing to texts is not required to book.</div>
+    <button class="btn" id="bkGo">Book ${esc(fmtTime(B.time))}</button>
+    <div class="msg" id="bkMsg"></div></div>`;
+  $('app').innerHTML = html;
+  $('bkGo').onclick = book;
+  setTimeout(() => $('bkName').focus(), 50);
+}
+function pickService(id) { B.service = B.page.services.find(s => String(s.id) === String(id)); B.time = null; render(); window.scrollTo(0, 0); }
+function shiftDays(n) { B.dayOffset = Math.max(0, B.dayOffset + n); B.date = null; render(); }
+function pickDay(k) { B.date = k; document.querySelectorAll('.day').forEach(d => d.setAttribute('aria-pressed', String(d.getAttribute('onclick').includes(k)))); loadTimes(); }
+let timesReq = 0;
+async function loadTimes() {
+  const box = $('timesBox'); if (!box) return;
+  const my = ++timesReq;
+  box.innerHTML = '<div class="loading"><span class="spin"></span> Finding open times…</div>';
+  try {
+    const d = await api(`/public/${encodeURIComponent(slug)}/slots?serviceId=${encodeURIComponent(B.service.id)}&date=${B.date}`);
+    if (my !== timesReq) return;
+    box.innerHTML = d.times.length ? `<div class="times">${d.times.map(t => `<button class="time" onclick="pickTime('${t}')">${esc(fmtTime(t))}</button>`).join('')}</div>`
+      : '<div class="none">No open times this day. Try another day.</div>';
+  } catch (e) { if (my === timesReq) box.innerHTML = `<div class="none">${esc(e.message)}</div>`; }
+}
+function pickTime(t) { B.time = t; render(); }
+function keepForm() {
+  B.form = { name: $('bkName').value, phone: $('bkPhone').value, email: $('bkEmail').value, notes: $('bkNotes').value, consent: $('bkConsent').checked, marketing: $('bkMarketing').checked };
+}
+async function book() {
+  keepForm();
+  const f = B.form, msg = $('bkMsg');
+  const fail = t => { msg.textContent = t; msg.style.display = 'block'; };
+  msg.style.display = 'none';
+  if (!f.name.trim()) return fail('Enter your name.');
+  if (String(f.phone).replace(/\D/g, '').length < 10) return fail('Enter your mobile number with the area code.');
+  if (f.email && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(f.email.trim())) return fail("That email address doesn't look right.");
+  const btn = $('bkGo'); btn.disabled = true; btn.innerHTML = '<span class="spin"></span> Booking…';
+  try {
+    const d = await api(`/public/${encodeURIComponent(slug)}/book`, { method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ serviceId: B.service.id, startsAt: B.time, name: f.name.trim(), phone: f.phone, email: f.email.trim(), notes: f.notes.trim(), reminderConsent: f.consent, marketingConsent: f.marketing }) });
+    done(d.booking);
+  } catch (e) {
+    if (e.status === 409) { B.time = null; B.notice = e.message; render(); return; }
+    btn.disabled = false; btn.textContent = 'Book ' + fmtTime(B.time); fail(e.message);
+  }
+}
+function done(bk) {
+  const start = new Date(B.time), end = new Date(start.getTime() + (Number(B.service.minutes) || 60) * 60000);
+  const ics = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Dozfi//Booking//EN', 'BEGIN:VEVENT', 'UID:' + Date.now() + '@dozfi.com',
+    'DTSTAMP:' + new Date().toISOString().replace(/[-:]/g, '').replace(/\.\d+/, ''), 'DTSTART:' + start.toISOString().replace(/[-:]/g, '').replace(/\.\d+/, ''),
+    'DTEND:' + end.toISOString().replace(/[-:]/g, '').replace(/\.\d+/, ''), 'SUMMARY:' + (bk.service + ' at ' + bk.business).replace(/[,;]/g, ' '),
+    B.page.business.address ? 'LOCATION:' + B.page.business.address.replace(/[,;]/g, ' ') : '', 'END:VEVENT', 'END:VCALENDAR'].filter(Boolean).join('\r\n');
+  const href = URL.createObjectURL(new Blob([ics], { type: 'text/calendar' }));
+  $('app').innerHTML = `<div class="card"><div class="done-ic"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>
+    <div class="step-t" style="font-size:1.3rem;margin-bottom:4px">You're booked</div>
+    <div class="chosen" style="margin-bottom:14px">${bk.reminders ? `${esc(bk.business)} will text you a reminder before your appointment.` : `Save the date. You won't get text reminders because you didn't choose them.`}</div>
+    <div class="kv"><span>Service</span><span>${esc(bk.service)}</span></div>
+    <div class="kv"><span>When</span><span>${esc(dayParts(B.date).long)} at ${esc(fmtTime(B.time))}</span></div>
+    <div class="kv"><span>With</span><span>${esc(bk.business)}</span></div>
+    ${bk.price != null ? `<div class="kv"><span>Price</span><span>${esc(priceText(B.service))}</span></div>` : ''}
+    ${B.page.business.address ? `<div class="kv"><span>Where</span><span>${esc(B.page.business.address)}</span></div>` : ''}
+    <a class="btn btn-ghost" style="display:block;text-align:center;text-decoration:none;margin-top:16px" href="${href}" download="appointment.ics">Add to my calendar</a>
+    <div class="fine" style="margin:12px 0 0">Need to change or cancel? ${bk.reminders ? 'Reply to the reminder text, or contact' : 'Contact'} ${esc(bk.business)} directly.</div></div>`;
+  window.scrollTo(0, 0);
+}
+start();
+</script>
+</body>
+</html>
